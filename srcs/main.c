@@ -72,15 +72,24 @@ void	ft_exit()
 	exit(0);
 }
 
+int	ft_putchar(int c)
+{
+	write(1, &c, 1);
+	return (0);
+}
+
+//! проверить на лики
 int	main(void)
 {
-	char	wr[100];
-	char	*str;
+	char			wr[100];
+	char			*str;
+	t_hystory_list	*history;
 
 	ft_set_input_mode();
 	signal(SIGINT, ft_sighnd);
 	signal(SIGTERM, ft_sighnd);
 	str = NULL;
+	history = NULL;
 	while (1) //основной цикл
 	{
 		str = malloc(sizeof(char));
@@ -89,6 +98,7 @@ int	main(void)
 		str[0] = '\0';
 		ft_set_prompt();
 		wr[0] = '\0';
+		// тут происходит ввод одной строки (до \n)
 		while (wr[0] != '\n')
 		{
 			//TODO: объеденить строки между собой если одновременно было введено более 100 символов
@@ -96,28 +106,43 @@ int	main(void)
 			read(0, wr, 100);
 			if (wr[0] == '\004')
 				ft_exit();
-			if (!strcmp(wr, "\e[A"))
+			// переход по истории вверх и вниз
+			//TODO: организовать как отдельные функции
+			//TODO: стирать предыдущую строку при изменении истории
+			if (!ft_strncmp(wr, "\e[A", 100))
 			{
-				printf("previous\n");
-				break;
+				//prev
+				if (history != NULL)
+					ft_putstr_fd(history->content, 1);
+				ft_history_step_back(&history);
+				continue;
 			}
-			if (!strcmp(wr, "\e[B"))
-			{
-				printf("next\n");
-				break;
+			if (!ft_strncmp(wr, "\e[B", 100))
+			{ 
+				//next
+				if (ft_history_step_front(&history))
+					ft_putstr_fd(history->content, 1);
+				else
+					ft_putstr_fd(str, 1);
+				continue;
 			}
-			str = ft_strjoin(str, wr);
-			ft_putstr_fd(wr, 1);
+			// if (!ft_strncmp(wr, "\x7f", 100))
+			// {
+			// 	tputs("\b", 1, ft_putchar);
+			// 	continue;
+			// }
+			if (wr[0] != '\n')
+				str = ft_strjoin(str, wr); // присоединение введенных символов к строке
+			ft_putstr_fd(wr, 1); // вывод этих символов
 		}
-		// if (strcmp(str, "\n"))
-			//добавить историю в лист
-		free(str);
+		if (strcmp(str, "\n"))
+			history = ft_history_newline(&history, str); //добавление строки в историю
 	}
 	return (0);
 }
 
 
-// * может пригодиться потом
+//! может пригодиться потом
 // char	*ft_add_char_to_str(char *str, char c)
 // {
 // 	int		len;

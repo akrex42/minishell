@@ -1,6 +1,6 @@
 NAME := minishell
 
-SRCS := srcs/main.c
+SRCS := srcs/main.c srcs/ft_hostory.c
 
 OBJS := ${patsubst %.c,%.o,${SRCS}}
 D_FILES := ${patsubst %.c,%.d,${SRCS}}
