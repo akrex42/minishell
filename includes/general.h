@@ -30,10 +30,11 @@ typedef struct s_history_list
 	struct s_history_list	*prev;
 }	t_hystory_list;
 
-t_hystory_list	*ft_history_newline(t_hystory_list **list,
+void	ft_init_hostory(t_hystory_list **history);
+void	ft_history_newline(t_hystory_list **list,
 					char *content);
-void			ft_malloc_error(void);
-void			ft_history_step_back(t_hystory_list **history);
-int				ft_history_step_front(t_hystory_list **history);
+void	ft_malloc_error(void);
+void	ft_history_step_back(t_hystory_list **history);
+void	ft_history_step_front(t_hystory_list **history);
 
 #endif

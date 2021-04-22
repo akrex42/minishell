@@ -52,9 +52,10 @@ void	ft_set_input_mode(void)
 	}
 	tcgetattr(0, &g_saved_attributes);
 	ft_memcpy(&tattr, &g_saved_attributes, sizeof(tattr));
-	tattr.c_lflag &= ~(ICANON | ECHO);
-	tattr.c_cc[VMIN] = 1;
-	tattr.c_cc[VTIME] = 0;
+	tattr.c_lflag &= ~(ICANON);
+	tattr.c_lflag &= ~(ECHO);
+	// tattr.c_cc[VMIN] = 1;
+	// tattr.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSAFLUSH, &tattr);
 }
 
@@ -82,14 +83,18 @@ int	ft_putchar(int c)
 int	main(void)
 {
 	char			wr[100];
+	char			term_name[15];
 	char			*str;
 	t_hystory_list	*history;
 
 	ft_set_input_mode();
-	signal(SIGINT, ft_sighnd);
+	signal(SIGINT, ft_sighnd); // обработка сигналов 
 	signal(SIGTERM, ft_sighnd);
-	str = NULL;
 	history = NULL;
+	ft_init_hostory(&history);
+	ft_strlcpy(term_name, "xterm-256color", 15);
+	tgetent(0, term_name); // инициализируем наш терминал по имени
+	str = NULL;
 	while (1) //основной цикл
 	{
 		str = malloc(sizeof(char));
@@ -98,6 +103,7 @@ int	main(void)
 		str[0] = '\0';
 		ft_set_prompt();
 		wr[0] = '\0';
+		tputs(save_cursor, 1, ft_putchar);
 		// тут происходит ввод одной строки (до \n)
 		while (wr[0] != '\n')
 		{
@@ -106,64 +112,36 @@ int	main(void)
 			read(0, wr, 100);
 			if (wr[0] == '\004')
 				ft_exit();
-			// переход по истории вверх и вниз
 			//TODO: организовать как отдельные функции
-			//TODO: стирать предыдущую строку при изменении истории
+			//TODO: редактирование строк
+			//TODO: добавление истории к str
 			if (!ft_strncmp(wr, "\e[A", 100))
 			{
 				//prev
-				if (history != NULL)
-					ft_putstr_fd(history->content, 1);
+				tputs(restore_cursor, 1, ft_putchar);
+				tputs(clr_eos, 1, ft_putchar);
 				ft_history_step_back(&history);
+				ft_putstr_fd(history->content, 1);
 				continue;
 			}
 			if (!ft_strncmp(wr, "\e[B", 100))
 			{ 
 				//next
-				if (ft_history_step_front(&history))
+				tputs(restore_cursor, 1, ft_putchar);
+				tputs(clr_eos, 1, ft_putchar);
+				ft_history_step_front(&history);
+				if (history->content != NULL)
 					ft_putstr_fd(history->content, 1);
 				else
 					ft_putstr_fd(str, 1);
 				continue;
 			}
-			// if (!ft_strncmp(wr, "\x7f", 100))
-			// {
-			// 	tputs("\b", 1, ft_putchar);
-			// 	continue;
-			// }
 			if (wr[0] != '\n')
 				str = ft_strjoin(str, wr); // присоединение введенных символов к строке
 			ft_putstr_fd(wr, 1); // вывод этих символов
 		}
 		if (strcmp(str, "\n"))
-			history = ft_history_newline(&history, str); //добавление строки в историю
+			ft_history_newline(&history, str); //добавление строки в историю
 	}
 	return (0);
 }
-
-
-//! может пригодиться потом
-// char	*ft_add_char_to_str(char *str, char c)
-// {
-// 	int		len;
-// 	char	*tmp;
-
-// 	if (str == NULL)
-// 	{
-// 		str = malloc(sizeof(char) * 2);
-// 		if (!str)
-// 			ft_malloc_error();
-// 		str[0] = c;
-// 		str[1] = '\0';
-// 		return (str);
-// 	}
-// 	len = ft_strlen(str);
-// 	tmp = malloc(sizeof(char) * (len + 2));
-// 	if (!tmp)
-// 		ft_malloc_error();
-// 	ft_strlcpy(tmp, str, len + 2);
-// 	tmp[len] = c;
-// 	tmp[len + 1] = '\0';
-// 	free(str);
-// 	return (tmp);
-// }

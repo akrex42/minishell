@@ -12,8 +12,18 @@
 
 #include "general.h"
 
+void	ft_init_hostory(t_hystory_list **history)
+{
+	*history = malloc(sizeof(t_hystory_list));
+	if (!(*history))
+		ft_malloc_error();
+	(*history)->content = NULL;
+	(*history)->prev = NULL;
+	(*history)->next = NULL;
+}
+
 // добавляет новый элемент истории в конец и возвращает на него указатель
-t_hystory_list	*ft_history_newline(t_hystory_list **history,
+void	ft_history_newline(t_hystory_list **history,
 					char *content)
 {
 	t_hystory_list	*new;
@@ -21,33 +31,28 @@ t_hystory_list	*ft_history_newline(t_hystory_list **history,
 	new = malloc(sizeof(t_hystory_list));
 	if (!new)
 		ft_malloc_error();
-	if (*history != NULL)
-	{
-		while ((*history)->next != NULL)
+	while ((*history)->next != NULL)
 			history = &((*history)->next);
-		(*history)->next = new;
-		new->prev = *history;
-	}
-	else
-		new->prev = NULL;
+	new->prev = (*history)->prev;
+	if ((*history)->prev != NULL)
+		(*history)->prev->next = new;
+	(*history)->prev = new;
+	new->next = *history;
 	new->content = content;
-	new->next = NULL;
-	return (new);
 }
 
-// 1 - отображаем строку истории; 0 - ничего не отображаем
+// шаг назад по истории если есть куда
 void	ft_history_step_back(t_hystory_list **history)
 {
-	if ((*history) == NULL || (*history)->prev == NULL)
+	if ((*history)->prev == NULL)
 		return ;
 	(*history) = (*history)->prev;
 }
 
-// 1 - отображаем строку истории; 0 - отображаем сущкствующую строку
-int	ft_history_step_front(t_hystory_list **history)
+// шаг вперед по истории если есть куда
+void	ft_history_step_front(t_hystory_list **history)
 {
-	if ((*history) == NULL || (*history)->next == NULL)
-		return (0);
+	if ((*history)->next == NULL)
+		return ;
 	(*history) = (*history)->next;
-	return (1);
 }
