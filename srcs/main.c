@@ -1,80 +1,81 @@
 #include "main_term.h"
 
-struct termios g_saved_attributes;
+t_term_all		g_all;
 
 void	ft_reset_input_mode(void)
 {
-	tcsetattr(0, TCSANOW, &g_saved_attributes);
+	tcsetattr(0, TCSANOW, &(g_all.g_saved_attributes));
 }
 
-// обработчик сигналов
-void	ft_sighnd(int signo)
+void	ft_cycle_head(void)
 {
-	(void)signo;
-	printf("Signal function\n");
-	ft_reset_input_mode();
-	exit(0);
+	ft_malloc_one_char_str(&(g_all.str));
+	ft_malloc_one_char_str(&(g_all.str_hist));
+	ft_set_prompt();
+	tputs(save_cursor, 1, ft_putchar);
+	g_all.wr[0] = '\0';
 }
 
-void	ft_set_input_mode(void)
+// действия с введенной строкой после цикла
+void	ft_manage_str(void)
 {
-	struct termios tattr;
-
-	if (!isatty(0))
+	ft_strjoin_and_free_2((g_all.history)->content, &(g_all.str_hist));
+	if (ft_strncmp(g_all.str_hist, "\0", 10))
 	{
-		printf("Error idn\n");
-		exit(1);
+		ft_history_newline(&(g_all.history), g_all.str_hist);
+		free(g_all.str);
 	}
-	tcgetattr(0, &g_saved_attributes);
-	ft_memcpy(&tattr, &g_saved_attributes, sizeof(tattr));
-	tattr.c_lflag &= ~(ICANON);
-	tattr.c_lflag &= ~(ECHO);
-	// tattr.c_cc[VMIN] = 1;
-	// tattr.c_cc[VTIME] = 0;
-	tcsetattr(0, TCSAFLUSH, &tattr);
+	else if (ft_strncmp(g_all.str, "\0", 10))
+	{
+		ft_history_newline(&(g_all.history), g_all.str);
+		free(g_all.str_hist);
+	}
+	else
+	{
+		free(g_all.str);
+		free(g_all.str_hist);
+	}
+	// ! передать строку дальше на обрабоку парсеру
+}
+
+// инициализация всех переменных
+void	ft_init_term_all(void)
+{
+	g_all.history = NULL;
+	ft_init_history(&(g_all.history));
+	ft_strlcpy(g_all.term_name, "xterm-256color", 15);
+	tgetent(0, g_all.term_name);
+	signal(SIGINT, ft_sighnd);
+	signal(SIGTERM, ft_sighnd);
 }
 
 //! проверить на лики
 int	main(void)
 {
-	char			wr[100];
-	char			term_name[15];
-	char			*str;
-	t_hystory_list	*history;
-
-	ft_set_input_mode();
-	signal(SIGINT, ft_sighnd); // обработка сигналов 
-	signal(SIGTERM, ft_sighnd);
-	history = NULL;
-	ft_init_history(&history);
-	ft_strlcpy(term_name, "xterm-256color", 15);
-	tgetent(0, term_name); // инициализируем наш терминал по имени
-	str = NULL;
-	while (1) //основной цикл
+	ft_set_input_mode(&g_all);
+	ft_init_term_all();
+	while (1)
 	{
-		ft_malloc_one_char_str(&str);
-		ft_set_prompt();
-		wr[0] = '\0';
-		tputs(save_cursor, 1, ft_putchar);
-		// тут происходит ввод одной строки (до \n)
-		while (wr[0] != '\n')
+		ft_cycle_head();
+		while (g_all.wr[0] != '\n')
 		{
-			//TODO: объеденить строки между собой если одновременно было введено более 100 символов
-			ft_bzero(wr, 100);
-			read(0, wr, 100);
-			if (wr[0] == '\004')
+			ft_bzero(g_all.wr, 10);
+			read(0, g_all.wr, 10);
+			if (g_all.wr[0] == '\004')
 				ft_exit();
-			if (!ft_strncmp(wr, "\e[D", 100) || !ft_strncmp(wr, "\e[C", 100))
+			if (!ft_strncmp(g_all.wr, "\e[D", 100)
+				|| !ft_strncmp(g_all.wr, "\e[C", 100))
 				continue ;
-			if (ft_manage_history(wr, &str, &history))
+			if (ft_manage_history(&g_all))
 				continue ;
-			if (wr[0] != '\n')
-				ft_strjoin_and_free_1(&str, wr);
-			ft_putstr_fd(wr, 1); // вывод этих символов
+			if (g_all.wr[0] != '\n')
+				ft_add_char_to_rigth_str(&g_all);
+			ft_putstr_fd(g_all.wr, 1);
 		}
-		ft_strjoin_and_free_2(history->content, &str); //добавляет существующую истори к строке
-		if (strcmp(str, "\0"))
-			ft_history_newline(&history, str); //добавление строки в историю
+		ft_manage_str();
 	}
 	return (0);
 }
+
+// char *arg[] = {"cat", NULL};
+// execve("/bin/cat", arg, NULL);

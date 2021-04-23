@@ -15,7 +15,12 @@ void	ft_file_open_error(void)
 // устанавливает начальные символы
 void	ft_set_prompt(void)
 {
-	char str[] = "\033[0;92m(⌐■_■)☞ \033[0m$ ";
+	write(1, "\033[0;92m(⌐■_■)☞ \033[0m$ ", 30);
+}
 
-	write(1, str, ft_strlen(str));
+// обработчик сигналов
+void	ft_sighnd(int signo)
+{
+	(void)signo;
+	printf("Signal function\n");
 }

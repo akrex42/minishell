@@ -1,8 +1,8 @@
 #include "main_term.h"
 
-void	ft_init_history(t_hystory_list **history)
+void	ft_init_history(t_history_list **history)
 {
-	*history = malloc(sizeof(t_hystory_list));
+	*history = malloc(sizeof(t_history_list));
 	if (!(*history))
 		ft_malloc_error();
 	(*history)->content = NULL;
@@ -11,16 +11,16 @@ void	ft_init_history(t_hystory_list **history)
 }
 
 // добавляет новый элемент истории в конец и возвращает на него указатель
-void	ft_history_newline(t_hystory_list **history,
-					char *content)
+void	ft_history_newline(t_history_list **history,
+			char *content)
 {
-	t_hystory_list	*new;
+	t_history_list	*new;
 
-	new = malloc(sizeof(t_hystory_list));
+	new = malloc(sizeof(t_history_list));
 	if (!new)
 		ft_malloc_error();
 	while ((*history)->next != NULL)
-			*history = (*history)->next;
+		*history = (*history)->next;
 	new->content = content;
 	new->prev = (*history)->prev;
 	new->next = *history;
@@ -30,7 +30,7 @@ void	ft_history_newline(t_hystory_list **history,
 }
 
 // шаг назад по истории если есть куда
-void	ft_history_step_back(t_hystory_list **history)
+void	ft_history_step_back(t_history_list **history)
 {
 	if ((*history)->prev == NULL)
 		return ;
@@ -38,7 +38,7 @@ void	ft_history_step_back(t_hystory_list **history)
 }
 
 // шаг вперед по истории если есть куда
-void	ft_history_step_front(t_hystory_list **history)
+void	ft_history_step_front(t_history_list **history)
 {
 	if ((*history)->next == NULL)
 		return ;

@@ -1,7 +1,7 @@
 NAME := minishell
 
 SRCS := srcs/main.c srcs/ft_history.c srcs/ft_manage_history.c \
-		srcs/ft_dop_1.c srcs/ft_dop_2.c
+		srcs/ft_dop_1.c srcs/ft_dop_2.c srcs/ft_dop_3.c
 
 OBJS := ${patsubst %.c,%.o,${SRCS}}
 D_FILES := ${patsubst %.c,%.d,${SRCS}}

@@ -1,6 +1,6 @@
 #include "main_term.h"
 
-void	ft_exit()
+void	ft_exit(void)
 {
 	ft_reset_input_mode();
 	exit(0);
@@ -47,4 +47,3 @@ void	ft_strjoin_and_free_2(const char *str1, char **str2)
 	free(*str2);
 	*str2 = tmp;
 }
-
