@@ -4,9 +4,9 @@
 #include <fcntl.h>
 #include "libft.h"
 
-void 	ft_exit()
+void 	ft_exit() //implement errno here
 {
-
+	exit(0);
 }
 
 int		main()

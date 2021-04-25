@@ -16,8 +16,6 @@ void 	ft_env(const char *str, char **envp)
 		env++;
 	}
 }
-//	fd = open("dotenv", O_RDWR);
-//	printf("%d", fd);
 
 int main (int argc, char **argv, char **envp)
 {
@@ -29,7 +27,8 @@ int main (int argc, char **argv, char **envp)
 	{
 		printf("%s%s%s", "env: ", argv[1],": no such file or directory" );
 		return (-1);
-		//PERMISSION DENIED CASES AND WHEN $HOME -- WHAT SHALL WE DO?
+		//PERMISSION DENIED CASES AND WHEN $HOME -- WHAT SHALL WE DO? 
+		//ERRNO
 	}
 	return (0);
 }
