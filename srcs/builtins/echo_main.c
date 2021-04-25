@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 		ft_echo(argv[i]);
 		i++;
 	}
-	if (!flag)
+	if (flag)
 	{
 		printf("\n");
 	}
