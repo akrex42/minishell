@@ -21,11 +21,11 @@ void 	ft_export(int argc, const char *str, char **envp)
 // 		while (*envp1 != 0)
 // 		{
 // 			char *thisEnv = *envp1;
-// 			printf("%s%s\n", "declare -x ", thisEnv); //NEED TO FIX "" issue - strdup??
+// 			printf("%s%s\n", "declare -x ", thisEnv); // NEED TO FIX "" issue - strdup??
 // 			envp1++;
 // 		}
 // 	}
-// 	//I need to find all the keys and wrap them up into brackets
+// 	// I need to find all the keys and wrap them up into brackets
 // 	else if (argc == 2)
 // 	{
 // 		char **env = envp;
@@ -37,7 +37,7 @@ void 	ft_export(int argc, const char *str, char **envp)
 // //		printf ("%s", *env);
 
 // 		char **env1 = envp;
-// 		while (*env1 != 0) //I ADDED IT JUST TO CHECK WHETHER I AM RIGHT
+// 		while (*env1 != 0) // I ADDED IT JUST TO CHECK WHETHER I AM RIGHT
 // 		{
 // 			char *thisEnv = *env1;
 // 			printf("%s%s\n", "declare -x ", thisEnv);
