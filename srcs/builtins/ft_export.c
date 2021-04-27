@@ -1,65 +1,40 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include "libft.h"
+#include "minishell.h"
 
-char	**ft_allocate_env(char **env);
-void 	ft_export(int argc, const char *str, char **envp)
+void 	ft_export(int argc, char **str, char **envp)
 {
-//	int fd;
-	char **envp1;
-	envp1 = ft_allocate_env(envp);
-	while (*envp1 != NULL)
-	{
-		char *thisEnv = *envp1;
-		printf("%s\n", thisEnv);
-		envp1++;
-	}
-// 	if (argc == 1)
-// 	{
-// 		while (*envp1 != 0)
-// 		{
-// 			char *thisEnv = *envp1;
-// 			printf("%s%s\n", "declare -x ", thisEnv); // NEED TO FIX "" issue - strdup??
-// 			envp1++;
-// 		}
-// 	}
-// 	// I need to find all the keys and wrap them up into brackets
-// 	else if (argc == 2)
-// 	{
-// 		char **env = envp;
-// 		while (*env != 0)
-// 		{
-// 			env++;
-// 		}
-// 		*env = ft_strdup(str); //free
-// //		printf ("%s", *env);
+	char *equal;
+	char *this_env;
 
-// 		char **env1 = envp;
-// 		while (*env1 != 0) // I ADDED IT JUST TO CHECK WHETHER I AM RIGHT
-// 		{
-// 			char *thisEnv = *env1;
-// 			printf("%s%s\n", "declare -x ", thisEnv);
-// 			env1++;
-// 		}
-// 	}
+	g_all.flag_allocate = 0;
+	if (!(g_all.env = ft_allocate_env(g_all.env, argc, str, this_env)))
+	{
+		printf("%s", "error"); // error handling errors: g_all.env[0] != alpha, 
+		// g_all.env[i] != isalphanum except for '=' and mb other bash reserved symbols
+		exit (-1);
+	}
+	while (*g_all.env != NULL)
+	{
+		this_env = *g_all.env;
+		equal = ft_strchr(this_env, '=');
+		if (equal == NULL)
+		{
+			printf("%s%s", "declare -x ", this_env);
+		}
+		else 
+		{
+			printf("%s", "declare -x ");
+			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
+			printf("%c", equal[0]);
+			printf("%c", '"');
+			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
+			printf("%c%c", '"', '\n');
+		}
+		g_all.env++;
+	}
 }
 
 int main (int argc, char **argv, char **envp)
 {
-	if (argc == 1)
-	{
-		ft_export(argc, argv[0], envp);
-	}
-	else if (argc >= 2) //how to pass all the args?
-	{
-		ft_export(argc, argv[1], envp);
-	}
-	else
-	{
-		printf("%s", "error");
-		return (-1);
-	}
+	ft_export(argc, argv, envp);
 	return (0);
 }

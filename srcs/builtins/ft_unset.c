@@ -1,73 +1,70 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include "libft.h"
+#include "minishell.h"
 
-char	**ft_allocate_env(char **env);
-void 	ft_unset(const char *str, char **envp)
+void 	ft_unset(char **str, int args, char **envp)
 {
-//	int fd;
     char *end;
 	char *key;
 	int len;
-	char **env = ft_allocate_env(envp);
+	int i;
+	char *this_env;
 
-	if (!(ft_isalpha(*str)))
+	g_all.env = ft_allocate_env(envp, 0, str, this_env); // we need to initialize it somewhere else
+	// printf("%s", g_all.env[0]);
+
+	// if (!(ft_isalpha(**str)))
+	// {
+	// 	printf("%s%s%s", "bash: unset: `", *str, "': not a valid identifier\n"); // error handling func
+	// 	return ;
+	// }
+	i = 1;
+	while (*g_all.env != 0 && i < args)
 	{
-		printf("%s%s%s", "bash: unset: `", str, "': not a valid identifier\n");
-		return ;
-	}
-	while (*env != 0)
-	{
-		char *thisEnv = *env;
-		end = ft_strchr(thisEnv, '=');
-		len = ft_strlen(end);
-		key = ft_substr(thisEnv, 0, ft_strlen(thisEnv) - len); //free
-		if (!(ft_strncmp(key, str, ft_strlen(key))))
+		this_env = *g_all.env;
+		// printf("%s\n", this_env);
+		end = ft_strchr(this_env, '=');
+		// printf("%s\n", end);
+		len = ft_strlen(end); //maybe we can add a func for that
+		// printf("%d\n", len);
+		key = ft_substr(this_env, 0, ft_strlen(this_env) - len); //free
+		// printf("%s\n", key);
+		if (!(ft_strncmp(key, str[i], ft_strlen(key))))
 		{
-			//HOW TO DELETE THIS SHIT????
-//			thisEnv = "";
-			free(thisEnv);
-			thisEnv = NULL;
-//			printf("%s\n", "ff");
-//			env--;
-//			ft_strjoin(*env, thisEnv);
-//			env++;
-			printf("%s\n", thisEnv);
-			break ;
-//			thisEnv++;
+			// printf("%s\n", str[i]);
+			g_all.flag_allocate = 1;
+			g_all.env = ft_allocate_env(g_all.env, 1, str, this_env);
+			// printf("%s\n", g_all.env[0]);
+	// 		break ;
+			i++;
 		}
-		env++;
+		else
+			g_all.env++;
 	}
-//	while (*env != 0)
-//	{
-//		char *thisEnv = *env;
-//		*thisEnv = *(thisEnv + 1);
-//	}
-//	*thisEnv = NULL;
-//	char **env1 = ft_allocate_env(env);
-//	while (len1-- != 0)
-//	{
-//		char *thisEnv = env1[len1];
-//		printf("%s\n", thisEnv);
-//	}
-//	char **env1 = envp;
-//	while (*env1 != 0) //I ADDED IT JUST TO CHECK WHETHER I AM RIGHT
-//	{
-//		char *thisEnv1 = *env1;
-//		printf("%s%s\n", "declare -x ", thisEnv1);
-//		env1++;
-//	}
-//	fd = open("dotenv", O_RDWR);
-//	printf("%d", fd);
+	while (*g_all.env != NULL) //this cycle is here just to check
+	{
+		char *equal;
+
+		this_env = *g_all.env;
+		equal = ft_strchr(this_env, '=');
+		if (equal == NULL)
+		{
+			printf("%s%s", "declare -x ", this_env);
+		}
+		else 
+		{
+			printf("%s", "declare -x ");
+			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
+			printf("%c", equal[0]);
+			printf("%c", '"');
+			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
+			printf("%c%c", '"', '\n');
+		}
+		g_all.env++;
+	}
+	g_all.flag_allocate = 0;
 }
 
 int main (int argc, char **argv, char **envp)
 {
-	if (argc > 1)
-	{
-		ft_unset(argv[1], envp);
-	}
+	ft_unset(argv, argc, envp);
 	return (0);
 }
