@@ -1,15 +1,10 @@
-#include "main_term.h"
+#include "minishell.h"
 
 void	ft_exit(void)
 {
 	ft_reset_input_mode();
+	printf("exit\n");
 	exit(0);
-}
-
-int	ft_putchar(int c)
-{
-	write(1, &c, 1);
-	return (0);
 }
 
 void	ft_malloc_one_char_str(char **str)
@@ -19,6 +14,24 @@ void	ft_malloc_one_char_str(char **str)
 		ft_malloc_error();
 	(*str)[0] = '\0';
 }
+
+// str1 will be free and rewritten
+void	ft_strjoin_char_and_free(char **str1, char ch)
+{
+	char	*tmp;
+	char	dup[2];
+
+	if (!ch)
+		return ;
+	dup[0] = ch;
+	dup[1] = '\0';
+	tmp = ft_strjoin(*str1, dup);
+	if (!tmp)
+		ft_malloc_error();
+	free(*str1);
+	*str1 = tmp;
+}
+
 
 // str1 will be free and rewritten
 void	ft_strjoin_and_free_1(char **str1, const char *str2)

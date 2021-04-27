@@ -1,4 +1,4 @@
-#include "main_term.h"
+#include "minishell.h"
 
 // 1 - алгоритм прошел, 0 - алгоритм не прошел 
 int	ft_manage_history(t_term_all *all)

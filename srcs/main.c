@@ -1,6 +1,4 @@
-#include "main_term.h"
-
-t_term_all		g_all;
+#include "minishell.h"
 
 void	ft_reset_input_mode(void)
 {
@@ -24,36 +22,39 @@ void	ft_manage_str(void)
 	{
 		ft_history_newline(&(g_all.history), g_all.str_hist);
 		free(g_all.str);
+		ft_parser(g_all.str_hist); // передача строки парсеру
 	}
 	else if (ft_strncmp(g_all.str, "\0", 10))
 	{
 		ft_history_newline(&(g_all.history), g_all.str);
 		free(g_all.str_hist);
+		ft_parser(g_all.str); // передача строки парсеру
 	}
 	else
 	{
 		free(g_all.str);
 		free(g_all.str_hist);
 	}
-	// ! передать строку дальше на обрабоку парсеру
 }
 
 // инициализация всех переменных
-void	ft_init_term_all(void)
+void	ft_init_term_all(char **env)
 {
 	g_all.history = NULL;
+	g_all.env = ft_allocate_env(env);
 	ft_init_history(&(g_all.history));
-	ft_strlcpy(g_all.term_name, "xterm-256color", 15);
-	tgetent(0, g_all.term_name);
-	signal(SIGINT, ft_sighnd);
-	signal(SIGTERM, ft_sighnd);
+	tgetent(0,  "xterm-256color"); // ! для дебаггера
+	// tgetent(0,  getenv("TERM")); // ! основной
+	signal(SIGINT, ft_sighnd); //ctrl + с
+	signal(SIGQUIT, ft_sighnd); //ctrl + '\'
 }
 
-//! проверить на лики
-int	main(void)
+int	main(int argc, char* argv[], char* env[])
 {
+	(void)argc;
+	(void)argv;
 	ft_set_input_mode(&g_all);
-	ft_init_term_all();
+	ft_init_term_all(env);
 	while (1)
 	{
 		ft_cycle_head();
@@ -63,13 +64,12 @@ int	main(void)
 			read(0, g_all.wr, 10);
 			if (g_all.wr[0] == '\004')
 				ft_exit();
-			if (!ft_strncmp(g_all.wr, "\e[D", 100)
-				|| !ft_strncmp(g_all.wr, "\e[C", 100))
+			if (ft_check_unused_char(g_all.wr))
 				continue ;
 			if (ft_manage_history(&g_all))
 				continue ;
 			if (g_all.wr[0] != '\n')
-				ft_add_char_to_rigth_str(&g_all);
+				ft_add_char_to_correct_str(&g_all);
 			ft_putstr_fd(g_all.wr, 1);
 		}
 		ft_manage_str();
@@ -77,5 +77,4 @@ int	main(void)
 	return (0);
 }
 
-// char *arg[] = {"cat", NULL};
-// execve("/bin/cat", arg, NULL);
+
