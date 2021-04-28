@@ -29,6 +29,7 @@ int main (int argc, char **argv, char **envp)
 		return (-1);
 		//PERMISSION DENIED CASES AND WHEN $HOME -- WHAT SHALL WE DO? 
 		//ERRNO
+		//DOES NOT PRINT KEY WITHOUT VALUES
 	}
 	return (0);
 }

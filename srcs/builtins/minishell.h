@@ -28,7 +28,6 @@ typedef struct s_term_all
 	char			*str_hist;
 	int				flag_allocate;
 	char			**env;
-	int				flag_allocate;
 	t_history_list	*history;
 }	t_term_all;
 
@@ -46,8 +45,7 @@ int		ft_putchar(int c);
 void	ft_strjoin_and_free_1(char **str1, const char *str2);
 void	ft_strjoin_and_free_2(const char *str1, char **str2);
 void	ft_malloc_one_char_str(char **str);
-void	ft_malloc_one_char_str(char **str);
-void	ft_exit(void);
+void	ft_exit(int error);
 void	ft_set_prompt(void);
 void	ft_sighnd(int signo);
 void	ft_reset_input_mode(void);
@@ -55,7 +53,7 @@ void	ft_set_input_mode(t_term_all *all);
 void	ft_add_char_to_rigth_str(t_term_all *all);
 void	ft_parser(const char *str);
 int		ft_check_unused_char(const char *wr);
-char	**ft_allocate_env1(char **env);
-char	**ft_allocate_env(char **env, int len, char **str, char *this_env);
+char	**ft_allocate_env(char **env);
+char	**ft_allocate_env_builtins(char **env, int len, char **str, char *this_env);
 
 #endif

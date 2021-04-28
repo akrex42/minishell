@@ -8,7 +8,7 @@ void 	ft_unset(char **str, int args, char **envp)
 	int i;
 	char *this_env;
 
-	g_all.env = ft_allocate_env(envp, 0, str, this_env); // we need to initialize it somewhere else
+	g_all.env = ft_allocate_env(envp); // we need to initialize it somewhere else
 	// printf("%s", g_all.env[0]);
 
 	// if (!(ft_isalpha(**str)))
@@ -17,6 +17,9 @@ void 	ft_unset(char **str, int args, char **envp)
 	// 	return ;
 	// }
 	i = 1;
+	char **beg_env;
+
+	beg_env = g_all.env;
 	while (*g_all.env != 0 && i < args)
 	{
 		this_env = *g_all.env;
@@ -31,18 +34,19 @@ void 	ft_unset(char **str, int args, char **envp)
 		{
 			// printf("%s\n", str[i]);
 			g_all.flag_allocate = 1;
-			g_all.env = ft_allocate_env(g_all.env, 1, str, this_env);
+			g_all.env = ft_allocate_env_builtins(beg_env, 1, str, this_env);
 			// printf("%s\n", g_all.env[0]);
+			beg_env = g_all.env;
 			i++;
 		}
 		else
 			g_all.env++;
 	}
-	while (*g_all.env != NULL) //this cycle is here just to check
+	while (*beg_env != NULL) //this cycle is here just to check
 	{
 		char *equal;
 
-		this_env = *g_all.env;
+		this_env = *beg_env;
 		equal = ft_strchr(this_env, '=');
 		if (equal == NULL)
 		{
@@ -57,7 +61,7 @@ void 	ft_unset(char **str, int args, char **envp)
 			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
 			printf("%c%c", '"', '\n');
 		}
-		g_all.env++;
+		beg_env++;
 	}
 	g_all.flag_allocate = 0;
 }

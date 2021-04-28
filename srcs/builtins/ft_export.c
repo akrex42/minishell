@@ -5,8 +5,9 @@ void 	ft_export(int argc, char **str, char **envp)
 	char *equal;
 	char *this_env;
 
+	g_all.env = ft_allocate_env(envp); // we need to initialize it somewhere else
 	g_all.flag_allocate = 0;
-	if (!(g_all.env = ft_allocate_env(g_all.env, argc, str, this_env)))
+	if (!(g_all.env = ft_allocate_env_builtins(g_all.env, argc, str, this_env)))
 	{
 		printf("%s", "error"); // error handling errors: g_all.env[0] != alpha, 
 		// error handling errors: g_all.env[0] != alpha,
@@ -19,7 +20,7 @@ void 	ft_export(int argc, char **str, char **envp)
 		equal = ft_strchr(this_env, '=');
 		if (equal == NULL)
 		{
-			printf("%s%s", "declare -x ", this_env);
+			printf("%s%s%c", "declare -x ", this_env, '\n');
 		}
 		else 
 		{
