@@ -1,19 +1,23 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include "libft.h"
-
+#include "minishell.h"
 
 void 	ft_env(const char *str, char **envp)
 {
 //	int fd;
-	char **env = envp;
-	while (*env != 0)
+	char *equal;
+	char *this_env;
+
+	g_all.env = ft_allocate_env(envp);
+	// char **env = g_all.env;
+	while (*g_all.env != 0)
 	{
-		char *thisEnv = *env;
-		printf("%s\n", thisEnv);
-		env++;
+		this_env = *g_all.env;
+		equal = ft_strchr(this_env, '=');
+		if (equal == NULL)
+		{
+			g_all.env++;
+		}
+		printf("%s\n", this_env);
+		g_all.env++;
 	}
 }
 
