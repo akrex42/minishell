@@ -35,8 +35,8 @@ void	ft_manage_str(void)
 		free(g_all.str);
 		free(g_all.str_hist);
 	}
-	// TODO: передать токены дальше на обработку
 	ft_display_tokens(); // ! для отладки
+	// TODO: передать токены дальше на обработку
 	ft_free_tokens();
 }
 
@@ -44,6 +44,7 @@ void	ft_manage_str(void)
 void	ft_init_term_all(char **env)
 {
 	g_all.history = NULL;
+	g_all.tokens = NULL;
 	g_all.env = ft_allocate_env(env);
 	ft_init_history(&(g_all.history));
 	tgetent(0,  "xterm-256color"); // ! для дебаггера

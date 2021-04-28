@@ -16,10 +16,12 @@ void	ft_display_tokens(void)
 	ft_tokens_to_beginning();
 	while (g_all.tokens->next != NULL)
 	{
-		printf("%s\n", g_all.tokens->content);
+		printf("%s", g_all.tokens->content);
+		printf(" (((special value = %d)))\n", g_all.tokens->special_value);
 		g_all.tokens = g_all.tokens->next;
 	}
-	printf("%s\n", g_all.tokens->content);
+	printf("%s", g_all.tokens->content);
+	printf(" (((special value = %d)))\n", g_all.tokens->special_value);
 }
 
 void	ft_free_tokens(void)
@@ -47,6 +49,7 @@ void	ft_tokens_newline(char *content)
 	if (!new)
 		ft_malloc_error();
 	new->next = NULL;
+	new->special_value = 1;
 	new->content = content;
 	if (g_all.tokens == NULL)
 	{

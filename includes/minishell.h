@@ -19,8 +19,11 @@ typedef struct s_history_list
 	struct s_history_list	*prev;
 }	t_history_list;
 
+// special_value для определения того, имеет ли элемент специальное значение
+// или он был экранирован
 typedef struct s_tokens_list
 {
+	int						special_value; // 1 - значимый элемент, 0 - просто символ
 	char					*content;
 	struct s_tokens_list	*next;
 	struct s_tokens_list	*prev;
@@ -31,6 +34,7 @@ typedef struct s_parse_flags
 	int		esc;			// '\\'
 	int		dollar;			// $
 	int		double_quote;	// '
+	int		special_value;	// был ли элемень в строке экранирован
 }	t_parse_flags;
 
 typedef struct s_term_all
