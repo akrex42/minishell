@@ -33,7 +33,6 @@ void 	ft_unset(char **str, int args, char **envp)
 			g_all.flag_allocate = 1;
 			g_all.env = ft_allocate_env(g_all.env, 1, str, this_env);
 			// printf("%s\n", g_all.env[0]);
-	// 		break ;
 			i++;
 		}
 		else

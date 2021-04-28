@@ -1,14 +1,15 @@
 NAME := minishell
 
-SRCS := srcs/main.c srcs/ft_history.c srcs/ft_manage_history.c \
-		srcs/ft_dop_1.c srcs/ft_dop_2.c srcs/ft_dop_3.c
-
+SRCS := srcs/main.c srcs/ft_history.c srcs/ft_manage_history.c srcs/ft_dop_1.c\
+		srcs/ft_dop_2.c srcs/ft_dop_3.c \
+		srcs/parser/ft_parser.c srcs/parser/ft_tokens.c srcs/parser/ft_parser_dop.c
+		
 OBJS := ${patsubst %.c,%.o,${SRCS}}
 D_FILES := ${patsubst %.c,%.d,${SRCS}}
 
 GCC := gcc
-FLAGS := -Wall -Wextra -Werror -g # -g для дебагинга 
-# FLAGS := -g # -g для дебагинга 
+# FLAGS := -Wall -Wextra -Werror -g # -g для дебагинга 
+FLAGS := -g # -g для дебагинга 
 INCLUDES := includes
 
 all: ${NAME}

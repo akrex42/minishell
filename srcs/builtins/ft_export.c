@@ -9,6 +9,7 @@ void 	ft_export(int argc, char **str, char **envp)
 	if (!(g_all.env = ft_allocate_env(g_all.env, argc, str, this_env)))
 	{
 		printf("%s", "error"); // error handling errors: g_all.env[0] != alpha, 
+		// error handling errors: g_all.env[0] != alpha,
 		// g_all.env[i] != isalphanum except for '=' and mb other bash reserved symbols
 		exit (-1);
 	}

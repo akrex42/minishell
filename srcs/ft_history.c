@@ -1,4 +1,4 @@
-#include "main_term.h"
+#include "minishell.h"
 
 void	ft_init_history(t_history_list **history)
 {
