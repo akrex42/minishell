@@ -26,6 +26,7 @@ typedef struct s_term_all
 	char			term_name[15];
 	char			*str;
 	char			*str_hist;
+	int				flag_allocate;
 	char			**env;
 	t_history_list	*history;
 }	t_term_all;
@@ -53,6 +54,7 @@ void	ft_set_input_mode(t_term_all *all);
 void	ft_add_char_to_rigth_str(t_term_all *all);
 void	ft_parser(const char *str);
 int		ft_check_unused_char(const char *wr);
-char	**ft_allocate_env(char **env);
+char	**ft_allocate_env1(char **env);
+char	**ft_allocate_env(char **env, int len, char **str, char *this_env);
 
 #endif
