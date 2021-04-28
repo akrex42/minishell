@@ -1,14 +1,14 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "libft.h"
-#include <unistd.h>
+#include "minishell.h"
 
-void	ft_echo(const char *str)
+void	ft_echo(char **str, int argc)
 {
 	// char *dollar;
 	// char *newstr;
 	// int len;
+	int flag;
+	int i;
+
+	flag = 0;
 	// int i = 0;
 	//ft_putstr_fd(stdout, str);
 
@@ -24,6 +24,32 @@ void	ft_echo(const char *str)
 	// 	newstr = ft_substr(str, i, len); // possible leak
 	// 	printf("%s\n", getenv(newstr)); //we get the env variable home and change dir to there
 	// }
-	printf("%s ", str);
+	if (argc == 1)
+	{
+		return ;
+	}
+	i = 1;
+	// Parse key -n if needed
+	if (!(strcmp(str[1], "-n")))
+	{
+		flag = 1;
+		++i;
+	}
+	while (i < argc - 1)
+	{
+		printf("%s ", str[i]);
+		i++;
+	}
+	printf("%s", str[i]);
+	if (!flag)
+	{
+		printf("\n");
+	}
 	//return (0);
+}
+
+int main(int argc, char **argv)
+{
+	ft_echo(argv, argc);
+	return (0);
 }
