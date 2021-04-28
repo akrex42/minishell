@@ -9,17 +9,14 @@ void	ft_init_parse_flags(void)
 {
 	g_all.flags.esc = 0;
 	g_all.flags.dollar = 0;
-	g_all.flags.single_quote = 0;
 	g_all.flags.double_quote = 0;
 }
 
-// добавляет стркоу в лист
+// добавляет стркоу в лист и выделяет память под новую строку
 void	ft_command_add_to_list(char **command)
 {
-	//TODO: записать command в list
 	if ((*command)[0] != '\0')
-		printf("%s\n", *command);
-	free(*command);
+		ft_tokens_newline(*command); // записываем строки в лист 
 	ft_malloc_one_char_str(command);
 }
 
@@ -33,18 +30,17 @@ void	ft_common_split_part(char **command, const char *str)
 	ft_command_add_to_list(command);
 }
 
-// * Если встретилось что-либо, что разделяет команды, то добавляем
-// * command в token list
 // $? - exit status variable (содержит код последней команды)
 void	ft_parser(const char *str)
 {
 	int		i;
 	char	*command;
 	char	*env_str;
+	char	*tmp;
 
-	//TODO: в command сохранаям символы
 	ft_init_parse_flags();
 	ft_malloc_one_char_str(&command);
+	g_all.tokens = NULL;
 	i = 0;
 	while(str[i])
 	{
@@ -59,14 +55,15 @@ void	ft_parser(const char *str)
 				ft_malloc_one_char_str(&env_str);
 				while (((str[i] >= 'A' && str[i] <= 'Z')
 					|| (str[i] >= 'a' && str[i] <= 'z')
+					|| (str[i] >= '0' && str[i] <= '9')
 					|| str[i] == '_') && str[i])
 				{
 					ft_strjoin_char_and_free(&env_str, str[i]);
 					i++;
 				}
-				//TODO: найти данные по этой переменной в env
-				ft_putstr_fd("ENVIROMEN VARIABLE\n", 1);
+				tmp = ft_find_env_var(env_str);
 				free(env_str);
+				ft_strjoin_and_free_1(&command, tmp);
 			}
 			g_all.flags.dollar = 0;
 		}
@@ -75,7 +72,7 @@ void	ft_parser(const char *str)
 			ft_strjoin_char_and_free(&command, str[i]);
 			g_all.flags.esc = 0;
 		}
-		else if (str[i] == '\"' && g_all.flags.double_quote) // $ и '\' сохраняют значения
+		else if (str[i] == '\"' && g_all.flags.double_quote)
 			g_all.flags.double_quote = 0;
 		else if (str[i] == '\"')
 			g_all.flags.double_quote = 1;
@@ -83,7 +80,7 @@ void	ft_parser(const char *str)
 			g_all.flags.dollar = 1;
 		else if (str[i] == '\\')
 			g_all.flags.esc = 1;
-		else if (g_all.flags.double_quote) // все что ниже не выполняется
+		else if (g_all.flags.double_quote) // все что ниже не выполняется внутри " "
 			ft_strjoin_char_and_free(&command, str[i]);
 		else if (str[i] == '\'')
 		{
@@ -112,7 +109,6 @@ void	ft_parser(const char *str)
 			ft_common_split_part(&command, "|");
 		else if (str[i] == ';')
 			ft_common_split_part(&command, ";");
-		// ! иначе просто прибавляем к command
 		else
 			ft_strjoin_char_and_free(&command, str[i]);
 		i++;

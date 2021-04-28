@@ -22,21 +22,20 @@ typedef struct s_history_list
 typedef struct s_tokens_list
 {
 	char					*content;
-	struct t_tokens_list	*next;
-	struct t_tokens_list	*prev;
+	struct s_tokens_list	*next;
+	struct s_tokens_list	*prev;
 }	t_tokens_list;
 
 typedef struct s_parse_flags
 {
 	int		esc;			// '\\'
 	int		dollar;			// $
-	int		single_quote;	// "
 	int		double_quote;	// '
 }	t_parse_flags;
 
 typedef struct s_term_all
 {
-	//TODO: добавить код предыдущей ошибки 
+	//TODO: добавить код предыдущей ошибки (отлавливать во время вызывов программ)
 	struct termios	g_saved_attributes;
 	char			wr[10];
 	char			*str;
@@ -72,5 +71,13 @@ void	ft_add_char_to_correct_str(t_term_all *all);
 void	ft_parser(const char *str);
 int		ft_check_unused_char(const char *wr);
 char	**ft_allocate_env(char **env);
+void	ft_tokens_step_back(void);
+void	ft_tokens_step_front(void);
+void	ft_tokens_newline(char *content);
+void	ft_tokens_to_beginning(void);
+void	ft_free_tokens(void);
+char	*ft_find_env_var(char *str);
+
+void	ft_display_tokens(void);
 
 #endif

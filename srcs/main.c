@@ -35,6 +35,9 @@ void	ft_manage_str(void)
 		free(g_all.str);
 		free(g_all.str_hist);
 	}
+	// TODO: передать токены дальше на обработку
+	ft_display_tokens(); // ! для отладки
+	ft_free_tokens();
 }
 
 // инициализация всех переменных
@@ -62,14 +65,14 @@ int	main(int argc, char* argv[], char* env[])
 		{
 			ft_bzero(g_all.wr, 10);
 			read(0, g_all.wr, 10);
-			if (g_all.wr[0] == '\004')
-				ft_exit();
 			if (ft_check_unused_char(g_all.wr))
 				continue ;
 			if (ft_manage_history(&g_all))
 				continue ;
 			if (g_all.wr[0] != '\n')
 				ft_add_char_to_correct_str(&g_all);
+			if (g_all.str[0] == '\004')
+				ft_exit();
 			ft_putstr_fd(g_all.wr, 1);
 		}
 		ft_manage_str();
