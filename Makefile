@@ -1,8 +1,9 @@
 NAME := minishell
 
-SRCS := srcs/main.c srcs/ft_history.c srcs/ft_manage_history.c srcs/ft_dop_1.c\
-		srcs/ft_dop_2.c srcs/ft_dop_3.c \
-		srcs/parser/ft_parser.c srcs/parser/ft_tokens.c srcs/parser/ft_parser_dop.c
+SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c\
+		srcs/term/dop_2.c srcs/term/dop_3.c srcs/term/dop_1.c\
+		srcs/parser/parser.c srcs/parser/tokens.c srcs/parser/parser_dop.c \
+		srcs/handler/handler.c
 		
 OBJS := ${patsubst %.c,%.o,${SRCS}}
 D_FILES := ${patsubst %.c,%.d,${SRCS}}

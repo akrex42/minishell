@@ -41,6 +41,7 @@ typedef struct s_term_all
 {
 	//TODO: добавить код предыдущей ошибки (отлавливать во время вызывов программ)
 	struct termios	g_saved_attributes;
+	int				exit_status;
 	char			wr[10];
 	char			*str;
 	char			*str_hist;
@@ -81,6 +82,7 @@ void	ft_tokens_newline(char *content);
 void	ft_tokens_to_beginning(void);
 void	ft_free_tokens(void);
 char	*ft_find_env_var(char *str);
+void	ft_handler(void);
 
 void	ft_display_tokens(void);
 

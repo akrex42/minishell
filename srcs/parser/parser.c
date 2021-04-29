@@ -1,10 +1,5 @@
 #include "minishell.h"
 
-// * пример вызова программы
-// * исполняемые файлы искать в $PATH
-// char *arg[] = {"cat", NULL};
-// execve("/bin/cat", arg, NULL);
-
 void	ft_init_parse_flags(void)
 {
 	g_all.flags.esc = 0;
@@ -27,8 +22,8 @@ void	ft_command_add_to_list(char **command)
 			g_all.tokens->special_value = 0;
 			g_all.flags.special_value = 1;
 		}
+		ft_malloc_one_char_str(command);
 	}
-	ft_malloc_one_char_str(command);
 }
 
 // если встречен специальный символ, то добавляет в лист строку,
@@ -41,7 +36,6 @@ void	ft_common_split_part(char **command, const char *str)
 	ft_command_add_to_list(command);
 }
 
-// $? - exit status variable (содержит код последней команды)
 void	ft_parser(const char *str)
 {
 	int		i;
@@ -59,7 +53,12 @@ void	ft_parser(const char *str)
 			i++;
 			if (str[i] == '?')
 			{
-				// TODO: добавить в command exit status variable
+				env_str = ft_itoa(g_all.exit_status);
+				if (!env_str)
+					ft_malloc_error();
+				ft_strjoin_and_free_1(&command, env_str);
+				free(env_str);
+				i++;
 			}
 			else
 			{
