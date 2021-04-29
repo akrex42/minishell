@@ -9,8 +9,10 @@ void	ft_echo(char **str, int argc)
 	int i;
 
 	flag = 0;
+	// WE CHANGE STDOUT WITH PIPES AND REDIRECTS!!!!!!!
+
 	// int i = 0;
-	//ft_putstr_fd(stdout, str);
+	// ft_putstr_fd(stdout, str);
 
 	/* WE DO THE FOLLOWING IN THE PARSER, NOT HERE */
 
@@ -24,13 +26,9 @@ void	ft_echo(char **str, int argc)
 	// 	newstr = ft_substr(str, i, len); // possible leak
 	// 	printf("%s\n", getenv(newstr)); //we get the env variable home and change dir to there
 	// }
-	if (argc == 1)
-	{
-		return ;
-	}
 	i = 1;
 	// Parse key -n if needed
-	if (!(strcmp(str[1], "-n")))
+	if (argc > 1 && !(strcmp(str[1], "-n")))
 	{
 		flag = 1;
 		++i;
@@ -40,10 +38,13 @@ void	ft_echo(char **str, int argc)
 		printf("%s ", str[i]);
 		i++;
 	}
-	printf("%s", str[i]);
+	if (argc > 1)
+	{
+		printf("%s", str[i]);
+	}
 	if (!flag)
 	{
-		printf("\n");
+		printf("%c", '\n');
 	}
 	//return (0);
 }

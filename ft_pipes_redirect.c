@@ -1,4 +1,4 @@
-#include "main_term.h"
+#include "minishell.h"
 
 void	ft_execute()
 {
