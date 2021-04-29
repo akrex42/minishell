@@ -1,10 +1,20 @@
-#include <stdio.h>
-#include <unistd.h>
+#include "minishell.h"
 
-int main(void)
+void	ft_pwd(int argc)
 {
-	char dir[1000]; //WE WILL PARSE THIS SO IT WILL BE ALLOCATED DYNAMICALLY
-	getcwd(dir, 1000); //add realloc and errors
-	printf("Current directory is %s", dir);
-	return (0);
+	if (argc == 1)
+	{
+		char dir[1000]; //WE WILL PARSE THIS SO IT WILL BE ALLOCATED DYNAMICALLY
+		getcwd(dir, 1000); //add realloc and errors
+		printf("%s", dir);
+	}
+	else
+	{
+		ft_error_builtins();
+	}
+}
+
+int main(int argc, char **argv, char **env)
+{
+	ft_pwd(argc);
 }

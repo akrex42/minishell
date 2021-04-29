@@ -1,18 +1,17 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include "libft.h"
+#include "minishell.h"
 
 void 	ft_exit(int error_code) //implement errno here
 {
-	exit(0);
+	exit(error_code); // we should set this value to $?
 }
 
 int		main()
 {
 	int errno;
-	
+
+	errno = 0; // perror?
+	// EXIT FROM BASH, not builtinse
+
 	ft_exit(errno);
 	return (0);
 }
