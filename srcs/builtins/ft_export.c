@@ -21,8 +21,8 @@ void 	ft_export(int argc, char **str, char **envp)
 		// key1 = ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))); //free
 		// key2 = ft_substr(str[i], 0, ft_strlen(str[i]) - ft_strlen(ft_strchr(str[i], '='))); 
 		if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))),
-			ft_substr(str[i], 0, ft_strlen(str[i]) - ft_strlen(ft_strchr(str[i], '='))),
-			ft_strlen(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')))))))
+						 ft_substr(str[i], 0, ft_strlen(str[i]) - ft_strlen(ft_strchr(str[i], '='))),
+						 ft_strlen(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')))))))
 		{
 			printf("%s\n", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))));
 			*g_all.env = ft_strdup(str[i]);
@@ -39,10 +39,10 @@ void 	ft_export(int argc, char **str, char **envp)
 		if (!(g_all.env = ft_allocate_env_builtins(g_all.env, argc, str, this_env)))
 		{
 			printf("%s", "error"); // error handling errors: g_all.env[0] != alpha, 
-		// error handling errors: g_all.env[0] != alpha,
-		// g_all.env[i] != isalphanum except for '=' and mb other bash reserved symbols
+			// error handling errors: g_all.env[0] != alpha,
+			// g_all.env[i] != isalphanum except for '=' and mb other bash reserved symbols
 			exit (-1);
-		// NEED TO ADD VALUES CHANGE HANDLING
+			// NEED TO ADD VALUES CHANGE HANDLING
 		}
 	}
 	g_all.env = beg_env;
@@ -54,7 +54,7 @@ void 	ft_export(int argc, char **str, char **envp)
 		{
 			printf("%s%s%c", "declare -x ", this_env, '\n');
 		}
-		else 
+		else
 		{
 			printf("%s", "declare -x ");
 			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));

@@ -36,7 +36,7 @@ void	ft_manage_str(void)
 		free(g_all.str_hist);
 	}
 	ft_display_tokens(); // ! для отладки
-	// TODO: передать токены дальше на обработку
+	ft_handler();
 	ft_free_tokens();
 }
 
@@ -45,6 +45,7 @@ void	ft_init_term_all(char **env)
 {
 	g_all.history = NULL;
 	g_all.tokens = NULL;
+	g_all.exit_status = 0;
 	g_all.env = ft_allocate_env(env);
 	ft_init_history(&(g_all.history));
 	tgetent(0,  "xterm-256color"); // ! для дебаггера
@@ -70,7 +71,7 @@ int	main(int argc, char* argv[], char* env[])
 				continue ;
 			if (ft_manage_history(&g_all))
 				continue ;
-			if (g_all.wr[0] != '\n')
+			if (g_all.wr[0] != '\n') // TODO: разделять wr по \n
 				ft_add_char_to_correct_str(&g_all);
 			if (g_all.str[0] == '\004')
 				ft_exit();

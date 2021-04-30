@@ -36,7 +36,7 @@ t_term_all		g_all;
 
 void	ft_init_history(t_history_list **history);
 void	ft_history_newline(t_history_list **list,
-			char *content);
+						   char *content);
 int		ft_manage_history(t_term_all *all);
 void	ft_malloc_error(void);
 void	ft_file_open_error(void);

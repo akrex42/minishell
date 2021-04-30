@@ -9,7 +9,7 @@ void 	ft_cd(char **str, int argc, char **envp)
 	char *key1;
 	int errno;
 
-	char dir[1000]; // 
+	char dir[1000]; //
 	g_all.env = ft_allocate_env(envp); // we need to initialize it somewhere else
 	beg_env = g_all.env;
 	if (argc > 1)
@@ -42,27 +42,27 @@ void 	ft_cd(char **str, int argc, char **envp)
 				else
 					g_all.env++;
 			}
-	// g_all.env = beg_env;
-	// while (*g_all.env != NULL)
-	// {
-	// 	this_env = *g_all.env;
-	// 	char *equal = ft_strchr(this_env, '=');
-	// 	if (equal == NULL)
-	// 	{
-	// 		printf("%s%s%c", "declare -x ", this_env, '\n');
-	// 	}
-	// 	else 
-	// 	{
-	// 		printf("%s", "declare -x ");
-	// 		printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
-	// 		printf("%c", equal[0]);
-	// 		printf("%c", '"');
-	// 		printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
-	// 		printf("%c%c", '"', '\n');
-	// 	}
-	// 	g_all.env++;
-	// }
-	// printf("%s\n", getcwd(dir, 1000));
+			// g_all.env = beg_env;
+			// while (*g_all.env != NULL)
+			// {
+			// 	this_env = *g_all.env;
+			// 	char *equal = ft_strchr(this_env, '=');
+			// 	if (equal == NULL)
+			// 	{
+			// 		printf("%s%s%c", "declare -x ", this_env, '\n');
+			// 	}
+			// 	else
+			// 	{
+			// 		printf("%s", "declare -x ");
+			// 		printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
+			// 		printf("%c", equal[0]);
+			// 		printf("%c", '"');
+			// 		printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
+			// 		printf("%c%c", '"', '\n');
+			// 	}
+			// 	g_all.env++;
+			// }
+			// printf("%s\n", getcwd(dir, 1000));
 		}
 		else
 		{

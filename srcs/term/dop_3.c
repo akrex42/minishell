@@ -46,7 +46,7 @@ void	ft_set_input_mode(t_term_all *all)
 
 	if (!isatty(0))
 	{
-		printf("Error term initialization\n");
+		printf("Error term initialization\n"); // ! сделать более осмысленную ошибку
 		exit(1);
 	}
 	tcgetattr(0, &(all->g_saved_attributes));

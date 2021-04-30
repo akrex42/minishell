@@ -2,7 +2,7 @@
 
 void 	ft_unset(char **str, int args, char **envp)
 {
-    char *end;
+	char *end;
 	char *key;
 	int len;
 	int i;
@@ -29,12 +29,12 @@ void 	ft_unset(char **str, int args, char **envp)
 			{
 				while (this_arg != '\0')
 				{
-						if (!(ft_isalnum(*this_arg)))
-						{
-							// print_err(-3);
-							printf("%s%s%s", "bash: unset: `", this_arg, "': not a valid identifier\n"); // error handling func
-							return ;
-						}
+					if (!(ft_isalnum(*this_arg)))
+					{
+						// print_err(-3);
+						printf("%s%s%s", "bash: unset: `", this_arg, "': not a valid identifier\n"); // error handling func
+						return ;
+					}
 					this_arg++;
 				}
 			}
@@ -77,7 +77,7 @@ void 	ft_unset(char **str, int args, char **envp)
 // 		{
 // 			printf("%s%s", "declare -x ", this_env);
 // 		}
-// 		else 
+// 		else
 // 		{
 // 			printf("%s", "declare -x ");
 // 			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
