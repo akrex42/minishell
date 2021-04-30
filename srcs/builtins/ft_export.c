@@ -15,42 +15,74 @@ void 	ft_export(int argc, char **str, char **envp)
 	g_all.env = ft_allocate_env(envp); // we need to initialize it somewhere else
 	i = 1;
 	beg_env = g_all.env;
+	// while (*g_all.env != 0 && i < argc)
+	// {
+	// 	this_env = *g_all.env;
+	// 	// equal = ft_strchr(this_env, '=');
+	// 	// if (equal == NULL)
+	// 	// {
+	// 	// 	i++;
+	// 	// }
+	// 	if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))),
+	// 					 ft_substr(str[i], 0, ft_strlen(str[i]) - ft_strlen(ft_strchr(str[i], '='))),
+	// 					 ft_strlen(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')))))))
+	// 	{
+	// 		printf("%s\n", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))));
+	// 		*g_all.env = ft_strdup(str[i]);
+	// 		printf("%s\n", *g_all.env);
+	// 		flag_rep = 1;
+	// 		i++;
+	// 		// g_all.env++;
+	// 	}
+	// 	// else
+	// 	// {
+	// 	// 	g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
+	// 	// 	i++;
+	// 	// 	// g_all.env++;
+	// 	// 	// printf("%s\n", );
+	// 	// }
+	// 	g_all.env++;
+	// }
+	// g_all.flag_allocate = 0;
+	// i = 0;
+	// while ()
 	while (*g_all.env != 0 && i < argc)
 	{
 		this_env = *g_all.env;
-		if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))),
-						 ft_substr(str[i], 0, ft_strlen(str[i]) - ft_strlen(ft_strchr(str[i], '='))),
-						 ft_strlen(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')))))))
+		equal = ft_strchr(this_env, '=');
+		if (equal == NULL)
 		{
-			printf("%s\n", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))));
-			*g_all.env = ft_strdup(str[i]);
-			printf("%s\n", *g_all.env);
-			flag_rep = 1;
-			i++;
-			// g_all.env++;
+			g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
 		}
-		// else
-		// {
-		// 	g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
-		// 	i++;
-		// 	// g_all.env++;
-		// 	// printf("%s\n", );
-		// }
+		else if (equal != NULL)
+		{
+			int j = 1;
+			while (*beg_env != 0 && j < argc)
+			{
+				this_env = *beg_env;
+				if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))),
+								ft_substr(str[j], 0, ft_strlen(str[j]) - ft_strlen(ft_strchr(str[j], '='))),
+								ft_strlen(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')))))))
+				{
+					printf("%s\n", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))));
+					*g_all.env = ft_strdup(str[j]);
+					printf("%s\n", *g_all.env);
+					flag_rep = 1;
+				}
+				j++;
+				beg_env++;
+			}
+		}
+		i++;
 		g_all.env++;
 	}
-	g_all.flag_allocate = 0;
-	i = 0;
-	// while ()
-	// if (!flag_rep)
+	// if (!(g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env)))
 	// {
-	// 	if (!(g_all.env = ft_allocate_env_builtins(g_all.env, argc, str[i], this_env)))
-	// 	{
-	// 		printf("%s", "error"); // error handling errors: g_all.env[0] != alpha, 
-	// 		// error handling errors: g_all.env[0] != alpha,
-	// 		// g_all.env[i] != isalphanum except for '=' and mb other bash reserved symbols
-	// 		exit (-1);
-	// 		// NEED TO ADD VALUES CHANGE HANDLING
-	// 	}
+	// 	printf("%s", "error"); // error handling errors: g_all.env[0] != alpha, 
+	// 	// error handling errors: g_all.env[0] != alpha,
+	// 	// g_all.env[i] != isalphanum except for '=' and mb other bash reserved symbols
+	// 	exit (-1);
+	// 	// NEED TO ADD VALUES CHANGE HANDLING
 	// }
 	// g_all.env = beg_env;
 	// while (*g_all.env != NULL)
