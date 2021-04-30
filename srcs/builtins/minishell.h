@@ -55,7 +55,7 @@ void	ft_add_char_to_rigth_str(t_term_all *all);
 void	ft_parser(const char *str);
 int		ft_check_unused_char(const char *wr);
 char	**ft_allocate_env(char **env);
-char	**ft_allocate_env_builtins(char **env, int len, char **str, char *this_env);
+char	**ft_allocate_env_builtins(char **env, int len, char *str, char *this_env);
 void 	ft_cd(char **str, int argc, char **envp);
 void	ft_echo(char **str, int argc);
 void 	ft_env(int argv, char **str, char **envp);

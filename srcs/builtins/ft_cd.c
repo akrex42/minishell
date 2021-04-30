@@ -17,9 +17,11 @@ void 	ft_cd(char **str, int argc, char **envp)
 		if ((strcmp(str[1], "-"))) //DO WE NEED TO MAKE TILDA?????
 		{
 			getcwd(dir, 1000);
-			if (chdir(str[1] == -1)); //we get the env variable home and change dir to there
+			if (chdir(str[1]) == -1) //we get the env variable home and change dir to there
 			{
-				print_err_cd(errno); //ERROR
+				// print_err_cd(errno); //ERROR
+				printf("%s\n", "error");
+
 			}
 			while (*g_all.env != 0)
 			{

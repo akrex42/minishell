@@ -21,25 +21,25 @@ void 	ft_unset(char **str, int args, char **envp)
 			return ;
 		}
 		// i = 1;
-		j = 0;
-		while (*str != NULL)
-		{
-			char *this_arg = *str;
-			if (ft_strncmp(this_arg, "./a.out", 7))
-			{
-				while (this_arg != '\0')
-				{
-					if (!(ft_isalnum(*this_arg)))
-					{
-						// print_err(-3);
-						printf("%s%s%s", "bash: unset: `", this_arg, "': not a valid identifier\n"); // error handling func
-						return ;
-					}
-					this_arg++;
-				}
-			}
-			str++;
-		}
+		// j = 0;
+		// while (*str != NULL)
+		// {
+		// 	char *this_arg = *str;
+		// 	if (ft_strncmp(this_arg, "./a.out", 7))
+		// 	{
+		// 		while (this_arg != '\0')
+		// 		{
+		// 			if (!(ft_isalnum(*this_arg)))
+		// 			{
+		// 				// print_err(-3);
+		// 				printf("%s%s%s", "bash: unset: `", this_arg, "': not a valid identifier\n"); // error handling func
+		// 				return ;
+		// 			}
+		// 			this_arg++;
+		// 		}
+		// 	}
+		// 	str++;
+		// }
 	}
 	i = 1;
 	char **beg_env;
@@ -59,7 +59,7 @@ void 	ft_unset(char **str, int args, char **envp)
 		{
 			// printf("%s\n", str[i]);
 			g_all.flag_allocate = 1;
-			g_all.env = ft_allocate_env_builtins(beg_env, 1, str, this_env);
+			g_all.env = ft_allocate_env_builtins(beg_env, 1, str[i], this_env);
 			// printf("%s\n", g_all.env[0]);
 			beg_env = g_all.env;
 			i++;
@@ -67,28 +67,28 @@ void 	ft_unset(char **str, int args, char **envp)
 		else
 			g_all.env++;
 	}
-// 	while (*beg_env != NULL) //this cycle is here just to check
-// 	{
-// 		char *equal;
+	while (*beg_env != NULL) //this cycle is here just to check
+	{
+		char *equal;
 
-// 		this_env = *beg_env;
-// 		equal = ft_strchr(this_env, '=');
-// 		if (equal == NULL)
-// 		{
-// 			printf("%s%s", "declare -x ", this_env);
-// 		}
-// 		else
-// 		{
-// 			printf("%s", "declare -x ");
-// 			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
-// 			printf("%c", equal[0]);
-// 			printf("%c", '"');
-// 			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
-// 			printf("%c%c", '"', '\n');
-// 		}
-// 		beg_env++;
-// 	}
-// 	g_all.flag_allocate = 0;
+		this_env = *beg_env;
+		equal = ft_strchr(this_env, '=');
+		if (equal == NULL)
+		{
+			printf("%s%s", "declare -x ", this_env);
+		}
+		else
+		{
+			printf("%s", "declare -x ");
+			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
+			printf("%c", equal[0]);
+			printf("%c", '"');
+			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
+			printf("%c%c", '"', '\n');
+		}
+		beg_env++;
+	}
+	g_all.flag_allocate = 0;
 }
 
 int main (int argc, char **argv, char **envp)

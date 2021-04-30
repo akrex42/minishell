@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 // перевыделяет память для переменных окружения
-char	**ft_allocate_env_builtins(char **env, int args, char **str, char *this_env)
+char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 {
 	char	**ret;
 	int		len;
@@ -14,9 +14,9 @@ char	**ft_allocate_env_builtins(char **env, int args, char **str, char *this_env
 	if (g_all.flag_allocate == 1)
 		ret = malloc(sizeof(char *) * (len));
 	else
-		ret = malloc(sizeof(char *) * (len + args)); //for every pointer
+		ret = malloc(sizeof(char *) * (len + 2)); //for every pointer
 	i = 0;
-	while (i < len - 1)
+	while (i < len - 1) // I need to fix somehow double lines issue
 	{
 		if (g_all.flag_allocate == 1 && !(ft_strncmp(env[i], this_env, ft_strlen(this_env))))
 		{
@@ -33,11 +33,13 @@ char	**ft_allocate_env_builtins(char **env, int args, char **str, char *this_env
 		}
 	}
 	j = 1;
-	if (args > 1 && !g_all.flag_allocate)
+	if (args == 1 && !g_all.flag_allocate)
 	{
-		while (j < args)
+		ret[i] = ft_strdup(env[i]); // we need to free it somewhere, memory per line
+		i++;
+		while (j <= args)
 		{
-			ret[i] = ft_strdup(str[j]);
+			ret[i] = ft_strdup(str);
 			i++;
 			j++;
 		}
