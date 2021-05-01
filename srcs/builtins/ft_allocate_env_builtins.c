@@ -33,16 +33,16 @@ char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 		}
 	}
 	j = 1;
-	if (args == 1 && !g_all.flag_allocate)
+	if (!g_all.flag_allocate)
 	{
 		ret[i] = ft_strdup(env[i]); // we need to free it somewhere, memory per line
 		i++;
-		while (j <= args)
-		{
+		// while (j < args)
+		// {
 			ret[i] = ft_strdup(str);
 			i++;
-			j++;
-		}
+		// 	j++;
+		// }
 		ret[i] = NULL;
 	}
 	else
