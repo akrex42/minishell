@@ -10,7 +10,6 @@
 # include <unistd.h>
 # include <signal.h>
 # include <fcntl.h>
-# include <errno.h>
 # include "libft.h"
 
 typedef struct s_history_list
@@ -47,6 +46,7 @@ typedef struct s_term_all
 	char			*str;
 	char			*str_hist;
 	char			**env;
+	char			**path; //разделенные директории по которым нужно искать прогу
 	t_history_list	*history;
 	t_tokens_list	*tokens;
 	t_parse_flags	flags;

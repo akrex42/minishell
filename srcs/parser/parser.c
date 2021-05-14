@@ -17,6 +17,7 @@ void	ft_command_add_to_list(char **command)
 		if (!g_all.flags.special_value)
 		{
 			// если хоть один элемень в строке был экранирован
+			// или написан в кавычках
 			// но проверять это мы будем только на отдельных символах
 			// "|" ">" ">>" "<"
 			g_all.tokens->special_value = 0;
@@ -92,10 +93,14 @@ void	ft_parser(const char *str)
 		else if (str[i] == '\\')
 			g_all.flags.esc = 1;
 		else if (g_all.flags.double_quote) // все что ниже не выполняется внутри " "
+		{
+			g_all.flags.special_value = 0;
 			ft_strjoin_char_and_free(&command, str[i]);
+		}
 		else if (str[i] == '\'')
 		{
 			i++;
+			g_all.flags.special_value = 0;
 			while (str[i] != '\'' && str[i])
 				ft_strjoin_char_and_free(&command, str[i++]);
 		}
