@@ -62,8 +62,8 @@ void 	ft_export(int argc, char **str, char **envp)
 						flag_equal = 1;
 						// break ;
 					}
-					k++;
 				}
+				k++;
 			}
 			if (flag_equal == 0) // h h case breaks
 			{
@@ -76,6 +76,7 @@ void 	ft_export(int argc, char **str, char **envp)
 						if (ft_strncmp(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '='))),
 								str[i], ft_strlen(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '='))))) == 0)
 						{
+							// printf("%s\n", str[i]);
 							flag_equal = 2;
 							break ;
 						}
@@ -84,6 +85,7 @@ void 	ft_export(int argc, char **str, char **envp)
 				}
 				if (flag_equal == 0)
 				{
+					printf("%s\n", str[i]);
 					g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
 				}		
 			}
