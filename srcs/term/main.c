@@ -47,6 +47,7 @@ void	ft_init_term_all(char **env)
 	g_all.tokens = NULL;
 	g_all.exit_status = 0;
 	g_all.env = ft_allocate_env(env);
+	g_all.path = ft_split(ft_find_env_var("PATH"), ':'); // добавляет двумерный массив возможных директорий для запуска программ
 	ft_init_history(&(g_all.history));
 	tgetent(0,  "xterm-256color"); // ! для дебаггера
 	// tgetent(0,  getenv("TERM")); // ! основной
@@ -71,7 +72,7 @@ int	main(int argc, char* argv[], char* env[])
 				continue ;
 			if (ft_manage_history(&g_all))
 				continue ;
-			if (g_all.wr[0] != '\n') // TODO: разделять wr по \n
+			if (g_all.wr[0] != '\n') // TODO: разделять wr по \n мб бонус
 				ft_add_char_to_correct_str(&g_all);
 			if (g_all.str[0] == '\004')
 				ft_exit();
