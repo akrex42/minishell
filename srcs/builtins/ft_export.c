@@ -56,9 +56,9 @@ void 	ft_export(int argc, char **str, char **envp)
 				if (equal != NULL)
 				{
 					if (!(ft_strncmp(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '='))),
-							str[i], ft_strlen(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '=')))))))
+							str[i], ft_strlen(str[i]))))
 					{
-						printf("%s\n", str[i]);
+						// printf("%s\n", str[i]);
 						flag_equal = 1;
 						// break ;
 					}
@@ -74,9 +74,9 @@ void 	ft_export(int argc, char **str, char **envp)
 					if (equal != NULL)
 					{
 						if (ft_strncmp(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '='))),
-								str[i], ft_strlen(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '='))))) == 0)
+								str[i], ft_strlen(str[i])) == 0) //we need to compare the lenght of the arg, not the existing env
 						{
-							// printf("%s\n", str[i]);
+							printf("%s\n", str[i]);
 							flag_equal = 2;
 							break ;
 						}
@@ -85,7 +85,7 @@ void 	ft_export(int argc, char **str, char **envp)
 				}
 				if (flag_equal == 0)
 				{
-					printf("%s\n", str[i]);
+					// printf("%s\n", str[i]);
 					g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
 				}		
 			}
@@ -113,7 +113,7 @@ void 	ft_export(int argc, char **str, char **envp)
 					{
 						if (ft_strncmp(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '='))),
 								ft_substr(str[i], 0, ft_strlen(str[i]) - ft_strlen(ft_strchr(str[i], '='))),
-								ft_strlen(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '='))))) == 0)
+								ft_strlen(ft_substr(str[i], 0, ft_strlen(str[i]) - ft_strlen(ft_strchr(str[i], '='))))) == 0)
 						{
 							flag_equal = 2;
 							break ;
@@ -156,7 +156,7 @@ void 	ft_export(int argc, char **str, char **envp)
 				{
 					if (!(ft_strncmp(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '='))),
 									ft_substr(str[j], 0, ft_strlen(str[j]) - ft_strlen(ft_strchr(str[j], '='))),
-									ft_strlen(ft_substr(g_all.env[k], 0, ft_strlen(g_all.env[k]) - ft_strlen(ft_strchr(g_all.env[k], '=')))))))
+									ft_strlen(ft_substr(str[j], 0, ft_strlen(str[j]) - ft_strlen(ft_strchr(str[j], '=')))))))
 					{
 						g_all.env[k] = ft_strdup(str[j]);
 						break ;
