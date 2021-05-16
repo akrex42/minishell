@@ -10,7 +10,7 @@ int		main()
 	int errno;
 
 	errno = 0; // perror?
-	// EXIT FROM BASH, not builtinse
+	// EXIT FROM BASH, not builtins
 	
 	ft_exit(errno);
 	return (0);

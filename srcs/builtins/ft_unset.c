@@ -66,6 +66,7 @@ void 	ft_unset(char **str, int args, char **envp)
 		}
 		else
 			g_all.env++;
+		free(key);
 	}
 	while (*beg_env != NULL) //this cycle is here just to check
 	{
@@ -80,15 +81,20 @@ void 	ft_unset(char **str, int args, char **envp)
 		else
 		{
 			printf("%s", "declare -x ");
-			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
+			char *env = ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal));
+			printf("%s", env);
+			free(env);
 			printf("%c", equal[0]);
 			printf("%c", '"');
-			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
+			env = ft_substr(equal, 1, ft_strlen(equal) - 1);
+			printf("%s", env);
+			free(env);
 			printf("%c%c", '"', '\n');
 		}
 		beg_env++;
 	}
 	g_all.flag_allocate = 0;
+	sleep(1000);
 }
 
 int main (int argc, char **argv, char **envp)

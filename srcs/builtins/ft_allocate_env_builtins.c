@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-// перевыделяет память для переменных окружения
+// перевыделяет память для переменных окружения // we need to free all of this
 char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 {
 	char	**ret;
@@ -23,12 +23,14 @@ char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 			while (i < len - 1)
 			{
 				ret[i] = ft_strdup(env[i + 1]); // we need to free it somewhere, memory per line
+				// free(env[i + 1]);
 				i++;
 			}
 		}
 		else
 		{
 			ret[i] = ft_strdup(env[i]); // we need to free it somewhere, memory per line
+			// free(env[i]);
 			i++;
 		}
 	}
@@ -36,6 +38,7 @@ char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 	if (!g_all.flag_allocate)
 	{
 		ret[i] = ft_strdup(env[i]); // we need to free it somewhere, memory per line
+		// free(env[i]);
 		i++;
 		ret[i] = ft_strdup(str);
 		i++;
@@ -43,5 +46,12 @@ char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 	}
 	else
 		ret[i] = NULL;
+	// sleep (1000);
 	return (ret);
 }
+
+// int main(int argc, char **argv, char **env)
+// {
+// 	ft_allocate_env_builtins(env, argc, *argv, "str");
+// 	return (0);
+// }

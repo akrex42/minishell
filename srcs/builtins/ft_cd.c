@@ -26,23 +26,32 @@ void 	ft_cd(char **str, int argc, char **envp)
 			while (*g_all.env != 0)
 			{
 				this_env = *g_all.env;
-				char *equal = ft_strchr(this_env, '=');
-				if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))), "PWD", 3)))
+				char *equal = ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')));
+				if (!(ft_strncmp(equal, "PWD", 3)))
 				{
 					// printf("%s\n", this_env);
+					this_env = *g_all.env;
 					*g_all.env = ft_strjoin("PWD=", str[1]);
+					free(this_env);
 					// g_all.env + ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')) = ft_strdup(str[1]);
 					g_all.env++;
+					free(equal);
 				}
-				else if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))), "OLDPWD", 6)))
+				else if (!(ft_strncmp(equal, "OLDPWD", 6)))
 				{
 					// printf("%s\n", this_env);
+					this_env = *g_all.env;
 					*g_all.env = ft_strjoin("OLDPWD=", dir);
+					free(this_env);
 					// g_all.env + ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')) = ft_strdup(str[1]);
 					g_all.env++;
+					free(equal);
 				}
 				else
+				{
 					g_all.env++;
+					free(equal);
+				}
 			}
 			// g_all.env = beg_env;
 			// while (*g_all.env != NULL)
@@ -73,25 +82,34 @@ void 	ft_cd(char **str, int argc, char **envp)
 			while (*g_all.env != 0)
 			{
 				this_env = *g_all.env;
-				char *equal = ft_strchr(this_env, '=');
-				if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))), "OLDPWD", 6)))
+				char *equal = ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')));
+				if (!(ft_strncmp(equal, "OLDPWD", 6)))
 				{
 					// printf("%s\n", this_env);
+					this_env = *g_all.env;
 					*g_all.env = ft_strjoin("PWD=", ft_substr(equal, 1, ft_strlen(equal) - 1));
+					free(this_env);
 					// g_all.env + ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')) = ft_strdup(str[1]);
-					printf("%s\n", *g_all.env);
+					// printf("%s\n", *g_all.env);
 					g_all.env++;
+					free(equal);
 				}
-				else if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))), "PWD", 3)))
+				else if (!(ft_strncmp(equal, "PWD", 3)))
 				{
 					// printf("%s\n", this_env);
+					this_env = *g_all.env;
 					*g_all.env = ft_strjoin("OLDPWD=", ft_substr(equal, 1, ft_strlen(equal) - 1));
+					free(this_env);
 					// g_all.env + ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')) = ft_strdup(str[1]);
-					printf("%s\n", *g_all.env);
+					// printf("%s\n", *g_all.env);
 					g_all.env++;
+					free(equal);
 				}
 				else
+				{
 					g_all.env++;
+					free(equal);
+				}
 			}
 		}
 	}
@@ -101,27 +119,37 @@ void 	ft_cd(char **str, int argc, char **envp)
 		while (*g_all.env != 0)
 		{
 			this_env = *g_all.env;
-			char *equal = ft_strchr(this_env, '=');
-			if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))), "PWD", 3)))
+			char *equal = ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')));
+			if (!(ft_strncmp(equal, "PWD", 3)))
 			{
 				// printf("%s\n", this_env);
+				this_env = *g_all.env;
 				*g_all.env = ft_strjoin("OLDPWD=", ft_substr(equal, 1, ft_strlen(equal) - 1));
+				free(this_env);
 				// g_all.env + ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')) = ft_strdup(str[1]);
-				printf("%s\n", *g_all.env);
+				// printf("%s\n", *g_all.env);
 				g_all.env++;
+				free(equal);
 			}
 			else if (!(ft_strncmp(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '='))), "OLDPWD", 3)))
 			{
 				// printf("%s\n", this_env);
+				this_env = *g_all.env;
 				*g_all.env = ft_strjoin("PWD=", getenv("HOME"));
+				free(this_env);
 				// g_all.env + ft_strlen(this_env) - ft_strlen(ft_strchr(this_env, '=')) = ft_strdup(str[1]);
-				printf("%s\n", *g_all.env);
+				// printf("%s\n", *g_all.env);
 				g_all.env++;
+				free(equal);
 			}
 			else
+			{
 				g_all.env++;
+				free(equal);
+			}
 		}
 	}
+	// sleep (1000);
 }
 
 int 	main(int argc, char **argv, char **envp)
