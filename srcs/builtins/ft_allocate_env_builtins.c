@@ -16,7 +16,7 @@ char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 	else
 		ret = malloc(sizeof(char *) * (len + 2)); //for every pointer
 	i = 0;
-	while (i < len - 1) // I need to fix somehow double lines issue
+	while (i < len - 1)
 	{
 		if (g_all.flag_allocate == 1 && !(ft_strncmp(env[i], this_env, ft_strlen(this_env))))
 		{
@@ -37,12 +37,8 @@ char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 	{
 		ret[i] = ft_strdup(env[i]); // we need to free it somewhere, memory per line
 		i++;
-		// while (j < args)
-		// {
-			ret[i] = ft_strdup(str);
-			i++;
-		// 	j++;
-		// }
+		ret[i] = ft_strdup(str);
+		i++;
 		ret[i] = NULL;
 	}
 	else
