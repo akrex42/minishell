@@ -47,7 +47,8 @@ char	**ft_allocate_env_builtins(char **env, int args, char *str, char *this_env)
 	else
 		ret[i] = NULL;
 	// sleep (1000);
-	return (ret);
+	// free(env);
+	return(ret);
 }
 
 // int main(int argc, char **argv, char **env)

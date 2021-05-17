@@ -16,6 +16,7 @@ void 	ft_export(int argc, char **str, char **envp)
 
 	while (i < argc)
 	{
+		print_err_export_unset(str[i]);
 		equal = ft_strchr(str[i], '=');
 		if (equal == NULL) // key without value args cases
 		{
@@ -163,7 +164,7 @@ void 	ft_export(int argc, char **str, char **envp)
 		j++;
 	}
 	// free(g_all.env);
-	sleep(1000);
+	// sleep(1000);
 }
 
 int main (int argc, char **argv, char **envp)

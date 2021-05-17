@@ -46,7 +46,6 @@ int		ft_putchar(int c);
 void	ft_strjoin_and_free_1(char **str1, const char *str2);
 void	ft_strjoin_and_free_2(const char *str1, char **str2);
 void	ft_malloc_one_char_str(char **str);
-void	ft_exit(int error);
 void	ft_set_prompt(void);
 void	ft_sighnd(int signo);
 void	ft_reset_input_mode(void);
@@ -59,10 +58,11 @@ char	**ft_allocate_env_builtins(char **env, int len, char *str, char *this_env);
 void 	ft_cd(char **str, int argc, char **envp);
 void	ft_echo(char **str, int argc);
 void 	ft_env(int argv, char **str, char **envp);
-void 	ft_exit(int error_code);
+void 	ft_exit(int error_code, char **argv);
 void 	ft_export(int argc, char **str, char **envp);
 void 	ft_unset(char **str, int args, char **envp);
 void	ft_pwd(int argc);
+void	print_err_export_unset(char *str);
 
 
 #endif

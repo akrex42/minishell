@@ -22,8 +22,8 @@ void 	ft_env(int argc, char **str, char **envp)
 	}
 	else if (argc > 1)
 	{
-		print_err(-2); //-2 can be for ENV
-		// printf("%s%s%s", "env: ", str[1],": No such file or directory\n" ); // ONLY ONE ERROR CAN OCCUR
+		// print_err(-2); //-2 can be for ENV
+		printf("%s%s%s", "env: ", str[1],": No such file or directory\n" ); // ONLY ONE ERROR CAN OCCUR
 		// return ;
 	}
 }

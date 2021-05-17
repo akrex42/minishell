@@ -20,8 +20,7 @@ void 	ft_cd(char **str, int argc, char **envp)
 			if (chdir(str[1]) == -1) //we get the env variable home and change dir to there
 			{
 				// print_err_cd(errno); //ERROR
-				printf("%s\n", "error");
-
+				printf("%s%s%s", "bash: cd: ", str[1], ": No such file or directory\n");
 			}
 			while (*g_all.env != 0)
 			{

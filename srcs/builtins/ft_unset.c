@@ -12,14 +12,14 @@ void 	ft_unset(char **str, int args, char **envp)
 	g_all.env = ft_allocate_env(envp); // we need to initialize it somewhere else
 	// printf("%s", g_all.env[0]);
 
-	if (args > 1)
-	{
-		if (!(ft_isalpha(str[1][0])))
-		{
-			// print_err(-3);
-			printf("%s%s%s", "bash: unset: `", str[1], "': not a valid identifier\n"); // error handling func
-			return ;
-		}
+	// if (args > 1)
+	// {
+		// if (!(ft_isalpha(str[1][0])))
+		// {
+		// 	// print_err(-3);
+		// 	printf("%s%s%s", "bash: unset: `", str[1], "': not a valid identifier\n"); // error handling func
+		// 	return ;
+		// }
 		// i = 1;
 		// j = 0;
 		// while (*str != NULL)
@@ -40,7 +40,7 @@ void 	ft_unset(char **str, int args, char **envp)
 		// 	}
 		// 	str++;
 		// }
-	}
+	// }
 	i = 1;
 	char **beg_env;
 
@@ -48,6 +48,7 @@ void 	ft_unset(char **str, int args, char **envp)
 	while (*g_all.env != 0 && i < args)
 	{
 		this_env = *g_all.env;
+		print_err_export_unset(str[i]);
 		// printf("%s\n", this_env);
 		end = ft_strchr(this_env, '=');
 		// printf("%s\n", end);
