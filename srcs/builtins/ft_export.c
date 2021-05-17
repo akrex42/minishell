@@ -29,7 +29,7 @@ void 	ft_export(int argc, char **str, char **envp)
 						== ft_strlen(str[i]) && !(ft_strncmp(g_all.env[j],
 							str[i], ft_strlen(str[i]))))
 					{
-						// printf("%s\n", str[i]); // if keys without values repeat and tey do not have value in the list
+						// printf("%s\n", str[i]); // if keys without values repeat and they do not have value in the list
 						flag_equal = 1;
 						break ;
 					}
@@ -42,9 +42,11 @@ void 	ft_export(int argc, char **str, char **envp)
 					{
 						// printf("%s\n", str[i]); // if keys without values repeat and they have value assigned in the list
 						flag_equal = 1;
+						free(key);
 						break ;
 					}
-					free(key);
+					else
+						free(key);			
 				}
 				j++;
 			}
@@ -52,7 +54,14 @@ void 	ft_export(int argc, char **str, char **envp)
 			{
 				// printf("%s\n", str[i]); // all the keys without value that do not repeat OR first time appeared repeating ones
 				env1 = g_all.env;
+				// free(g_all.env);
 				g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
+				int k = 0;
+				while (env1[k] != NULL)
+				{
+					free(env1[k]);
+					k++;
+				}
 				free(env1);
 			}		
 			flag_equal = 0;
@@ -78,9 +87,11 @@ void 	ft_export(int argc, char **str, char **envp)
 						// free
 						// printf("%s\n", g_all.env[k]);
 						flag_equal = 1;
+						free(key);
 						break ;
 					}
-					free(key);
+					else
+						free(key);
 				}
 				if (equal != NULL)
 				{
@@ -96,18 +107,29 @@ void 	ft_export(int argc, char **str, char **envp)
 						free(this_env);
 						// printf("%s\n", g_all.env[j]);
 						flag_equal = 1;
+						free(key);
+						free(key1);
 						break ;
 					}
-					free(key);
-					free(key1);
+					else
+					{
+						free(key);
+						free(key1);
+					}
 				}
 				j++;
 			}
 			if (flag_equal == 0)
 			{
-				// printf("%s\n", str[i]); // key=value included in the list for the first timie
+				// printf("%s\n", str[i]); // key=value included in the list for the first time
 				env1 = g_all.env;
 				g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
+				int k = 0;
+				while (env1[k] != NULL)
+				{
+					free(env1[k]);
+					k++;
+				}
 				free(env1);
 			}		
 			flag_equal = 0;
@@ -140,7 +162,8 @@ void 	ft_export(int argc, char **str, char **envp)
 		}
 		j++;
 	}
-	sleep (1000);
+	// free(g_all.env);
+	sleep(1000);
 }
 
 int main (int argc, char **argv, char **envp)
