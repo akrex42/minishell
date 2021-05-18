@@ -55,7 +55,7 @@ void	ft_parser(const char *str);
 int		ft_check_unused_char(const char *wr);
 char	**ft_allocate_env(char **env);
 char	**ft_allocate_env_builtins(char **env, int len, char *str, char *this_env);
-void 	ft_cd(char **str, int argc, char **envp);
+void 	ft_cd(char **str);
 void	ft_echo(char **str, int argc);
 void 	ft_env(int argv, char **str, char **envp);
 void 	ft_exit(int error_code, char **argv);
