@@ -1,56 +1,33 @@
 #include "minishell.h"
 
-void	ft_echo(char **str, int argc)
+int		ft_echo(char **str)
 {
-	// char *dollar;
-	// char *newstr;
-	// int len;
 	int flag;
 	int i;
 
 	flag = 0;
-	// WE CHANGE STDOUT WITH PIPES AND REDIRECTS!!!!!!!
-
-	// int i = 0;
-	// ft_putstr_fd(stdout, str);
-
-	/* WE DO THE FOLLOWING IN THE PARSER, NOT HERE */
-
-	// if ((dollar = ft_strchr(str, '$')))
-	// {
-	// 	while (str[i] != '$')
-	// 	{
-	// 		i++;
-	// 	}
-	// 	len = ft_strlen(dollar);
-	// 	newstr = ft_substr(str, i, len); // possible leak
-	// 	printf("%s\n", getenv(newstr)); //we get the env variable home and change dir to there
-	// }
 	i = 1;
 	// Parse key -n if needed
-	if (argc > 1 && !(strcmp(str[1], "-n")))
+	if (str[1] != NULL && !(ft_strncmp(str[1], "-n", ft_strlen(str[1]))))
 	{
 		flag = 1;
 		++i;
 	}
-	while (i < argc - 1)
+	while (str[i] != NULL)
 	{
-		printf("%s ", str[i]);
+		ft_putstr_fd(str[i], 1);
+		ft_putchar_fd(' ', 1);
 		i++;
 	}
-	if (argc > 1)
-	{
-		printf("%s", str[i]);
-	}
+	if (str[1] != NULL)
+		ft_putstr_fd(str[i], 1);
 	if (!flag)
-	{
-		printf("%c", '\n');
-	}
-	//return (0);
+		ft_putchar_fd('\n', 1);
+	return(0);
 }
 
-int main(int argc, char **argv)
-{
-	ft_echo(argv, argc);
-	return (0);
-}
+// int main(int argc, char **argv)
+// {
+// 	ft_echo(argv);
+// 	return (0);
+// }
