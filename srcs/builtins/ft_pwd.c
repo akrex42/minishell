@@ -1,20 +1,13 @@
 #include "minishell.h"
 
-void	ft_pwd(int argc)
+void	ft_pwd(void)
 {
-	// if (argc == 1)
-	// {
-		char dir[1000]; //WE WILL PARSE THIS SO IT WILL BE ALLOCATED DYNAMICALLY
-		getcwd(dir, 1000); //add realloc and errors
-		printf("%s", dir);
-	// }
-	// else
-	// {
-	// 	print_error_pwd();
-	// }
+	char dir[1000]; //WE WILL PARSE THIS SO IT WILL BE ALLOCATED DYNAMICALLY
+	getcwd(dir, 1000); //add realloc and errors
+	ft_putstr_fd(dir, 1);
 }
 
-int main(int argc, char **argv, char **env)
-{
-	ft_pwd(argc);
-}
+// int main(int argc, char **argv, char **env)
+// {
+// 	ft_pwd(argc);
+// }

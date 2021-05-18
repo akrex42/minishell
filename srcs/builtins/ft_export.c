@@ -1,5 +1,30 @@
 #include "minishell.h"
 
+void	ft_print_env(void)
+{
+	char **beg_env = g_all.env;
+	while (*g_all.env != NULL)
+	{
+		char *this_env = *g_all.env;
+		char *equal = ft_strchr(this_env, '=');
+		if (equal == NULL)
+		{
+			printf("%s%s%c", "declare -x ", this_env, '\n');
+		}
+		else
+		{
+			printf("%s", "declare -x ");
+			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
+			printf("%c", equal[0]);
+			printf("%c", '"');
+			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
+			printf("%c%c", '"', '\n');
+		}
+		g_all.env++;
+	}
+	g_all.env = beg_env;
+}
+
 void 	ft_export(int argc, char **str, char **envp)
 {
 	char *equal;
@@ -136,32 +161,6 @@ void 	ft_export(int argc, char **str, char **envp)
 			flag_equal = 0;
 		}
 		i++;
-	}
-
-
-	j = 0;
-	while (g_all.env[j] != NULL)
-	{
-		this_env = g_all.env[j];
-		equal = ft_strchr(this_env, '=');
-		if (equal == NULL)
-		{
-			printf("%s%s%c", "declare -x ", this_env, '\n');
-		}
-		else
-		{
-			printf("%s", "declare -x ");
-			char *env = ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal));
-			printf("%s", env);
-			free(env);
-			printf("%c", equal[0]);
-			printf("%c", '"');
-			env = ft_substr(equal, 1, ft_strlen(equal) - 1);
-			printf("%s", env);
-			free(env);
-			printf("%c%c", '"', '\n');
-		}
-		j++;
 	}
 	// free(g_all.env);
 	// sleep(1000);

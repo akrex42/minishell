@@ -9,7 +9,7 @@ void 	ft_exit(int error_code, char **argv) //implement errno here
 		if (!ft_isalpha(argv[1][i]))
 		{
 			printf("%s%s%s", "bash: exit: ", argv[1], ": numeric argument required\n");
-			exit(1);
+			return(1);
 		}
 		i++;
 	}

@@ -60,9 +60,8 @@ int		ft_echo(char **str);
 int 	ft_env(char **str, char **envp);
 void 	ft_exit(int error_code, char **argv);
 void 	ft_export(int argc, char **str, char **envp);
-void 	ft_unset(char **str, int args, char **envp);
-void	ft_pwd(int argc);
-void	print_err_export_unset(char *str);
+int 	ft_unset(char **str, char **envp);
+void	ft_pwd(void);
 
 
 #endif
