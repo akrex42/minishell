@@ -59,9 +59,10 @@ void 	ft_cd(char **str);
 int		ft_echo(char **str);
 int 	ft_env(char **str, char **envp);
 void 	ft_exit(int error_code, char **argv);
-void 	ft_export(int argc, char **str, char **envp);
+int		ft_export(char **str);
 int 	ft_unset(char **str, char **envp);
 void	ft_pwd(void);
+int		print_err_export_unset(char *str);
 
 
 #endif
