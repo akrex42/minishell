@@ -110,6 +110,7 @@ int		ft_check_equal2(int i, int flag_equal, char *key, char **str)
 		free(key);
 	return(flag_equal);
 }
+
 int		ft_check_equal(int i, int flag_equal, int j, char **str)
 {
 	if (ft_strlen(g_all.env[j]) 
@@ -121,6 +122,7 @@ int		ft_check_equal(int i, int flag_equal, int j, char **str)
 	}
 	return(flag_equal);
 }
+
 int		ft_equal_null(char **str, int flag_equal, char *equal, int i)
 {
 	int j;
@@ -150,15 +152,20 @@ void	ft_print_env(void)
 		char *this_env = *g_all.env;
 		char *equal = ft_strchr(this_env, '=');
 		if (equal == NULL)
-			printf("%s%s%c", "declare -x ", this_env, '\n');
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(this_env, 1);
+			ft_putchar_fd('\n', 1);
+		}
 		else
 		{
-			printf("%s", "declare -x ");
-			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
-			printf("%c", equal[0]);
-			printf("%c", '"');
-			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
-			printf("%c%c", '"', '\n');
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)), 1);
+			ft_putchar_fd(equal[0], 1);
+			ft_putchar_fd('"', 1);
+			ft_putstr_fd(ft_substr(equal, 1, ft_strlen(equal) - 1), 1);
+			ft_putchar_fd('"', 1);
+			ft_putchar_fd('\n', 1);
 		}
 		g_all.env++;
 	}

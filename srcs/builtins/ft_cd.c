@@ -1,29 +1,32 @@
 #include "minishell.h"
 
-void	ft_print_env(void)
-{
-	char **beg_env = g_all.env;
-	while (*g_all.env != NULL)
-	{
-		char *this_env = *g_all.env;
-		char *equal = ft_strchr(this_env, '=');
-		if (equal == NULL)
-		{
-			printf("%s%s%c", "declare -x ", this_env, '\n');
-		}
-		else
-		{
-			printf("%s", "declare -x ");
-			printf("%s", ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)));
-			printf("%c", equal[0]);
-			printf("%c", '"');
-			printf("%s", ft_substr(equal, 1, ft_strlen(equal) - 1));
-			printf("%c%c", '"', '\n');
-		}
-		g_all.env++;
-	}
-	g_all.env = beg_env;
-}
+// void	ft_print_env(void)
+// {
+// 	char **beg_env = g_all.env;
+// 	while (*g_all.env != NULL)
+// 	{
+// 		char *this_env = *g_all.env;
+// 		char *equal = ft_strchr(this_env, '=');
+// 		if (equal == NULL)
+// 		{
+// 			ft_putstr_fd("declare -x ", 1);
+// 			ft_putstr_fd(this_env, 1);
+// 			ft_putchar_fd('\n', 1);
+// 		}
+// 		else
+// 		{
+// 			ft_putstr_fd("declare -x ", 1);
+// 			ft_putstr_fd(ft_substr(this_env, 0, ft_strlen(this_env) - ft_strlen(equal)), 1);
+// 			ft_putchar_fd(equal[0], 1);
+// 			ft_putchar_fd('"', 1);
+// 			ft_putstr_fd(ft_substr(equal, 1, ft_strlen(equal) - 1), 1);
+// 			ft_putchar_fd('"', 1);
+// 			ft_putchar_fd('\n', 1);
+// 		}
+// 		g_all.env++;
+// 	}
+// 	g_all.env = beg_env;
+// }
 
 void	ft_chdir_emdash(char *dir, char **beg_env, char *this_env, char *equal)
 {

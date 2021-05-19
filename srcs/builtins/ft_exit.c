@@ -1,29 +1,37 @@
 #include "minishell.h"
 
-void 	ft_exit(char **argv) //implement errno here
+unsigned char 	ft_exit(char **str) //implement errno here
 {
-	int i = 0;
+	int i;
+	unsigned int error_code;
 
-	// atoi??
-	while (argv[1] != '\0')
+	i = 0;
+	if (str[1] == NULL)
+		return(0);
+	while (str[1][i] != '\0')
 	{
-		if (!ft_isalpha(argv[1][i]))
+		if ((str[1][i] == '-' || str[1][i] == '+') && ft_isdigit(str[1][i + 1]))
+			i++;
+		else if (!ft_isdigit(str[1][i]))
 		{
-			printf("%s%s%s", "bash: exit: ", argv[1], ": numeric argument required\n");
+			ft_putstr_fd("bash: exit: ", 1);
+			ft_putstr_fd(str[1], 1);
+			ft_putstr_fd(": numeric argument required", 1);
+			ft_putchar_fd('\n', 1);
 			return(1);
 		}
 		i++;
 	}
-	exit(error_code); // we should set this value to $?
+	error_code = (unsigned char)ft_atoi(str[1]);
+	ft_putstr_fd("exit", 1);
+	return(error_code); // we should set this value to $?
 }
 
-int		main(int argc, char **argv, char **env)
-{
-	int errno;
-
-	errno = 0; // perror?
-	// EXIT FROM BASH, not builtins
+// int		main(int argc, char **argv, char **env)
+// {
+// 	// perror?
+// 	// EXIT FROM BASH, not builtins
 	
-	ft_exit(argv);
-	return (0);
-}
+// 	ft_exit(argv);
+// 	return(0);
+// }
