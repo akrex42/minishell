@@ -79,7 +79,7 @@ void	ft_chdir_normal(char **beg_env, char *dir, char *dir1, char *this_env, char
 	g_all.env = beg_env;
 }
 
-void 	ft_cd(char **str)
+int		ft_cd(char **str)
 {
 	char *equal;
 	char *this_env;
@@ -98,6 +98,7 @@ void 	ft_cd(char **str)
 				ft_putstr_fd(str[1], 1);
 				ft_putstr_fd(": No such file or directory", 1);
 				ft_putchar_fd('\n', 1);
+				return(1);
 			}
 			getcwd(dir1, 1000);
 			ft_chdir_normal(beg_env, dir, dir1, this_env, equal);
@@ -105,6 +106,7 @@ void 	ft_cd(char **str)
 		else
 			ft_chdir_emdash(dir, beg_env, this_env, equal);
 	}
+	return(0);
 	// ft_print_env();
 	// sleep (1000);
 }

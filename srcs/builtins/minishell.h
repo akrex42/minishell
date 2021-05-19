@@ -55,13 +55,13 @@ void	ft_parser(const char *str);
 int		ft_check_unused_char(const char *wr);
 char	**ft_allocate_env(char **env);
 char	**ft_allocate_env_builtins(char **env, int len, char *str, char *this_env);
-void 	ft_cd(char **str);
+int 	ft_cd(char **str);
 int		ft_echo(char **str);
-int 	ft_env(char **str, char **envp);
-void 	ft_exit(int error_code, char **argv);
+int 	ft_env(char **str);
+int 	ft_exit(int error_code, char **str);
 int		ft_export(char **str);
-int 	ft_unset(char **str, char **envp);
-void	ft_pwd(void);
+int 	ft_unset(char **str);
+int		ft_pwd(char **str);
 int		print_err_export_unset(char *str);
 
 

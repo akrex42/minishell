@@ -8,13 +8,13 @@ void	ft_print_error_env(char *str)
 	ft_putchar_fd('\n', 1);
 }
 
-int 	ft_env(char **str, char **envp)
+int 	ft_env(char **str)
 {
 	char *equal;
 	char **beg_env;
 
 	beg_env = g_all.env;
-	g_all.env = ft_allocate_env(envp);
+	// g_all.env = ft_allocate_env(envp);
 	if (str[1] == NULL)
 	{
 		while (*g_all.env != 0)

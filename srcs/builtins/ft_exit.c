@@ -1,9 +1,10 @@
 #include "minishell.h"
 
-void 	ft_exit(int error_code, char **argv) //implement errno here
+void 	ft_exit(char **argv) //implement errno here
 {
 	int i = 0;
 
+	// atoi??
 	while (argv[1] != '\0')
 	{
 		if (!ft_isalpha(argv[1][i]))
@@ -23,6 +24,6 @@ int		main(int argc, char **argv, char **env)
 	errno = 0; // perror?
 	// EXIT FROM BASH, not builtins
 	
-	ft_exit(errno, argv);
+	ft_exit(argv);
 	return (0);
 }
