@@ -21,7 +21,8 @@ void	ft_display_tokens(void)
 		g_all.tokens = g_all.tokens->next;
 	}
 	printf("%s", g_all.tokens->content);
-	printf(" (((special value = %d)))\n", g_all.tokens->special_value);
+	printf(" (((special value = %d)))\n\n", g_all.tokens->special_value);
+	ft_tokens_to_beginning();
 }
 
 void	ft_free_tokens(void)

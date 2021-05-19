@@ -26,11 +26,16 @@ void	ft_set_prompt(void)
 	ft_putstr_fd("\033[0;92m(⌐■_■)☞ \033[0m$ ", 1);
 }
 
-// обработчик сигналов (ничего не делает)
+// обработчик сигналов
 void	ft_sighnd(int signo)
 {
 	(void)signo;
-	ft_putstr_fd("^C", 1);
-	// ft_putstr_fd("\n", 0); // ! не работает
-	exit(1);
+	//TODO: очищать g_all.str (и g_all.str_hist)?
+	// if (g_all.str != NULL)
+	// 	free(g_all.str);
+	// if (g_all.str_hist != NULL)
+	// 	free(g_all.str_hist);
+	ft_putstr_fd("\n", 1);
+	ft_set_prompt();
+	exit(1); //!временно
 }

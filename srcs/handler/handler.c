@@ -5,23 +5,17 @@
 // char *arg[] = {"cat", NULL};
 // execve("/bin/cat", arg, NULL);
 
-//TODO: ft_pipes_redirect() которому передается количество вызываемых программ 
-//TODO: и сами программы с аргументами (в каком виде ?) 
-
 // * если команды не существует на вход следующей ничего не передается
-void	ft_execute(void)
+void	ft_execute(void) //TODO: передавать лист из пайпов
 {
-	// как искать исполняемые файлы???
-	// 1 сначала проверить по билдинам
-	// 2 потом в PATH (запускать по очереди со всеми путями)
-	
-	// * test
-	//TODO: добавлять / к названию программы в зависимости от того, что там написано
-	char prog[] = "/ls"; // название программы
-	char *arg[] = {prog, NULL}; // Сюда будет писаться имя программы и АРГУМЕНТЫ
-	int fd[2];
-	int	ret;
-	int pid;
+	// TODO: добавлять / к названию программы
+	char	prog[] = "cat"; // название программы
+	char	*arg[] = {prog, NULL}; // Сюда будет писаться имя программы и АРГУМЕНТЫ
+	int		fd[2];
+	int		ret;
+	int		pid;
+	char	*str;
+	int		i;
 
 	//TODO: зациклить форк и передавать данные от процесса к  процессу
 	//TODO: разобраться что делать если в цепочке пайпов неверная программа
@@ -29,27 +23,36 @@ void	ft_execute(void)
 	pid = fork();
 	if (pid == 0)
 	{
-		
-		char	*str;
-		int		i;
 		close(fd[0]);
-		ret = execve(prog, arg, NULL);
+		close(fd[1]);
+		ft_reset_input_mode();
+		char *test = ft_strjoin("/", prog);
 		i = 0;
-		while (ret == -1 && g_all.path[i] != NULL)
+		while (g_all.path[i] != NULL)
 		{
-			str = ft_strjoin(g_all.path[i], prog);
+			str = ft_strjoin(g_all.path[i], test);
 			ret = execve(str, arg, NULL);
 			i++;
 			free(str);
 		}
+		ret = 127;
 		exit(ret);
 	}
+	signal(SIGINT, SIG_IGN); // игнарировать сигналы во время выполнения программ
 	waitpid(pid, &ret, 0);
-	g_all.exit_status = ret;
+	ret = WEXITSTATUS(ret);
+	signal(SIGINT, ft_sighnd); //ctrl + с // возвращаем первоначый обработчик
+	ft_set_input_mode(&g_all);
+	g_all.exit_status = ret; // как присваивать правильно???
+	// TODO: добавить обработчик выходных сигналов
 	if (ret == -1)
 	{ 
 		ft_putstr_fd(prog, 1);
 		ft_putstr_fd(": No such file or directory\n", 1);
+	}
+	else if (ret == 127)
+	{
+		//программа не найдена
 	}
 	else
 	{
@@ -59,7 +62,33 @@ void	ft_execute(void)
 	}
 	close(fd[1]);
 	close(fd[0]);
-	// * end of test
+}
+
+// делает из лексем лист исполняемых файлов
+void	ft_syntax_analyzer(void)
+{
+	// если всего один аргумент
+	if (g_all.tokens->next == NULL)
+	{
+		ft_new_prog_node();
+		ft_comands_list_add_args_and_prog();
+		return ;
+	}
+	while (g_all.tokens->next != NULL)
+	{
+		ft_new_prog_node();
+		ft_comands_list_add_args_and_prog();
+		ft_tokens_go_next_spec();
+	}
+	//если последни	аргумент один
+	g_all.tokens = g_all.tokens->prev;
+	if (g_all.tokens->next->next == NULL &&
+		ft_compare_tokens_cont_to_spec())
+	{
+		g_all.tokens = g_all.tokens->next;
+		ft_new_prog_node();
+		ft_comands_list_add_args_and_prog();
+	}
 }
 
 // < - меняет standart input (0) на содержимое файла (прга < файл)
@@ -81,10 +110,12 @@ void	ft_execute(void)
 
 void	ft_handler(void)
 {
-	//TODO: 1) добавлять все исполняемые команды соедененные пайпами лист
-	//TODO: 2) вызвать execute
-	//! если в названии программы есть '/' то нужно обрабатывать как директорию??? 
+	//! если в названии программы есть '/' то нужно обрабатывать как директорию???
 
-	ft_execute();
-	//работа с токенами
+	//заглушка от пустых строк
+	if (!(g_all.tokens))
+		return ;
+	ft_syntax_analyzer();
+	ft_display_comands(); // ! для отладки
+	// ft_execute();
 }

@@ -3,13 +3,13 @@ NAME := minishell
 SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c\
 		srcs/term/dop_2.c srcs/term/dop_3.c srcs/term/dop_1.c\
 		srcs/parser/parser.c srcs/parser/tokens.c srcs/parser/parser_dop.c \
-		srcs/handler/handler.c
+		srcs/handler/handler.c srcs/handler/comands.c srcs/handler/ft_cd.c 
 		
 OBJS := ${patsubst %.c,%.o,${SRCS}}
 D_FILES := ${patsubst %.c,%.d,${SRCS}}
 
 GCC := gcc
-# FLAGS := -Wall -Wextra -Werror -g # -g для дебагинга 
+# FLAGS := -Wall -Wextra -Werror 
 FLAGS := -g # -g для дебагинга 
 INCLUDES := includes
 

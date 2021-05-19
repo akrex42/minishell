@@ -29,6 +29,16 @@ typedef struct s_tokens_list
 	struct s_tokens_list	*prev;
 }	t_tokens_list;
 
+// для передачи исполнителю команд
+typedef struct s_comands_list
+{
+	char					*prog;
+	char					**args;
+	char					special[3];
+	struct s_comands_list	*next;
+	struct s_comands_list	*prev;
+}	t_comands_list;
+
 typedef struct s_parse_flags
 {
 	int		esc;			// '\\'
@@ -39,7 +49,6 @@ typedef struct s_parse_flags
 
 typedef struct s_term_all
 {
-	//TODO: добавить код предыдущей ошибки (отлавливать во время вызывов программ)
 	struct termios	g_saved_attributes;
 	int				exit_status;
 	char			wr[10];
@@ -49,6 +58,7 @@ typedef struct s_term_all
 	char			**path; //разделенные директории по которым нужно искать прогу
 	t_history_list	*history;
 	t_tokens_list	*tokens;
+	t_comands_list	*comands;
 	t_parse_flags	flags;
 }	t_term_all;
 
@@ -84,7 +94,17 @@ void	ft_tokens_to_beginning(void);
 void	ft_free_tokens(void);
 char	*ft_find_env_var(char *str);
 void	ft_handler(void);
+void	ft_new_prog_node(void);
+void	ft_tokens_go_next_spec(void);
+int		ft_progs_count_args(void);
+int		ft_compare_tokens_cont_to_spec(void);
+void	ft_comands_list_add_args_and_prog(void);
+void	ft_free_comands(void);
+
+//tmp
+int 	ft_cd(char **str);
 
 void	ft_display_tokens(void);
+void	ft_display_comands(void);
 
 #endif
