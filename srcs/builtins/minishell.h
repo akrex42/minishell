@@ -60,6 +60,7 @@ int				ft_echo(char **str);
 int 			ft_env(char **str);
 unsigned char 	ft_exit(char **str);
 int				ft_export(char **str);
+int				ft_check_equal2(int i, int flag_equal, char *key, char **str);
 int 			ft_unset(char **str);
 int				ft_pwd(char **str);
 int				print_err_export_unset(char *str);

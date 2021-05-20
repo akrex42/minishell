@@ -10,8 +10,8 @@ void	ft_print_error_env(char *str)
 
 int 	ft_env(char **str)
 {
-	char *equal;
-	char **beg_env;
+	char	*equal;
+	char	**beg_env;
 
 	beg_env = g_all.env;
 	// g_all.env = ft_allocate_env(envp);
@@ -31,13 +31,13 @@ int 	ft_env(char **str)
 	else if (str[1] != NULL)
 	{
 		ft_print_error_env(str[1]);
-		return(1);
+		return (1);
 	}
-	return(0);
+	return (0);
 }
 
-// int main (int argc, char **argv, char **envp)
+/* int main (int argc, char **argv, char **envp)
 // {
 // 	ft_env(argv, envp);
 // 	return (0);
-// }
+// } */

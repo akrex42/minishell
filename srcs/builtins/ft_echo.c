@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-int		ft_echo(char **str)
+int	ft_echo(char **str)
 {
-	int flag;
-	int i;
+	int	flag;
+	int	i;
 
 	flag = 0;
 	i = 1;
@@ -23,11 +23,11 @@ int		ft_echo(char **str)
 		ft_putstr_fd(str[i], 1);
 	if (!flag)
 		ft_putchar_fd('\n', 1);
-	return(0);
+	return (0);
 }
 
-// int main(int argc, char **argv)
+/* int main(int argc, char **argv)
 // {
 // 	ft_echo(argv);
-// 	return (0);
-// }
+// 	return(0);
+// } */
