@@ -100,6 +100,8 @@ int		ft_progs_count_args(void);
 int		ft_compare_tokens_cont_to_spec(void);
 void	ft_comands_list_add_args_and_prog(void);
 void	ft_free_comands(void);
+int		ft_is_relative(void);
+void	ft_error_handler(int ret);
 
 //tmp
 int 	ft_cd(char **str);

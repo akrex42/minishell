@@ -82,6 +82,7 @@ int	main(int argc, char* argv[], char* env[])
 		}
 		ft_manage_str();
 	}
+	ft_reset_input_mode();
 	return (0);
 }
 

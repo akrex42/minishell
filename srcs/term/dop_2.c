@@ -36,6 +36,7 @@ void	ft_sighnd(int signo)
 	// if (g_all.str_hist != NULL)
 	// 	free(g_all.str_hist);
 	ft_putstr_fd("\n", 1);
-	ft_set_prompt();
+	// ft_set_prompt();
+	ft_reset_input_mode(); //! временно
 	exit(1); //!временно
 }

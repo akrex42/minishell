@@ -9,12 +9,13 @@
 void	ft_execute(void) //TODO: передавать лист из пайпов
 {
 	// TODO: добавлять / к названию программы
-	char	prog[] = "cat"; // название программы
-	char	*arg[] = {prog, NULL}; // Сюда будет писаться имя программы и АРГУМЕНТЫ
+	// char	prog[] = "cat"; // название программы
+	// char	*arg[] = {prog, NULL}; // Сюда будет писаться имя программы и АРГУМЕНТЫ
 	int		fd[2];
 	int		ret;
 	int		pid;
 	char	*str;
+	char	*tmp;
 	int		i;
 
 	//TODO: зациклить форк и передавать данные от процесса к  процессу
@@ -26,35 +27,32 @@ void	ft_execute(void) //TODO: передавать лист из пайпов
 		close(fd[0]);
 		close(fd[1]);
 		ft_reset_input_mode();
-		char *test = ft_strjoin("/", prog);
-		i = 0;
-		while (g_all.path[i] != NULL)
+		if (ft_is_relative()) // относительный путь (c /)
+			execve(g_all.comands->prog, g_all.comands->args, NULL);
+		else
 		{
-			str = ft_strjoin(g_all.path[i], test);
-			ret = execve(str, arg, NULL);
-			i++;
-			free(str);
+			tmp = ft_strjoin("/", g_all.comands->prog);
+			ret = execve(tmp, g_all.comands->args, NULL);
+			i = 0;
+			while (g_all.path[i] != NULL && ret == -1)
+			{
+				str = ft_strjoin(g_all.path[i], tmp);
+				execve(str, g_all.comands->args, NULL);
+				i++;
+				free(str);
+			}
 		}
-		ret = 127;
-		exit(ret);
+		exit(127);
 	}
 	signal(SIGINT, SIG_IGN); // игнарировать сигналы во время выполнения программ
 	waitpid(pid, &ret, 0);
-	ret = WEXITSTATUS(ret);
 	signal(SIGINT, ft_sighnd); //ctrl + с // возвращаем первоначый обработчик
-	ft_set_input_mode(&g_all);
+	ret = WEXITSTATUS(ret); // получение возвращаемого значения
 	g_all.exit_status = ret; // как присваивать правильно???
+	ft_set_input_mode(&g_all);
 	// TODO: добавить обработчик выходных сигналов
-	if (ret == -1)
-	{ 
-		ft_putstr_fd(prog, 1);
-		ft_putstr_fd(": No such file or directory\n", 1);
-	}
-	else if (ret == 127)
-	{
-		//программа не найдена
-	}
-	else
+	ft_error_handler(ret);
+	if (ret != 127)
 	{
 		ft_putstr_fd("exit status = ", 1);
 		ft_putnbr_fd(ret, 1);
@@ -117,5 +115,5 @@ void	ft_handler(void)
 		return ;
 	ft_syntax_analyzer();
 	ft_display_comands(); // ! для отладки
-	// ft_execute();
+	ft_execute();
 }
