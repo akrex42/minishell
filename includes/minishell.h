@@ -37,7 +37,7 @@ typedef struct s_comands_list
 	char					special[3];
 	struct s_comands_list	*next;
 	struct s_comands_list	*prev;
-}	t_comands_list;
+}	t_commands_list;
 
 typedef struct s_parse_flags
 {
@@ -55,10 +55,11 @@ typedef struct s_term_all
 	char			*str;
 	char			*str_hist;
 	char			**env;
+	int				flag_allocate;
 	char			**path; //разделенные директории по которым нужно искать прогу
 	t_history_list	*history;
 	t_tokens_list	*tokens;
-	t_comands_list	*comands;
+	t_commands_list	*commands;
 	t_parse_flags	flags;
 }	t_term_all;
 
@@ -78,7 +79,7 @@ void	ft_strjoin_and_free_2(const char *str1, char **str2);
 void	ft_strjoin_char_and_free(char **str1, char ch);
 void	ft_malloc_one_char_str(char **str);
 void	ft_malloc_one_char_str(char **str);
-void	ft_exit(void);
+void	ft_exit1(void);
 void	ft_set_prompt(void);
 void	ft_sighnd(int signo);
 void	ft_reset_input_mode(void);
@@ -103,8 +104,19 @@ void	ft_free_comands(void);
 int		ft_is_relative(void);
 void	ft_error_handler(int ret);
 
-//tmp
+// tmp
 int 	ft_cd(char **str);
+char	**ft_allocate_env_builtins(char **env, int args, char *str,
+char *this_env);
+int		ft_check_equal2(int i, int flag_equal, char *key, char **str);
+int		ft_echo(char **str);
+int 	ft_env(char **str);
+unsigned char 	ft_exit(char **str);
+int		ft_export(char **str);
+int		ft_pwd(char **str);
+int		ft_unset(char **str);
+int		print_err_export_unset(char *str);
+
 
 void	ft_display_tokens(void);
 void	ft_display_comands(void);

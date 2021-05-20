@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_exit(void)
+void	ft_exit1(void)
 {
 	ft_reset_input_mode();
 	printf("exit\n");

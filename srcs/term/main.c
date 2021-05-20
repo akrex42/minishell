@@ -46,15 +46,15 @@ void	ft_init_term_all(char **env)
 {
 	g_all.history = NULL;
 	g_all.tokens = NULL;
-	g_all.comands = NULL;
+	g_all.commands = NULL;
 	g_all.exit_status = 0;
 	g_all.env = ft_allocate_env(env);
 	g_all.path = ft_split(ft_find_env_var("PATH"), ':'); // добавляет двумерный массив возможных директорий для запуска программ
 	ft_init_history(&(g_all.history));
 	tgetent(0,  "xterm-256color"); // ! для дебаггера
 	// tgetent(0,  getenv("TERM")); // ! основной
-	signal(SIGINT, ft_sighnd); //ctrl + с //TODO пофиксить
-	signal(SIGQUIT, ft_sighnd); //ctrl + '\'
+	signal(SIGINT, ft_sighnd); // ctrl + с //TODO пофиксить // if we have CTRL+C signal the error code in $? is 130, so for each signal 128 + num of the signal
+	signal(SIGQUIT, ft_sighnd); // ctrl + '\'
 }
 
 int	main(int argc, char* argv[], char* env[])
@@ -77,7 +77,7 @@ int	main(int argc, char* argv[], char* env[])
 			if (g_all.wr[0] != '\n') // TODO: разделять wr по \n мб бонус
 				ft_add_char_to_correct_str(&g_all);
 			if (g_all.str[0] == '\004')
-				ft_exit();
+				ft_exit1();
 			ft_putstr_fd(g_all.wr, 1);
 		}
 		ft_manage_str();

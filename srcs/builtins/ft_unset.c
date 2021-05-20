@@ -21,7 +21,7 @@ int	print_err_export_unset(char *str)
 			ft_putstr_fd(str, 1);
 			ft_putstr_fd("': not a valid identifier", 1);
 			ft_putchar_fd('\n', 1);
-			return (1);
+			return (2);
 		}
 		i++;
 	}

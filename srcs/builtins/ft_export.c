@@ -34,7 +34,7 @@ int	ft_equal_null(char **str, int flag_equal, char *equal, int i)
 	return (flag_equal);
 }
 
-void	ft_print_env(char *equal)
+static void	ft_print_env(char *equal)
 {
 	char	**beg_env;
 
@@ -60,7 +60,7 @@ void	ft_print_env(char *equal)
 		}
 		g_all.env++;
 	}
-	g_all.env = beg_env;
+	g_all.env = beg_env; // it seems it is better to do all of this using indexes
 }
 
 int	ft_export(char **str)
@@ -77,7 +77,7 @@ int	ft_export(char **str)
 		ft_print_env(equal);
 	while (str[i] != NULL)
 	{
-		if (print_err_export_unset(str[i]))
+		if (print_err_export_unset(str[i]) == 1)
 			return (1);
 		equal = ft_strchr(str[i], '=');
 		if (equal == NULL) // key without value args cases

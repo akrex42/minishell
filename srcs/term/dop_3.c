@@ -46,12 +46,12 @@ void	ft_set_input_mode(t_term_all *all)
 
 	if (!isatty(0))
 	{
-		printf("Error term initialization\n"); // ! сделать более осмысленную ошибку
+		printf("Error term initialization\n"); // ! сделать более осмысленную ошибку // could be something like ("Could not intialize terminal");
 		exit(1);
 	}
 	tcgetattr(0, &(all->g_saved_attributes));
 	ft_memcpy(&tattr, &(all->g_saved_attributes), sizeof(tattr));
 	tattr.c_lflag &= ~(ICANON);
 	tattr.c_lflag &= ~(ECHO);
-	tcsetattr(0, TCSAFLUSH, &tattr);
+	tcsetattr(0, TCSAFLUSH, &tattr); /* WHY TCSAFLUSH? first arg - input baud rate */
 }

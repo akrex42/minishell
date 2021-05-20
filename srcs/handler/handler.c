@@ -28,16 +28,16 @@ void	ft_execute(void) //TODO: передавать лист из пайпов
 		close(fd[1]);
 		ft_reset_input_mode();
 		if (ft_is_relative()) // относительный путь (c /)
-			execve(g_all.comands->prog, g_all.comands->args, NULL);
+			execve(g_all.commands->prog, g_all.commands->args, NULL);
 		else
 		{
-			tmp = ft_strjoin("/", g_all.comands->prog);
-			ret = execve(tmp, g_all.comands->args, NULL);
+			tmp = ft_strjoin("/", g_all.commands->prog);
+			ret = execve(tmp, g_all.commands->args, NULL);
 			i = 0;
 			while (g_all.path[i] != NULL && ret == -1)
 			{
 				str = ft_strjoin(g_all.path[i], tmp);
-				execve(str, g_all.comands->args, NULL);
+				execve(str, g_all.commands->args, NULL);
 				i++;
 				free(str);
 			}
@@ -104,7 +104,27 @@ void	ft_syntax_analyzer(void)
 
 // | - передает вывод одной программы на вход другой
 // $? - exit status variable (содержит код последней команды)
+int	ft_execute_builtins()
+{
+	int ret;
 
+	ret = 3;
+	if (!ft_strncmp("cd", g_all.commands->prog, 3))
+		ret = ft_cd(g_all.commands->args);
+	else if (!ft_strncmp("echo", g_all.commands->prog, 5))
+		ret = ft_echo(g_all.commands->args);
+	else if (!ft_strncmp("env", g_all.commands->prog, 4))
+		ret = ft_env(g_all.commands->args);
+	else if (!ft_strncmp("exit", g_all.commands->prog, 5))
+		ret = ft_exit(g_all.commands->args);
+	else if (!ft_strncmp("export", g_all.commands->prog, 7))
+		ret = ft_export(g_all.commands->args);
+	else if (!ft_strncmp("pwd", g_all.commands->prog, 4))
+		ret = ft_pwd(g_all.commands->args);
+	else if (!ft_strncmp("unset", g_all.commands->prog, 6))
+		ret = ft_unset(g_all.commands->args);
+	return (ret); // $?
+}
 
 void	ft_handler(void)
 {
@@ -115,5 +135,9 @@ void	ft_handler(void)
 		return ;
 	ft_syntax_analyzer();
 	ft_display_comands(); // ! для отладки
-	ft_execute();
+	if (ft_execute_builtins() == 3)
+	{
+		ft_execute();
+	}
+	
 }

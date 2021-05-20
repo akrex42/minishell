@@ -8,14 +8,14 @@ int	ft_putchar(int c)
 
 void	ft_malloc_error(void)
 {
-	printf("Malloc error\n");
-	exit(2);
+	printf("Malloc error\n"); // do we need to use a normal exit or built-in?
+	exit(1);
 }
 
 void	ft_file_open_error(void)
 {
 	printf("Can`t open history file\n");
-	exit(3);
+	exit(1);
 }
 
 // устанавливает начальные символы

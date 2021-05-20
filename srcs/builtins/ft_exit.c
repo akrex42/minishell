@@ -18,20 +18,20 @@ unsigned char 	ft_exit(char **str)
 			ft_putstr_fd(str[1], 1);
 			ft_putstr_fd(": numeric argument required", 1);
 			ft_putchar_fd('\n', 1);
-			return (1);
+			return (255);
 		}
 		i++;
 	}
-	error_code = (unsigned char)ft_atoi(str[1]);
+	// sleep(1000);
+	error_code = (unsigned char)ft_atoi(str[1]); // returns 255 if error_code is out of range (0...255)
 	ft_putstr_fd("exit", 1);
 	return (error_code); // we should set this value to $?
 }
 
-/* int		main(int argc, char **argv, char **env)
+// int		main(int argc, char **argv, char **env)
 // {
 // 	// perror?
-// 	// EXIT FROM BASH, not builtins
-	
+// 	// EXIT FROM BASH, not builtins	
 // 	ft_exit(argv);
 // 	return(0);
-// } */
+// }

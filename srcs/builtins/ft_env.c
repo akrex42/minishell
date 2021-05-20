@@ -41,3 +41,5 @@ int 	ft_env(char **str)
 // 	ft_env(argv, envp);
 // 	return (0);
 // } */
+
+// PRINT ENVS!!!!!
