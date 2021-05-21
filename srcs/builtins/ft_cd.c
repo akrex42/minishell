@@ -2,21 +2,22 @@
 
 void	ft_print_env(void)
 {
-	char **beg_env = g_all.env;
-	while (*g_all.env != NULL)
+	int	i;
+
+	i = 0;
+	while (g_all.env[i] != NULL)
 	{
-		char *this_env = *g_all.env;
-		char *equal = ft_strchr(this_env, '=');
+		char *equal = ft_strchr(g_all.env[i], '=');
 		if (equal == NULL)
 		{
 			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd(this_env, 1);
+			ft_putstr_fd(g_all.env[i], 1);
 			ft_putchar_fd('\n', 1);
 		}
 		else
 		{
 			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd(ft_substr(this_env, 0, ft_strlen(this_env) 
+			ft_putstr_fd(ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) 
 			- ft_strlen(equal)), 1);
 			ft_putchar_fd(equal[0], 1);
 			ft_putchar_fd('"', 1);
@@ -25,9 +26,8 @@ void	ft_print_env(void)
 			ft_putchar_fd('"', 1);
 			ft_putchar_fd('\n', 1);
 		}
-		g_all.env++;
+		i++;
 	}
-	g_all.env = beg_env;
 }
 
 void	ft_print_error_cd(char **str)

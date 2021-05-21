@@ -1,27 +1,27 @@
 #include "minishell.h"
 
-int	print_err_export_unset(char *str)
+int	print_err_unset(char *str)
 {
 	int	i;
 
 	i = 1;
-	if (!ft_isalpha(str[0]))
+	if (str[1] == '\0' && !ft_isalpha(str[0]))
 	{
-		ft_putstr_fd("bash: export: `", 1);
-		ft_putchar_fd(str[0], 1);
+		ft_putstr_fd("bash: unset: `", 1);
+		ft_putstr_fd(str, 1);
 		ft_putstr_fd("': not a valid identifier", 1);
 		ft_putchar_fd('\n', 1);
 		return (1); // errno?
 	}
 	while (str[i] != '\0')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '=')
+		if (!ft_isalnum(str[i]))
 		{
-			ft_putstr_fd("bash: export: `", 1);
+			ft_putstr_fd("bash: unset: `", 1);
 			ft_putstr_fd(str, 1);
 			ft_putstr_fd("': not a valid identifier", 1);
 			ft_putchar_fd('\n', 1);
-			return (2);
+			return (1);
 		}
 		i++;
 	}
@@ -31,27 +31,65 @@ int	print_err_export_unset(char *str)
 int	ft_unset(char **str)
 {
 	char	*key;
-	char	**beg_e;
 	int		i;
+	int		j;
+	char	**env1;
+	int		k;
 
+	g_all.flag_allocate = 0;
 	i = 1;
-	beg_e = g_all.env;
-	while (*g_all.env != 0 && str[i] != NULL)
+	while (str[i] != NULL)
 	{
-		if (print_err_export_unset(str[i]) == 1)
+		if (print_err_unset(str[i]) == 1)
 			return (1);
-		key = ft_substr(*g_all.env, 0, ft_strlen(*g_all.env)
-				- ft_strlen(ft_strchr(*g_all.env, '=')));
-		if (!(ft_strncmp(key, str[i], ft_strlen(str[i]))))
+		j = 0;
+		while (g_all.env[j] != NULL)
 		{
-			g_all.flag_allocate = 1;
-			g_all.env = ft_allocate_env_builtins(beg_e, 1, str[i], *g_all.env);
-			beg_e = g_all.env;
-			i++;
+			char *equal = ft_strchr(g_all.env[j], '=');
+			if (equal == NULL)
+			{
+				if (!(ft_strncmp(g_all.env[j], str[i], ft_strlen(str[i]))))
+				{
+					// ft_putstr_fd(g_all.env[j], 1);
+					g_all.flag_allocate = 1;
+					env1 = g_all.env;
+					g_all.env = ft_allocate_env_builtins(1, str[i], g_all.env[j]);
+					// ft_putstr_fd(g_all.env[0], 1);
+					k = 0;
+					while (env1[k] != NULL)
+					{
+						free(env1[k]);
+						k++;
+					}
+					free(env1);
+				}
+			}
+			else
+			{
+				key = ft_substr(g_all.env[j], 0, ft_strlen(g_all.env[j])
+						- ft_strlen(equal));
+				// ft_putstr_fd(g_all.env[j], 1);
+				// ft_putchar_fd('\n', 1);
+				// ft_putstr_fd(key, 1);
+				if (!(ft_strncmp(key, str[i], ft_strlen(str[i]))))
+				{
+					// ft_putstr_fd(key, 1);
+					g_all.flag_allocate = 1;
+					env1 = g_all.env;
+					g_all.env = ft_allocate_env_builtins(1, str[i], g_all.env[j]);
+					k = 0;
+					while (env1[k] != NULL)
+					{
+						free(env1[k]);
+						k++;
+					}
+					free(env1);
+				}
+				free(key);
+			}
+			j++;
 		}
-		else
-			g_all.env++;
-		free(key);
+		i++;
 	}
 	g_all.flag_allocate = 0;
 	return (0);

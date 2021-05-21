@@ -10,7 +10,7 @@ int	flag_zero(char **str, int flag_equal, int i)
 	{
 		// all the keys without value that do not repeat OR first time appeared repeating ones
 		env1 = g_all.env;
-		g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
+		g_all.env = ft_allocate_env_builtins(1, str[i], this_env);
 		k = 0;
 		while (env1[k] != NULL)
 		{

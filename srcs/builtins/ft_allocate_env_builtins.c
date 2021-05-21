@@ -1,24 +1,30 @@
 #include "minishell.h"
 
-int	ft_cycle(int len, char **env, char *this_env, char **ret)
+int	ft_cycle(int len, char *this_env, char **ret)
 {
 	int	i;
 
 	i = 0;
 	while (i < len - 1)
 	{
-		if (g_all.flag_allocate == 1 && !(ft_strncmp(env[i],
+		if (g_all.flag_allocate == 1 && !(ft_strncmp(g_all.env[i],
 					this_env, ft_strlen(this_env))))
 		{
 			while (i < len - 1)
 			{
-				ret[i] = ft_strdup(env[i + 1]); // free 
+				// free(env[i]);
+				if (g_all.env[len] == NULL)
+					return (i);
+				// ft_putstr_fd(g_all.env[i + 1], 1);
+				else
+					ret[i] = ft_strdup(g_all.env[i + 1]); // free
+				// ft_putstr_fd(ret[i], 1);
 				i++;
 			}
 		}
 		else
-		{
-			ret[i] = ft_strdup(env[i]); // free
+		{	
+			ret[i] = ft_strdup(g_all.env[i]); // free
 			i++;
 		}
 	}
@@ -26,7 +32,7 @@ int	ft_cycle(int len, char **env, char *this_env, char **ret)
 }
 
 // перевыделяет память для переменных окружения // we need to free all of this
-char	**ft_allocate_env_builtins(char **env, int args, char *str,
+char	**ft_allocate_env_builtins(int args, char *str,
 char *this_env)
 {
 	char	**ret;
@@ -34,16 +40,16 @@ char *this_env)
 	int		i;
 
 	len = 0;
-	while (env[len] != NULL)
+	while (g_all.env[len] != NULL)
 		len++;
 	if (g_all.flag_allocate == 1)
 		ret = malloc(sizeof(char *) * (len));
 	else
 		ret = malloc(sizeof(char *) * (len + 2));
-	i = ft_cycle(len, env, this_env, ret);
+	i = ft_cycle(len, this_env, ret);
 	if (!g_all.flag_allocate)
 	{
-		ret[i] = ft_strdup(env[i]); // free
+		ret[i] = ft_strdup(g_all.env[i]); // free
 		i++;
 		ret[i] = ft_strdup(str);
 		i++;
@@ -51,6 +57,13 @@ char *this_env)
 	}
 	else
 		ret[i] = NULL;
+	// int k = 0;
+	// while (env[k] != NULL)
+	// {
+	// 	free(env[k]);
+	// 	k++;
+	// }
+	// free(env);
 	return (ret);
 }
 

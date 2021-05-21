@@ -7,10 +7,10 @@ SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c\
 		srcs/handler/errors.c \
 		srcs/handler/dop_1.c \
 		srcs/builtins/ft_echo.c \
-		srcs/builtins/ft_cd.c srcs/builtins/ft_allocate_env_builtins.c\
-		srcs/builtins/ft_env.c srcs/builtins/ft_check_equal2.c\
+		srcs/builtins/ft_cd.c srcs/builtins/ft_allocate_env_builtins.c \
+		srcs/builtins/ft_env.c srcs/builtins/ft_check_equal2.c \
 		srcs/builtins/ft_exit.c \
-		srcs/builtins/ft_export.c \
+		srcs/builtins/ft_export.c srcs/builtins/print_err_export.c \
 		srcs/builtins/ft_pwd.c \
 		srcs/builtins/ft_unset.c \
 
@@ -19,7 +19,7 @@ D_FILES := ${patsubst %.c,%.d,${SRCS}}
 
 GCC := gcc
 # FLAGS := -Wall -Wextra -Werror 
-FLAGS := -g # -g для дебагинга 
+FLAGS := -g # -g для дебагинга -fsanitize=address
 INCLUDES := includes
 
 all: ${NAME}

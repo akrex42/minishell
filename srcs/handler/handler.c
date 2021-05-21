@@ -106,7 +106,9 @@ void	ft_syntax_analyzer(void)
 // $? - exit status variable (содержит код последней команды)
 int	ft_execute_builtins()
 {
+
 	int ret;
+	// ft_putstr_fd(g_all.env[0], 1);
 
 	ret = 3;
 	if (!ft_strncmp("cd", g_all.commands->prog, 3))
@@ -126,6 +128,35 @@ int	ft_execute_builtins()
 	return (ret); // $?
 }
 
+// static void	ft_print_env()
+// {
+// 	int	i;
+// 	char *equal;
+
+// 	i = 0;
+// 	while (g_all.env[i] != NULL)
+// 	{
+// 		equal = ft_strchr(g_all.env[i], '=');
+// 		if (equal == NULL)
+// 		{
+// 			ft_putstr_fd("declare -x ", 1);
+// 			ft_putstr_fd(g_all.env[i], 1);
+// 			ft_putchar_fd('\n', 1);
+// 		}
+// 		else
+// 		{
+// 			ft_putstr_fd("declare -x ", 1);
+// 			ft_putstr_fd(ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) - ft_strlen(equal)), 1);
+// 			ft_putchar_fd(equal[0], 1);
+// 			ft_putchar_fd('"', 1);
+// 			ft_putstr_fd(ft_substr(equal, 1, ft_strlen(equal) - 1), 1);
+// 			ft_putchar_fd('"', 1);
+// 			ft_putchar_fd('\n', 1);
+// 		}
+// 		i++;
+// 	}
+// }
+
 void	ft_handler(void)
 {
 	//! если в названии программы есть '/' то нужно обрабатывать как директорию???
@@ -135,9 +166,14 @@ void	ft_handler(void)
 		return ;
 	ft_syntax_analyzer();
 	ft_display_comands(); // ! для отладки
-	if (ft_execute_builtins() == 3)
-	{
-		ft_execute();
-	}
+	// while (g_all.commands->next != NULL)
+	// {
+		if (ft_execute_builtins() == 3)
+		{
+			ft_execute();
+		}
+		// ft_print_env();
+	// 	g_all.commands = g_all.commands->next;
+	// }
 	
 }

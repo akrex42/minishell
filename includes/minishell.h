@@ -30,13 +30,13 @@ typedef struct s_tokens_list
 }	t_tokens_list;
 
 // для передачи исполнителю команд
-typedef struct s_comands_list
+typedef struct s_commands_list
 {
 	char					*prog;
 	char					**args;
 	char					special[3];
-	struct s_comands_list	*next;
-	struct s_comands_list	*prev;
+	struct s_commands_list	*next;
+	struct s_commands_list	*prev;
 }	t_commands_list;
 
 typedef struct s_parse_flags
@@ -106,7 +106,7 @@ void	ft_error_handler(int ret);
 
 // tmp
 int 	ft_cd(char **str);
-char	**ft_allocate_env_builtins(char **env, int args, char *str,
+char	**ft_allocate_env_builtins(int args, char *str,
 char *this_env);
 int		ft_check_equal2(int i, int flag_equal, char *key, char **str);
 int		ft_echo(char **str);
@@ -115,7 +115,7 @@ unsigned char 	ft_exit(char **str);
 int		ft_export(char **str);
 int		ft_pwd(char **str);
 int		ft_unset(char **str);
-int		print_err_export_unset(char *str);
+int		print_err_export(char *str);
 
 
 void	ft_display_tokens(void);

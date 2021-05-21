@@ -7,7 +7,11 @@ unsigned char 	ft_exit(char **str)
 
 	i = 0;
 	if (str[1] == NULL)
+	{	
+		ft_putstr_fd("exit", 1);
+		ft_putchar_fd('\n', 1);
 		return (0);
+	}
 	while (str[1][i] != '\0')
 	{
 		if ((str[1][i] == '-' || str[1][i] == '+') && ft_isdigit(str[1][i + 1]))
