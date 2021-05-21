@@ -19,7 +19,7 @@ void	ft_execute(void) //TODO: передавать лист из пайпов
 	int		i;
 
 	//TODO: зациклить форк и передавать данные от процесса к  процессу
-	//TODO: разобраться что делать если в цепочке пайпов неверная программа
+	//TODO: разобраться что делать если в цепочке пайпов неверная программа --  выдать ошибку, что нет такой программы?
 	pipe(fd);
 	pid = fork();
 	if (pid == 0)
@@ -28,21 +28,36 @@ void	ft_execute(void) //TODO: передавать лист из пайпов
 		close(fd[1]);
 		ft_reset_input_mode();
 		if (ft_is_relative()) // относительный путь (c /)
-			execve(g_all.commands->prog, g_all.commands->args, NULL);
+		{
+			if (execve(g_all.commands->prog, g_all.commands->args, NULL))
+			{
+				strerror(errno);
+				return ;
+			}
+		}
 		else
 		{
 			tmp = ft_strjoin("/", g_all.commands->prog);
-			ret = execve(tmp, g_all.commands->args, NULL);
+			if (execve(tmp, g_all.commands->args, NULL))
+			{
+				strerror(errno);
+				return ;
+			}
 			i = 0;
 			while (g_all.path[i] != NULL && ret == -1)
 			{
 				str = ft_strjoin(g_all.path[i], tmp);
-				execve(str, g_all.commands->args, NULL);
+				if (execve(str, g_all.commands->args, NULL))
+				{
+					free(str);
+					strerror(errno);
+					return ;
+				}
 				i++;
 				free(str);
 			}
 		}
-		exit(127);
+		exit(127); // return?
 	}
 	signal(SIGINT, SIG_IGN); // игнарировать сигналы во время выполнения программ
 	waitpid(pid, &ret, 0);

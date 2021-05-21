@@ -5,7 +5,7 @@ int	print_err_unset(char *str)
 	int	i;
 
 	i = 1;
-	if (str[1] == '\0' && !ft_isalpha(str[0]))
+	if (str[1] == '\0' && ((!ft_isalpha(str[0])) && (str[0] != '_')))
 	{
 		ft_putstr_fd("bash: unset: `", 1);
 		ft_putstr_fd(str, 1);

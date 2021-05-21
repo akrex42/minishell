@@ -5,17 +5,24 @@ int	ft_cycle(int len, char *this_env, char **ret)
 	int	i;
 
 	i = 0;
-	while (i < len - 1)
+	// ft_putstr_fd(g_all.env[i + 1], 1);
+	while (i < len)
 	{
+		// ft_putstr_fd(g_all.env[i + 1], 1);
 		if (g_all.flag_allocate == 1 && !(ft_strncmp(g_all.env[i],
 					this_env, ft_strlen(this_env))))
 		{
+			ft_putstr_fd(this_env, 1);
+			if (g_all.env[i + 1] == NULL)
+			{
+				ft_putstr_fd("NULL", 1);
+			}
 			while (i < len - 1)
 			{
 				// free(env[i]);
-				if (g_all.env[len] == NULL)
-					return (i);
 				// ft_putstr_fd(g_all.env[i + 1], 1);
+				if (g_all.env[i + 1] == NULL)
+					return (i);
 				else
 					ret[i] = ft_strdup(g_all.env[i + 1]); // free
 				// ft_putstr_fd(ret[i], 1);
@@ -49,8 +56,8 @@ char *this_env)
 	i = ft_cycle(len, this_env, ret);
 	if (!g_all.flag_allocate)
 	{
-		ret[i] = ft_strdup(g_all.env[i]); // free
-		i++;
+		// ret[i] = ft_strdup(g_all.env[i]); // free
+		// i++;
 		ret[i] = ft_strdup(str);
 		i++;
 		ret[i] = NULL;

@@ -10,6 +10,7 @@
 # include <unistd.h>
 # include <signal.h>
 # include <fcntl.h>
+# include <errno.h>
 # include "libft.h"
 
 typedef struct s_history_list
