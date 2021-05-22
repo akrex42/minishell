@@ -27,6 +27,7 @@ typedef struct s_term_all
 	char			*str;
 	char			*str_hist;
 	char			**env;
+	int				flag_allocate;
 	t_history_list	*history;
 }	t_term_all;
 
