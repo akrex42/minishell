@@ -1,45 +1,66 @@
 #include "minishell.h"
 
-int	ft_cycle(int len, char *this_env, char **ret)
+int	ft_cycle(char **env, int len, char *this_env, char **ret)
 {
 	int	i;
 
 	i = 0;
 	// ft_putstr_fd(g_all.env[i + 1], 1);
+	// ft_putnbr_fd(len, 1);
+	// ft_putchar_fd('\n', 1);
 	while (i < len)
 	{
-		// ft_putstr_fd(g_all.env[i + 1], 1);
-		if (g_all.flag_allocate == 1 && !(ft_strncmp(g_all.env[i],
-					this_env, ft_strlen(this_env))))
+		// ft_putstr_fd(env[i], 1);
+		// ft_putstr_fd(g_all.env[i], 1);
+		if (g_all.flag_allocate == 1 && !(ft_strncmp(env[i],
+					this_env, ft_strlen(env[i]))))
 		{
-			ft_putstr_fd(this_env, 1);
-			if (g_all.env[i + 1] == NULL)
-			{
-				ft_putstr_fd("NULL", 1);
-			}
+			int flag = 0;
+				ft_putchar_fd('h', 1);
+				ft_putnbr_fd(i, 1);
+				ft_putchar_fd('\n', 1);
+			// if (env[i + 1] == NULL)
+			// {
+			// 	ret[i] = NULL; // free
+			// 	g_all.flag_allocate = 2;
+			// 	return (i);
+			// }
+			// ft_putstr_fd(env[i], 1);
+			// ++i;
 			while (i < len - 1)
 			{
-				// free(env[i]);
-				// ft_putstr_fd(g_all.env[i + 1], 1);
-				if (g_all.env[i + 1] == NULL)
-					return (i);
-				else
-					ret[i] = ft_strdup(g_all.env[i + 1]); // free
+				ret[i] = ft_strdup(env[i + 1]);
 				// ft_putstr_fd(ret[i], 1);
+				ft_putnbr_fd(1, 1);
+				flag = 1;
 				i++;
 			}
+			if (flag == 1)
+			{
+				break ;
+			}
+			else if (i < len)
+				i++;
 		}
 		else
 		{	
-			ret[i] = ft_strdup(g_all.env[i]); // free
+			ft_putstr_fd(env[i], 1);
+			ft_putchar_fd('\n', 1);
+			// ft_putstr_fd(env[i], 1);
+			// ft_putchar_fd('\n', 1);
+			ret[i] = ft_strdup(env[i]); // free
 			i++;
 		}
+		ft_putnbr_fd(i, 1);
+		ft_putchar_fd('\n', 1);
+		// else
+		// 	i++;
 	}
 	return (i);
 }
 
 // перевыделяет память для переменных окружения // we need to free all of this
-char	**ft_allocate_env_builtins(int args, char *str,
+char	**ft_allocate_env_builtins(char **env, int args, char *str,
 char *this_env)
 {
 	char	**ret;
@@ -47,16 +68,21 @@ char *this_env)
 	int		i;
 
 	len = 0;
-	while (g_all.env[len] != NULL)
+	while (env[len] != NULL)
 		len++;
+	ft_putstr_fd("here", 1);	
+	ft_putnbr_fd(len, 1);
+	ft_putstr_fd("here", 1);
+	// ft_putchar_fd('\n', 1);
 	if (g_all.flag_allocate == 1)
 		ret = malloc(sizeof(char *) * (len));
 	else
 		ret = malloc(sizeof(char *) * (len + 2));
-	i = ft_cycle(len, this_env, ret);
+	// ft_putnbr_fd(len, 1);
+	i = ft_cycle(env, len, this_env, ret);
 	if (!g_all.flag_allocate)
 	{
-		// ret[i] = ft_strdup(g_all.env[i]); // free
+		// ret[i] = ft_strdup(env[i]); // free
 		// i++;
 		ret[i] = ft_strdup(str);
 		i++;
@@ -64,13 +90,7 @@ char *this_env)
 	}
 	else
 		ret[i] = NULL;
-	// int k = 0;
-	// while (env[k] != NULL)
-	// {
-	// 	free(env[k]);
-	// 	k++;
-	// }
-	// free(env);
+	// g_all.flag_allocate = 0;
 	return (ret);
 }
 

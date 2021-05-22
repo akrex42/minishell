@@ -107,7 +107,7 @@ void	ft_error_handler(int ret);
 
 // tmp
 int 	ft_cd(char **str);
-char	**ft_allocate_env_builtins(int args, char *str,
+char	**ft_allocate_env_builtins(char **env, int args, char *str,
 char *this_env);
 int		ft_check_equal2(int i, int flag_equal, char *key, char **str);
 int		ft_echo(char **str);
