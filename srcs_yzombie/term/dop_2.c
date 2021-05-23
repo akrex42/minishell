@@ -23,7 +23,7 @@ void	ft_set_prompt(void)
 {
 	// ft_putstr_fd(ft_find_env_var("PWD"), 1);
 	// ft_putstr_fd(" ", 1); // TODO: сделать отображение дириктории
-	ft_putstr_fd("\033[0;92m(⌐■_■)☞ \033[0m$ ", 1);
+	ft_putstr_fd("\033[0;92m(⌐■_■)☞ \033[0m$ ", 1); // 10 символов
 }
 
 // обработчик сигналов
