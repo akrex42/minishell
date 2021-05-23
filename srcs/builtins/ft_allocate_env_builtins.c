@@ -1,32 +1,19 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 int	ft_cycle(char **env, int len, char *this_env, char **ret)
 {
 	int	i;
 
 	i = 0;
-	// ft_putstr_fd(g_all.env[i + 1], 1);
-	// ft_putnbr_fd(len, 1);
-	// ft_putchar_fd('\n', 1);
 	while (i < len)
 	{
-		// ft_putstr_fd(env[i], 1);
-		// ft_putstr_fd(g_all.env[i], 1);
-		if (g_all.flag_allocate == 1 && !(ft_strncmp(env[i],
-					this_env, ft_strlen(env[i]))))
+		if ((g_all.flag_allocate == 1) && (!(ft_strncmp(env[i],
+					this_env, ft_strlen(this_env)))))
 		{
 			int flag = 0;
-				ft_putchar_fd('h', 1);
-				ft_putnbr_fd(i, 1);
-				ft_putchar_fd('\n', 1);
-			// if (env[i + 1] == NULL)
-			// {
-			// 	ret[i] = NULL; // free
-			// 	g_all.flag_allocate = 2;
-			// 	return (i);
-			// }
-			// ft_putstr_fd(env[i], 1);
-			// ++i;
+			ft_putchar_fd('h', 1);
+			ft_putnbr_fd(i, 1);
+			ft_putchar_fd('\n', 1);
 			while (i < len - 1)
 			{
 				ret[i] = ft_strdup(env[i + 1]);
@@ -35,12 +22,13 @@ int	ft_cycle(char **env, int len, char *this_env, char **ret)
 				flag = 1;
 				i++;
 			}
-			if (flag == 1)
-			{
-				break ;
-			}
-			else if (i < len)
-				i++;
+			// break ;
+			// i++;
+			break ;
+			// else if (i < len && ) // probably len - 1
+			// {
+			// 	i++;
+			// }
 		}
 		else
 		{	
@@ -56,6 +44,12 @@ int	ft_cycle(char **env, int len, char *this_env, char **ret)
 		// else
 		// 	i++;
 	}
+	// if ((g_all.flag_allocate == 1) && (!(ft_strncmp(env[i],
+	// 				this_env, ft_strlen(env[i])))))
+	// {
+	// 	ret[i] = NULL;
+	// 	g_all.flag_allocate == 2;
+	// }
 	return (i);
 }
 
@@ -69,8 +63,8 @@ char *this_env)
 
 	len = 0;
 	while (env[len] != NULL)
-		len++;
-	ft_putstr_fd("here", 1);	
+		len++; // i = len - 1
+	ft_putstr_fd("here", 1);	// i is counting from zero, len from 1
 	ft_putnbr_fd(len, 1);
 	ft_putstr_fd("here", 1);
 	// ft_putchar_fd('\n', 1);
@@ -78,9 +72,12 @@ char *this_env)
 		ret = malloc(sizeof(char *) * (len));
 	else
 		ret = malloc(sizeof(char *) * (len + 2));
-	// ft_putnbr_fd(len, 1);
 	i = ft_cycle(env, len, this_env, ret);
-	if (!g_all.flag_allocate)
+	ft_putstr_fd("there", 1);
+	ft_putnbr_fd(i, 1);
+	ft_putnbr_fd(g_all.flag_allocate, 1);
+	ft_putnbr_fd(len, 1);
+	if (g_all.flag_allocate == 0)
 	{
 		// ret[i] = ft_strdup(env[i]); // free
 		// i++;
@@ -88,8 +85,18 @@ char *this_env)
 		i++;
 		ret[i] = NULL;
 	}
-	else
+	else if (g_all.flag_allocate == 1)
+	{
+		ft_putnbr_fd(g_all.flag_allocate, 1);
+		// if (i == len)
+		// {
+		// 	ret[len - 2] = NULL;
+		// // }
+		// else
+		// {
 		ret[i] = NULL;
+		// }
+	}
 	// g_all.flag_allocate = 0;
 	return (ret);
 }

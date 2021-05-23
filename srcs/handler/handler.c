@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 // * пример вызова программы
 // * исполняемые файлы искать в $PATH

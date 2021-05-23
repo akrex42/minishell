@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 int	ft_check_equal(int i, int flag_equal, int j, char **str)
 {
@@ -34,33 +34,33 @@ int	ft_equal_null(char **str, int flag_equal, char *equal, int i)
 	return (flag_equal);
 }
 
-// static void	ft_print_env(char *equal)
-// {
-// 	int	i;
+static void	ft_print_env(char *equal)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (g_all.env[i] != NULL)
-// 	{
-// 		equal = ft_strchr(g_all.env[i], '=');
-// 		if (equal == NULL)
-// 		{
-// 			ft_putstr_fd("declare -x ", 1);
-// 			ft_putstr_fd(g_all.env[i], 1);
-// 			ft_putchar_fd('\n', 1);
-// 		}
-// 		else
-// 		{
-// 			ft_putstr_fd("declare -x ", 1);
-// 			ft_putstr_fd(ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) - ft_strlen(equal)), 1);
-// 			ft_putchar_fd(equal[0], 1);
-// 			ft_putchar_fd('"', 1);
-// 			ft_putstr_fd(ft_substr(equal, 1, ft_strlen(equal) - 1), 1);
-// 			ft_putchar_fd('"', 1);
-// 			ft_putchar_fd('\n', 1);
-// 		}
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (g_all.env[i] != NULL)
+	{
+		equal = ft_strchr(g_all.env[i], '=');
+		if (equal == NULL)
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(g_all.env[i], 1);
+			ft_putchar_fd('\n', 1);
+		}
+		else
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) - ft_strlen(equal)), 1);
+			ft_putchar_fd(equal[0], 1);
+			ft_putchar_fd('"', 1);
+			ft_putstr_fd(ft_substr(equal, 1, ft_strlen(equal) - 1), 1);
+			ft_putchar_fd('"', 1);
+			ft_putchar_fd('\n', 1);
+		}
+		i++;
+	}
+}
 
 int	ft_export(char **str)
 {

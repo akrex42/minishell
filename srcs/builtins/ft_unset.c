@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 // int	print_err_unset(char *str)
 // {
@@ -64,7 +64,7 @@ int	ft_unset(char **str)
 					free(env1);
 				}
 			}
-			else if (equal != NULL)
+			if (equal != NULL)
 			{
 				key = ft_substr(g_all.env[j], 0, ft_strlen(g_all.env[j])
 						- ft_strlen(equal));

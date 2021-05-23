@@ -57,7 +57,7 @@ typedef struct s_term_all
 	char			*str_hist;
 	char			**env;
 	int				flag_allocate;
-	char			**path; //разделенные директории по которым нужно искать прогу
+	char			**path; // разделенные директории по которым нужно искать прогу
 	t_history_list	*history;
 	t_tokens_list	*tokens;
 	t_commands_list	*commands;
