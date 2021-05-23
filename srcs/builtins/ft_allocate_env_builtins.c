@@ -24,6 +24,10 @@ int	ft_cycle(char **env, int len, char *this_env, char **ret)
 			}
 			// break ;
 			// i++;
+			// if (flag == 1)
+			// {
+			// 	i++;
+			// }
 			break ;
 			// else if (i < len && ) // probably len - 1
 			// {
