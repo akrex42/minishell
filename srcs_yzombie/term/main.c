@@ -17,7 +17,7 @@ void	ft_cycle_head(void)
 // действия с введенной строкой после цикла
 void	ft_manage_str(void)
 {
-	ft_strjoin_and_free_2((g_all.history)->content, &(g_all.str_hist));
+	// ft_strjoin_and_free_2((g_all.history)->content, &(g_all.str_hist));
 	if (ft_strncmp(g_all.str_hist, "\0", 10))
 	{
 		ft_history_newline(&(g_all.history), g_all.str_hist);
@@ -57,6 +57,37 @@ void	ft_init_term_all(char **env)
 	signal(SIGQUIT, ft_sighnd); //ctrl + '\'
 }
 
+void	ft_delete_one_char(char **str)
+{
+	int	len;
+	char	*tmp;	
+
+	len = ft_strlen(*str);
+	if ((len + 10) % tgetnum("co") == 0)
+	{
+		int	i;
+		tputs(cursor_up, 1, ft_putchar);
+		i = tgetnum("co");
+		while (i)
+		{
+			tputs(cursor_right, 1, ft_putchar);
+			i--;
+		}
+		tputs(cursor_left, 1, ft_putchar);
+		tputs(delete_character, 1, ft_putchar);
+		tputs(cursor_right, 1, ft_putchar);
+	}
+	else
+	{
+		tputs(cursor_left, 1, ft_putchar);
+		tputs(delete_character, 1, ft_putchar);
+	}
+	tmp = malloc(sizeof(char) * (len));
+	ft_strlcpy(tmp, *str, len);
+	free(*str);
+	*str = tmp;
+}
+
 //!ИСТОРИЯ ДОБАВЛЯЕТ ИСПОЛЬЗОВАННЫЕ БАЙТЫ ПРОГРАММЕ
 int	main(int argc, char* argv[], char* env[])
 {
@@ -74,12 +105,26 @@ int	main(int argc, char* argv[], char* env[])
 			if (ft_check_unused_char(g_all.wr))
 				continue ;
 			if (ft_manage_history(&g_all))
+			{
+				ft_strjoin_and_free_2((g_all.history)->content, &(g_all.str_hist));
 				continue ;
-			if (g_all.wr[0] != '\n') // TODO: разделять wr по \n мб бонус
+			}
+			if (!ft_strncmp(g_all.wr, "\x7f", 10)) //backspace
+			{
+				if (g_all.str[0] != '\0')
+					ft_delete_one_char(&(g_all.str));
+				else if (g_all.str_hist[0] != '\0')
+					ft_delete_one_char(&(g_all.str_hist));
+				continue ;
+			}
+			if (g_all.wr[0] != '\n')
 				ft_add_char_to_correct_str(&g_all);
 			if (g_all.str[0] == '\004')
 				ft_exit();
 			ft_putstr_fd(g_all.wr, 1);
+			if ((ft_strlen(g_all.str) + 10) % tgetnum("co") == 0 ||
+				(ft_strlen(g_all.str_hist) + 10) % tgetnum("co") == 0)
+				tputs(cursor_down, 1, ft_putchar);
 		}
 		ft_manage_str();
 	}

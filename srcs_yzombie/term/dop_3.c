@@ -24,9 +24,8 @@ char	**ft_allocate_env(char **env)
 // 1 - совпадает 0 - не совпадает
 int	ft_check_unused_char(const char *wr) // добавить сюда неиспользуемый ввод
 {
-	if (!ft_strncmp(wr, "\e[D", 100)
-		|| !ft_strncmp(wr, "\e[C", 100)
-		|| !ft_strncmp(wr, "\x7f", 100))
+	if (!ft_strncmp(wr, "\e[D", 10)
+		|| !ft_strncmp(wr, "\e[C", 10))
 		return (1);
 	return (0);
 }

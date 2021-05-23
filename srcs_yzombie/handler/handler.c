@@ -7,15 +7,16 @@ void	ft_execute_programm(int *fd1, int *fd2)
 
 	if (!fork())
 	{
-		//для ввода
+		// для ввода
 		if (g_all.comands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
 		{
 			if (g_all.comands->prev->special[0] == '|')
 				dup2(fd1[0], 0);
 			// TODO: другие случаи
+			close(fd1[0]);
+			close(fd1[1]);
 		}
-		close(fd1[0]);
-		close(fd1[1]);
+
 		//для вывода
 		if (g_all.comands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
 		{
@@ -25,15 +26,15 @@ void	ft_execute_programm(int *fd1, int *fd2)
 		}
 		close(fd2[0]);
 		close(fd2[1]);
+
 		ft_reset_input_mode();
 		if (ft_is_relative()) // относительный путь (c /)
 			execve(g_all.comands->prog, g_all.comands->args, g_all.env);
 		else
 		{
 			g_all.exec.tmp = ft_strjoin("/", g_all.comands->prog);
-			g_all.exec.ret = execve(g_all.exec.tmp, g_all.comands->args, g_all.env);
 			i = 0;
-			while (g_all.path[i] != NULL && g_all.exec.ret == -1)
+			while (g_all.path[i] != NULL)
 			{
 				g_all.exec.str = ft_strjoin(g_all.path[i], g_all.exec.tmp);
 				execve(g_all.exec.str, g_all.comands->args, g_all.env);
@@ -42,16 +43,23 @@ void	ft_execute_programm(int *fd1, int *fd2)
 			}
 			free(g_all.exec.tmp);
 		}
-		ft_error_handler(g_all.exec.ret);
-		exit(127);
+		exit(errno);
 	}
 	signal(SIGINT, ft_sighnd_exec); // сигналы во время выполнения программ
 	signal(SIGQUIT, ft_sighnd_exec);
+
+	if (fd1[0] != -1) // для того, чтобы закончить рид
+	{
+		close(fd1[0]);
+		close(fd1[1]);
+	}
+
 	waitpid(0, &g_all.exec.ret, 0);
 	signal(SIGINT, ft_sighnd); //ctrl + с // возвращаем первоначый обработчик
 	signal(SIGQUIT, ft_sighnd);
 	ft_set_input_mode(&g_all);
 	g_all.exec.ret = WEXITSTATUS(g_all.exec.ret);
+	ft_error_handler(g_all.exec.ret); // TODO: выводить ошибки в стандарт аутпут
 	//TODO: отлавить именно выход из программы на ctrl + c, а не просто его использование
 	if (g_all.exit_status == 500)
 		g_all.exec.ret = 130;
@@ -78,12 +86,7 @@ void	ft_execute(void)
 		//TODO: разобраться что делать если в цепочке пайпов неверная программа
 		//TODO: добавить buildins
 		//TODO: закрывать пайпы в процессах
-		if (fd1[0] != -1)
-		{
-			close(fd1[0]);
-			close(fd1[1]);
-			fd1[0] = -1;
-		}
+
 		pipe(fd1);
 		ft_execute_programm(fd2, fd1);
 		if (g_all.comands->next == NULL)
@@ -94,7 +97,6 @@ void	ft_execute(void)
 		{
 			close(fd2[0]);
 			close(fd2[1]);
-			fd2[0] = -1;
 		}
 		pipe(fd2);
 		ft_execute_programm(fd1, fd2);
@@ -161,5 +163,4 @@ void	ft_handler(void)
 	// ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning();
 	ft_execute();
-	// ft_putstr_fd(strerror(errno), 1);
 }
