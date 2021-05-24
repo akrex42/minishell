@@ -5,7 +5,7 @@ int	print_err_export(char *str)
 	int	i;
 
 	i = 1;
-	if (!ft_isalpha(str[0]))
+	if (!ft_isalpha(str[0]) && (str[0] != '_'))
 	{
 		ft_putstr_fd("bash: export: `", 1);
 		ft_putchar_fd(str[0], 1);
@@ -15,7 +15,8 @@ int	print_err_export(char *str)
 	}
 	while (str[i] != '\0')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '=')
+		if (!ft_isalnum(str[i]) && (str[i] != '=') 
+				&& (str[i] != '_'))
 		{
 			ft_putstr_fd("bash: export: `", 1);
 			ft_putstr_fd(str, 1);
