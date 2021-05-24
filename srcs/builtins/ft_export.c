@@ -36,7 +36,9 @@ int	ft_equal_null(char **str, int flag_equal, char *equal, int i)
 
 static void	ft_print_env(char *equal)
 {
-	int	i;
+	int		i;
+	char	*key;
+	char	*key1;
 
 	i = 0;
 	while (g_all.env[i] != NULL)
@@ -51,10 +53,14 @@ static void	ft_print_env(char *equal)
 		else
 		{
 			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd(ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) - ft_strlen(equal)), 1);
+			key = ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) - ft_strlen(equal));
+			ft_putstr_fd(key, 1);
+			free(key);
 			ft_putchar_fd(equal[0], 1);
 			ft_putchar_fd('"', 1);
-			ft_putstr_fd(ft_substr(equal, 1, ft_strlen(equal) - 1), 1);
+			key1 = ft_substr(equal, 1, ft_strlen(equal) - 1);
+			ft_putstr_fd(key1, 1);
+			free(key1);
 			ft_putchar_fd('"', 1);
 			ft_putchar_fd('\n', 1);
 		}

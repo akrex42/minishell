@@ -79,7 +79,7 @@ int	print_err_unset(char *str)
 	}
 	while (str[i] != '\0')
 	{
-		if ((!ft_isalnum(str[i])) || (str[i] != '_'))
+		if ((!ft_isalnum(str[i])) && (str[i] != '_'))
 		{
 			ft_putstr_fd("bash: unset: `", 1);
 			ft_putstr_fd(str, 1);

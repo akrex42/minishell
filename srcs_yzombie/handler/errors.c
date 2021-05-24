@@ -23,7 +23,7 @@ void	ft_error_handler(int errno_exec)
 			else if (errno == 20 && errno_exec == 13)
 				ft_putstr_fd(strerror(errno_pred), 1);
 		}
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", 1); //  1) also permission denied when we did not chmod +x 2) no such file or directory
 	}
 	if (dir != NULL)
 		closedir(dir);
