@@ -29,7 +29,7 @@ void	ft_execute_programm(int *fd1, int *fd2)
 	if (!fork())
 	{
 		// для ввода
-		if (g_all.commands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
+		if (g_all.commands->prev != NULL && fd1[0] != -1) // TODO: перенести в отдельный файл
 		{
 			if (g_all.commands->prev->special[0] == '|')
 				dup2(fd1[0], 0);
@@ -38,8 +38,8 @@ void	ft_execute_programm(int *fd1, int *fd2)
 			close(fd1[1]);
 		}
 
-		//для вывода
-		if (g_all.commands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
+		// для вывода
+		if (g_all.commands->next != NULL && fd2[0] != -1) // TODO: перенести в отдельный файл
 		{
 			if (g_all.commands->special[0] == '|')
 				dup2(fd2[1], 1);
@@ -48,9 +48,35 @@ void	ft_execute_programm(int *fd1, int *fd2)
 		close(fd2[0]);
 		close(fd2[1]);
 
+		if (g_all.commands->prev != NULL) // TODO: перенести в отдельный файл
+		{
+			if (g_all.commands->prev->special[0] == '>')
+			{
+				g_all.fd = open(g_all.commands->next, O_RDWR, O_TRUNC, O_CREAT, O_NONBLOCK);
+				if (g_all.fd == -1)
+					exit(-1);
+				dup2(g_all.fd, 1); // if we have > then the fd of the file after > becomes 1
+			}
+			else if (!ft_strncmp(g_all.commands->special[0], ">>", 3))
+			{
+				g_all.fd = open(g_all.commands->next, O_RDWR, O_APPEND, O_CREAT, O_NONBLOCK);
+				if (g_all.fd == -1)
+					exit(-1);
+				dup2(g_all.fd, 1); // if we have > then the fd of the file after > becomes 1
+			}
+			else if (g_all.commands->prev->special[0] == '<')
+			{
+				g_all.fd = open(g_all.commands->next, O_RDWR, O_TRUNC, O_CREAT, O_NONBLOCK);
+				if (g_all.fd == -1)
+					exit(-1);
+				dup2(g_all.fd, 0); // if we have > then the fd of the file after > becomes 1
+			}
+			close(g_all.fd);
+		}
+		close(fd2[0]);
+		close(fd2[1]);
+
 		ft_reset_input_mode();
-		if (ft_check_and_execute_builtins() != -1)
-			exit(g_all.exec.ret);
 		if (ft_is_relative()) // относительный путь (c /)
 			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
 		else
