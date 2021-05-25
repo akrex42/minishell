@@ -49,24 +49,24 @@ void	ft_tokens_go_next_spec(void)
 
 void	ft_new_prog_node(void)
 {
-	t_comands_list	*new;
+	t_commands_list	*new;
 
-	new = malloc(sizeof(t_comands_list));
+	new = malloc(sizeof(t_commands_list));
 	if (!new)
 		ft_malloc_error();
 	new->next = NULL;
 	ft_bzero(new->special, 3);
-	if (g_all.comands == NULL)
+	if (g_all.commands == NULL)
 	{
-		g_all.comands = new;
-		g_all.comands->prev = NULL;
+		g_all.commands = new;
+		g_all.commands->prev = NULL;
 		return ;
 	}
-	while (g_all.comands->next != NULL)
-		g_all.comands = g_all.comands->next;
-	g_all.comands->next = new;
-	new->prev = g_all.comands;
-	g_all.comands = new;
+	while (g_all.commands->next != NULL)
+		g_all.commands = g_all.commands->next;
+	g_all.commands->next = new;
+	new->prev = g_all.commands;
+	g_all.commands = new;
 }
 
 void	ft_comands_list_add_args_and_prog(void)
@@ -75,95 +75,95 @@ void	ft_comands_list_add_args_and_prog(void)
 	int	i;
 
 	arg_len = ft_progs_count_args();
-	g_all.comands->args = malloc(sizeof(char *) * (arg_len + 1));
+	g_all.commands->args = malloc(sizeof(char *) * (arg_len + 1));
 	i = 0;
 	if (!ft_compare_tokens_cont_to_spec())
-		g_all.comands->prog = ft_strdup(g_all.tokens->content);
+		g_all.commands->prog = ft_strdup(g_all.tokens->content);
 	while (i < arg_len)
 	{
-		g_all.comands->args[i] = ft_strdup(g_all.tokens->content);
+		g_all.commands->args[i] = ft_strdup(g_all.tokens->content);
 		ft_tokens_step_front();
 		i++;
 	}
-	g_all.comands->args[i] = NULL;
+	g_all.commands->args[i] = NULL;
 	if (ft_compare_tokens_cont_to_spec())
-		ft_strlcpy(g_all.comands->special, g_all.tokens->content, 3);
+		ft_strlcpy(g_all.commands->special, g_all.tokens->content, 3);
 }
 
 void	ft_free_comands(void)
 {
 	int	i;
 
-	if (!g_all.comands)
+	if (!g_all.commands)
 		return ;
 	ft_commands_go_beginning();
-	while (g_all.comands->next)
+	while (g_all.commands->next)
 	{
-		if (g_all.comands->prog != NULL)
-			free(g_all.comands->prog);
+		if (g_all.commands->prog != NULL)
+			free(g_all.commands->prog);
 		i = 0;
-		while (g_all.comands->args[i] != NULL)
+		while (g_all.commands->args[i] != NULL)
 		{
-			free(g_all.comands->args[i]);
+			free(g_all.commands->args[i]);
 			i++;
 		}
-		free(g_all.comands->args);
-		g_all.comands = g_all.comands->next;
-		free(g_all.comands->prev);
+		free(g_all.commands->args);
+		g_all.commands = g_all.commands->next;
+		free(g_all.commands->prev);
 	}
-	if (g_all.comands->prog != NULL)
-		free(g_all.comands->prog);
+	if (g_all.commands->prog != NULL)
+		free(g_all.commands->prog);
 	i = 0;
-	while (g_all.comands->args[i] != NULL)
+	while (g_all.commands->args[i] != NULL)
 	{
-		free(g_all.comands->args[i]);
+		free(g_all.commands->args[i]);
 		i++;
 	}
-	free(g_all.comands->args);
-	free(g_all.comands);
-	g_all.comands = NULL;
+	free(g_all.commands->args);
+	free(g_all.commands);
+	g_all.commands = NULL;
 }
 
 void	ft_display_comands(void)
 {
 	int	i;
 
-	while (g_all.comands->prev != NULL)
-		g_all.comands = g_all.comands->prev;
-	while (g_all.comands->next != NULL)
+	while (g_all.commands->prev != NULL)
+		g_all.commands = g_all.commands->prev;
+	while (g_all.commands->next != NULL)
 	{
 		ft_putstr_fd("prog: ", 1);
-		ft_putstr_fd(g_all.comands->prog, 1);
+		ft_putstr_fd(g_all.commands->prog, 1);
 		ft_putstr_fd("\n", 1);
 		i = 0;
 		ft_putstr_fd("args: ", 1);
-		while (g_all.comands->args[i] != NULL)
+		while (g_all.commands->args[i] != NULL)
 		{
 			ft_putstr_fd("[", 1);
-			ft_putstr_fd(g_all.comands->args[i], 1);
+			ft_putstr_fd(g_all.commands->args[i], 1);
 			ft_putstr_fd("] ", 1);
 			i++;
 		}
 		ft_putstr_fd("\n", 1);
 		ft_putstr_fd("spec: ", 1);
-		ft_putstr_fd(g_all.comands->special, 1);		
+		ft_putstr_fd(g_all.commands->special, 1);		
 		ft_putstr_fd("\n\n", 1);
-		g_all.comands = g_all.comands->next;
+		g_all.commands = g_all.commands->next;
 	}
 	ft_putstr_fd("prog: ", 1);
-		ft_putstr_fd(g_all.comands->prog, 1);
+		ft_putstr_fd(g_all.commands->prog, 1);
 		ft_putstr_fd("\n", 1);
 		i = 0;
 		ft_putstr_fd("args: ", 1);
-		while (g_all.comands->args[i] != NULL)
+		while (g_all.commands->args[i] != NULL)
 		{
 			ft_putstr_fd("[", 1);
-			ft_putstr_fd(g_all.comands->args[i], 1);
+			ft_putstr_fd(g_all.commands->args[i], 1);
 			ft_putstr_fd("] ", 1);
 			i++;
 		}
 		ft_putstr_fd("\n", 1);
 		ft_putstr_fd("spec: ", 1);
-		ft_putstr_fd(g_all.comands->special, 1);		
+		ft_putstr_fd(g_all.commands->special, 1);		
 		ft_putstr_fd("\n\n", 1);
 }

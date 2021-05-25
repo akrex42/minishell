@@ -47,7 +47,7 @@ typedef struct s_comands_list
 	char					special[3];
 	struct s_comands_list	*next;
 	struct s_comands_list	*prev;
-}	t_comands_list;
+}	t_commands_list;
 
 typedef struct s_parse_flags
 {
@@ -66,10 +66,11 @@ typedef struct s_term_all
 	char			*str;
 	char			*str_hist;
 	char			**env;
+	int				fd;
 	char			**path; //разделенные директории по которым нужно искать прогу
 	t_history_list	*history;
 	t_tokens_list	*tokens;
-	t_comands_list	*comands;
+	t_commands_list	*commands;
 	t_parse_flags	flags;
 	t_execute		exec;
 }	t_term_all;

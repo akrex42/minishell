@@ -1,5 +1,26 @@
 #include "minishell.h"
 
+int	ft_check_and_execute_builtins()
+{
+	// ft_putstr_fd(g_all.env[0], 1);
+	g_all.exec.ret = -1;
+	if (!ft_strncmp("cd", g_all.commands->prog, 3))
+		g_all.exec.ret = ft_cd(g_all.commands->args);
+	else if (!ft_strncmp("echo", g_all.commands->prog, 5))
+		g_all.exec.ret = ft_echo(g_all.commands->args);
+	else if (!ft_strncmp("env", g_all.commands->prog, 4))
+		g_all.exec.ret = ft_env(g_all.commands->args);
+	else if (!ft_strncmp("exit", g_all.commands->prog, 5))
+		g_all.exec.ret = ft_exit(g_all.commands->args);
+	else if (!ft_strncmp("export", g_all.commands->prog, 7))
+		g_all.exec.ret = ft_export(g_all.commands->args);
+	else if (!ft_strncmp("pwd", g_all.commands->prog, 4))
+		g_all.exec.ret = ft_pwd(g_all.commands->args);
+	else if (!ft_strncmp("unset", g_all.commands->prog, 6))
+		g_all.exec.ret = ft_unset(g_all.commands->args);
+	return (g_all.exec.ret); // $?
+}
+
 // из fd1 - берем в fd2 - записываем
 void	ft_execute_programm(int *fd1, int *fd2)
 {
@@ -8,9 +29,9 @@ void	ft_execute_programm(int *fd1, int *fd2)
 	if (!fork())
 	{
 		// для ввода
-		if (g_all.comands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
+		if (g_all.commands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
 		{
-			if (g_all.comands->prev->special[0] == '|')
+			if (g_all.commands->prev->special[0] == '|')
 				dup2(fd1[0], 0);
 			// TODO: другие случаи
 			close(fd1[0]);
@@ -18,9 +39,9 @@ void	ft_execute_programm(int *fd1, int *fd2)
 		}
 
 		//для вывода
-		if (g_all.comands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
+		if (g_all.commands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
 		{
-			if (g_all.comands->special[0] == '|')
+			if (g_all.commands->special[0] == '|')
 				dup2(fd2[1], 1);
 			// TODO: другие случаи
 		}
@@ -28,41 +49,18 @@ void	ft_execute_programm(int *fd1, int *fd2)
 		close(fd2[1]);
 
 		ft_reset_input_mode();
-		// if (ft_check_and_execute_builtins(&(g_all.exec.ret)))
-		// 	exit(g_all.exec.ret);
-		// int	ft_execute_builtins()
-		// {
-
-		// 	int ret;
-		// 	// ft_putstr_fd(g_all.env[0], 1);
-
-		// 	ret = 3;
-		// 	if (!ft_strncmp("cd", g_all.commands->prog, 3))
-		// 		ret = ft_cd(g_all.commands->args);
-		// 	else if (!ft_strncmp("echo", g_all.commands->prog, 5))
-		// 		ret = ft_echo(g_all.commands->args);
-		// 	else if (!ft_strncmp("env", g_all.commands->prog, 4))
-		// 		ret = ft_env(g_all.commands->args);
-		// 	else if (!ft_strncmp("exit", g_all.commands->prog, 5))
-		// 		ret = ft_exit(g_all.commands->args);
-		// 	else if (!ft_strncmp("export", g_all.commands->prog, 7))
-		// 		ret = ft_export(g_all.commands->args);
-		// 	else if (!ft_strncmp("pwd", g_all.commands->prog, 4))
-		// 		ret = ft_pwd(g_all.commands->args);
-		// 	else if (!ft_strncmp("unset", g_all.commands->prog, 6))
-		// 		ret = ft_unset(g_all.commands->args);
-		// 	return (ret); // $?
-		// }
+		if (ft_check_and_execute_builtins() != -1)
+			exit(g_all.exec.ret);
 		if (ft_is_relative()) // относительный путь (c /)
-			execve(g_all.comands->prog, g_all.comands->args, g_all.env);
+			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
 		else
 		{
-			g_all.exec.tmp = ft_strjoin("/", g_all.comands->prog);
+			g_all.exec.tmp = ft_strjoin("/", g_all.commands->prog);
 			i = 0;
 			while (g_all.path[i] != NULL)
 			{
 				g_all.exec.str = ft_strjoin(g_all.path[i], g_all.exec.tmp);
-				execve(g_all.exec.str, g_all.comands->args, g_all.env);
+				execve(g_all.exec.str, g_all.commands->args, g_all.env);
 				i++;
 				free(g_all.exec.str); // ! утечка, но можно не освобождать
 			}
@@ -104,10 +102,10 @@ void	ft_execute(void)
 	{
 		pipe(fd1);
 		ft_execute_programm(fd2, fd1);
-		if (g_all.comands->next == NULL)
+		if (g_all.commands->next == NULL)
 			break;
 		else
-			g_all.comands = g_all.comands->next;
+			g_all.commands = g_all.commands->next;
 		if (fd2[0] != -1)
 		{
 			close(fd2[0]);
@@ -116,10 +114,10 @@ void	ft_execute(void)
 		pipe(fd2);
 		ft_execute_programm(fd1, fd2);
 		//условие выхода из цикла
-		if (g_all.comands->next == NULL)
+		if (g_all.commands->next == NULL)
 			break;
 		else
-			g_all.comands = g_all.comands->next;
+			g_all.commands = g_all.commands->next;
 	} 
 }
 
@@ -170,7 +168,7 @@ void	ft_handler(void)
 	if (!(g_all.tokens))
 		return ;
 	ft_syntax_analyzer();
-	// ft_display_comands(); // ! для отладки
+	ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning();
 	if (ft_syntax_error())
 		return ;
