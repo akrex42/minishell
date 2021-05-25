@@ -1,12 +1,5 @@
 #include "minishell.h"
 
-void	ft_exit1(void)
-{
-	ft_reset_input_mode();
-	printf("exit\n");
-	exit(0);
-}
-
 void	ft_malloc_one_char_str(char **str)
 {
 	*str = malloc(sizeof(char));

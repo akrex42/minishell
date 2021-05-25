@@ -22,11 +22,10 @@ char	**ft_allocate_env(char **env)
 }
 
 // 1 - совпадает 0 - не совпадает
-int	ft_check_unused_char(const char *wr)
+int	ft_check_unused_char(const char *wr) // добавить сюда неиспользуемый ввод
 {
-	if (!ft_strncmp(wr, "\e[D", 100)
-		|| !ft_strncmp(wr, "\e[C", 100)
-		|| !ft_strncmp(wr, "\x7f", 100))
+	if (!ft_strncmp(wr, "\e[D", 10)
+		|| !ft_strncmp(wr, "\e[C", 10))
 		return (1);
 	return (0);
 }
@@ -46,12 +45,12 @@ void	ft_set_input_mode(t_term_all *all)
 
 	if (!isatty(0))
 	{
-		printf("Error term initialization\n"); // ! сделать более осмысленную ошибку // could be something like ("Could not intialize terminal");
+		printf("Error term initialization\n");
 		exit(1);
 	}
 	tcgetattr(0, &(all->g_saved_attributes));
 	ft_memcpy(&tattr, &(all->g_saved_attributes), sizeof(tattr));
 	tattr.c_lflag &= ~(ICANON);
 	tattr.c_lflag &= ~(ECHO);
-	tcsetattr(0, TCSAFLUSH, &tattr); /* WHY TCSAFLUSH? first arg - input baud rate */
+	tcsetattr(0, TCSANOW, &tattr); //TCSAFLUSH
 }

@@ -1,11 +1,11 @@
 NAME := minishell
 
-SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c\
-		srcs/term/dop_2.c srcs/term/dop_3.c srcs/term/dop_1.c\
+SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c \
+		srcs/term/dop_2.c srcs/term/dop_3.c srcs/term/dop_1.c \
 		srcs/parser/parser.c srcs/parser/tokens.c srcs/parser/parser_dop.c \
-		srcs/handler/handler.c srcs/handler/comands.c \
-		srcs/handler/errors.c \
-		srcs/handler/dop_1.c \
+		srcs/handler/handler.c srcs/handler/comands_1.c \
+		srcs/handler/errors.c srcs/handler/dop_1.c \
+		srcs/handler/comands_2.c \
 		srcs/builtins/ft_echo.c \
 		srcs/builtins/ft_cd.c srcs/builtins/ft_allocate_env_builtins.c \
 		srcs/builtins/ft_env.c srcs/builtins/ft_check_equal2.c \
@@ -14,12 +14,13 @@ SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c\
 		srcs/builtins/ft_pwd.c \
 		srcs/builtins/ft_unset.c \
 
+		
 OBJS := ${patsubst %.c,%.o,${SRCS}}
 D_FILES := ${patsubst %.c,%.d,${SRCS}}
 
 GCC := gcc
 # FLAGS := -Wall -Wextra -Werror 
-FLAGS := -g # -g для дебагинга -fsanitize=address
+FLAGS := -g # -g для дебагинга 
 INCLUDES := includes
 
 all: ${NAME}

@@ -96,11 +96,11 @@ void	ft_free_comands(void)
 
 	if (!g_all.comands)
 		return ;
-	while (g_all.comands->prev != NULL)
-		g_all.comands = g_all.comands->prev;
+	ft_commands_go_beginning();
 	while (g_all.comands->next)
 	{
-		free(g_all.comands->prog);
+		if (g_all.comands->prog != NULL)
+			free(g_all.comands->prog);
 		i = 0;
 		while (g_all.comands->args[i] != NULL)
 		{
@@ -111,7 +111,8 @@ void	ft_free_comands(void)
 		g_all.comands = g_all.comands->next;
 		free(g_all.comands->prev);
 	}
-	free(g_all.comands->prog);
+	if (g_all.comands->prog != NULL)
+		free(g_all.comands->prog);
 	i = 0;
 	while (g_all.comands->args[i] != NULL)
 	{

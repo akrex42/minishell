@@ -21,7 +21,7 @@ static void	ft_print_env(char *equal)
 			free(key);
 			ft_putchar_fd(equal[0], 1);
 			ft_putchar_fd('"', 1);
-			key1 = ft_substr(equal, 1, ft_strlen(equal) - 1), 1;
+			key1 = ft_substr(equal, 1, ft_strlen(equal) - 1);
 			ft_putstr_fd(key1, 1);
 			free(key1);
 			ft_putchar_fd('"', 1);
