@@ -17,7 +17,6 @@ void	ft_cycle_head(void)
 // действия с введенной строкой после цикла
 void	ft_manage_str(void)
 {
-	// ft_strjoin_and_free_2((g_all.history)->content, &(g_all.str_hist));
 	if (ft_strncmp(g_all.str_hist, "\0", 10))
 	{
 		ft_history_newline(&(g_all.history), g_all.str_hist);
@@ -47,7 +46,7 @@ void	ft_init_term_all(char **env)
 {
 	g_all.history = NULL;
 	g_all.tokens = NULL;
-	g_all.commands = NULL;
+	g_all.comands = NULL;
 	g_all.exit_status = 0;
 	g_all.env = ft_allocate_env(env);
 	g_all.path = ft_split(ft_find_env_var("PATH"), ':'); // добавляет двумерный массив возможных директорий для запуска программ

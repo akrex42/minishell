@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 void	inner_circle2(int j, int i, char **str, char *equal)
 {
@@ -71,7 +71,7 @@ int	print_err_unset(char *str)
 	i = 1;
 	if (!ft_isalpha(str[0]) && (str[0] != '_'))
 	{
-		ft_putstr_fd("bash: unset: `", 1); // stderror or stdout?
+		ft_putstr_fd("bash: unset: `", 1);
 		ft_putstr_fd(str, 1);
 		ft_putstr_fd("': not a valid identifier", 1);
 		ft_putchar_fd('\n', 1);
