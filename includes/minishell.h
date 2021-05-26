@@ -60,7 +60,9 @@ typedef struct s_parse_flags
 typedef struct s_term_all
 {
 	struct termios	g_saved_attributes;
+	int				flag_restart;
 	int				flag_allocate;
+	int				flag_builtin;
 	int				fd_in;
 	int				fd_out;
 	int				exit_status;
@@ -71,7 +73,7 @@ typedef struct s_term_all
 	char			**path; //разделенные директории по которым нужно искать прогу
 	t_history_list	*history;
 	t_tokens_list	*tokens;
-	t_comands_list	*comands;
+	t_comands_list	*commands;
 	t_parse_flags	flags;
 	t_execute		exec;
 }	t_term_all;

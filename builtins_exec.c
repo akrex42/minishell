@@ -1,9 +1,6 @@
-#include "minishell.h"
-
 int	ft_check_and_execute_builtins(void)
 {
 	// ft_putstr_fd(g_all.env[0], 1);
-	// ft_putstr_fd("here", 1);
 	g_all.exec.ret = -1;
 	if (!ft_strncmp("cd", g_all.commands->prog, 3))
 		g_all.exec.ret = ft_cd(g_all.commands->args);
@@ -22,85 +19,61 @@ int	ft_check_and_execute_builtins(void)
 	return (g_all.exec.ret); // $?
 }
 
-void	ft_close_file_fd(void)
-{
-	if (g_all.fd_in != -1)
-	{
-		close(g_all.fd_in);
-		g_all.fd_in = -1;
-	}
-	if (g_all.fd_out != -1)
-	{
-		close(g_all.fd_out);
-		g_all.fd_out = -1;
-	}
-}
-
 // из fd1 - берем в fd2 - записываем
 void	ft_execute_programm(int *fd1, int *fd2)
 {
 	int	i;
 
-	// ft_putstr_fd("here", 1);
-	if (ft_check_and_execute_builtins() == -1)
-	{
-		g_all.flag_builtin = 0;
-	}
-	// if (g_all.commands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
-	// {
-	// 	if (g_all.commands->prev->special[0] == '|')
-	// 		dup2(fd1[0], 0);
-			
-	// 	// TODO: другие случаи
-	// 	close(fd1[0]);
-	// 	close(fd1[1]);
-	// }
-	// if (g_all.fd_in != -1)
-	// {
-	// 	dup2(g_all.fd_in ,0);
-	// }
-	// 	//для вывода
-	// if (g_all.commands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
-	// {
-	// 	if (g_all.commands->special[0] == '|')
-	// 		dup2(fd2[1], 1);
-	// 	if (g_all.fd_out != -1)
-	// 		dup2(g_all.fd_out, 1);
-	// 		// TODO: другие случаи
-	// 	close(fd2[0]);
-	// 	close(fd2[1]);
-	// }
-	// ft_putstr_fd("here", 1);
-	// builtins here
 	if (!fork())
 	{
 		// для ввода
-		// if (g_all.commands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
-		// {
-		// 	if (g_all.commands->prev->special[0] == '|')
-		// 		dup2(fd1[0], 0);
-			
-		// 	// TODO: другие случаи
-		// 	close(fd1[0]);
-		// 	close(fd1[1]);
-		// }
-		// if (g_all.fd_in != -1)
-		// {
-		// 	dup2(g_all.fd_in ,0);
-		// }
+		if (g_all.commands->prev != NULL && fd1[0] != -1) // TODO: перенести в отдельный файл
+		{
+			if (g_all.commands->prev->special[0] == '|')
+				dup2(fd1[0], 0);
+			// TODO: другие случаи
+			close(fd1[0]);
+			close(fd1[1]);
+		}
 
-		// //для вывода
-		// if (g_all.commands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
-		// {
-		// 	if (g_all.commands->special[0] == '|')
-		// 		dup2(fd2[1], 1);
-		// 	if (g_all.fd_out != -1)
-		// 		dup2(g_all.fd_out, 1);
-		// 	// TODO: другие случаи
-		// 	close(fd2[0]);
-		// 	close(fd2[1]);
-		// }
-		// ft_putstr_fd("here", 1);
+		// для вывода
+		if (g_all.commands->next != NULL && fd2[0] != -1) // TODO: перенести в отдельный файл
+		{
+			if (g_all.commands->special[0] == '|')
+				dup2(fd2[1], 1);
+			// TODO: другие случаи
+		}
+		close(fd2[0]);
+		close(fd2[1]);
+
+		if (g_all.commands->next != NULL) // TODO: перенести в отдельный файл
+		{
+			if (g_all.commands->special[0] == '>')
+			{
+				g_all.fd = open(g_all.commands->next->prog, O_RDWR | O_TRUNC | O_CREAT);
+				if (g_all.fd == -1)
+					exit(-1);
+				dup2(g_all.fd, 1); // if we have > then the fd of the file after > becomes 1
+			}
+			else if (!ft_strncmp(g_all.commands->special, ">>", 3))
+			{
+				g_all.fd = open(g_all.commands->next->prog, O_RDWR | O_APPEND | O_CREAT, NULL);
+				if (g_all.fd == -1)
+					exit(-1);
+				dup2(g_all.fd, 1); // if we have > then the fd of the file after > becomes 1
+			}
+			else if (g_all.commands->next->special[0] == '<')
+			{
+				g_all.fd = open(g_all.commands->prog, O_RDWR | O_TRUNC | O_CREAT, NULL);
+				if (g_all.fd == -1)
+					exit(-1);
+				dup2(g_all.fd, 0); // if we have > then the fd of the file after > becomes 1
+			}
+			close(g_all.fd);
+		}
+		// close(fd2[0]);
+		// close(fd2[1]);
+
 		ft_reset_input_mode();
 		if (ft_is_relative()) // относительный путь (c /)
 			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
@@ -122,53 +95,23 @@ void	ft_execute_programm(int *fd1, int *fd2)
 	signal(SIGINT, ft_sighnd_exec); // сигналы во время выполнения программ
 	signal(SIGQUIT, ft_sighnd_exec);
 
-	if (fd1[0] != -1)
+	if (fd1[0] != -1) // для того, чтобы закончить рид
 	{
 		close(fd1[0]);
 		close(fd1[1]);
 	}
-	ft_close_file_fd();
 
 	waitpid(0, &g_all.exec.ret, 0);
 	signal(SIGINT, ft_sighnd); //ctrl + с // возвращаем первоначый обработчик
 	signal(SIGQUIT, ft_sighnd);
 	ft_set_input_mode(&g_all);
 	g_all.exec.ret = WEXITSTATUS(g_all.exec.ret);
-	ft_error_handler(g_all.exec.ret); //TODO: в 2 fd
+	ft_error_handler(g_all.exec.ret);
 }
 
 // * пример вызова программы
 // char *arg[] = {"cat", NULL};
 // execve("/bin/cat", arg, NULL);
-
-void	ft_make_redirect_fd(void)
-{
-	//TODO: убирать файлы, которые мы уже исопльзовали ??
-	//TODO: добавить ПРАВИЛЬНЫЙ алгоритм
-	if (g_all.commands->next != NULL)
-	{
-		if (!ft_strncmp(g_all.commands->special, ">>", 3))
-		{
-			g_all.fd_out = open(g_all.commands->next->prog, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU); //TODO: разобраться с доступом к файлу
-			if (g_all.fd_out == -1)
-				exit(-1);
-		}
-		else if (g_all.commands->special[0] == '>')
-		{
-			g_all.fd_out = open(g_all.commands->next->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
-			if (g_all.fd_out == -1)
-				exit(-1);
-		}
-		else if (g_all.commands->special[0] == '<') // 
-		{
-			g_all.fd_in = open(g_all.commands->next->prog, O_RDONLY | O_TRUNC | O_CREAT, S_IRWXU);
-			g_all.flag_restart = 1;
-			if (g_all.fd_in == -1)
-				exit(-1); // here restart the cycle 
-		}
-	}
-}
-
 
 void	ft_execute(void)
 {
@@ -179,28 +122,23 @@ void	ft_execute(void)
 
 	fd1[0] = -1;
 	fd2[0] = -1;
-	g_all.fd_in = -1;
-	g_all.fd_out = -1;
 	while (1)
 	{
 		pipe(fd1);
-		ft_make_redirect_fd();
-		if (g_all.flag_restart == 1)
-		{
-			ft_commands_go_beginning();
-			g_all.flag_restart = 0;
-		}
-		// ft_putstr_fd("here", 1);
 		ft_execute_programm(fd2, fd1);
-		if (g_all.commands->next == NULL || g_all.commands->special[0] == '<')
+		if (g_all.commands->next == NULL)
 			break;
 		else
 			g_all.commands = g_all.commands->next;
+		if (fd2[0] != -1)
+		{
+			close(fd2[0]);
+			close(fd2[1]);
+		}
 		pipe(fd2);
-		ft_make_redirect_fd();
 		ft_execute_programm(fd1, fd2);
 		//условие выхода из цикла
-		if (g_all.commands->next == NULL || g_all.commands->special[0] == '<')
+		if (g_all.commands->next == NULL)
 			break;
 		else
 			g_all.commands = g_all.commands->next;
@@ -254,9 +192,10 @@ void	ft_handler(void)
 	if (!(g_all.tokens))
 		return ;
 	ft_syntax_analyzer();
-	// ft_display_comands(); // ! для отладки
-	ft_commands_go_beginning(); // ! потом убрать
-	if (ft_syntax_error()) //TODO: в 2 fd
+	ft_display_comands(); // ! для отладки
+	ft_commands_go_beginning();
+	if (ft_syntax_error())
 		return ;
+	ft_commands_go_beginning();
 	ft_execute();
 }
