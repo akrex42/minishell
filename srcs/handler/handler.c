@@ -134,10 +134,10 @@ void	ft_make_redirect_fd(void)
 		}
 		else if (g_all.commands->special[0] == '<') // 
 		{
-			g_all.fd_in = open(g_all.commands->next->prog, O_RDONLY | O_TRUNC | O_CREAT, S_IRWXU);
+			g_all.fd_in = open(g_all.commands->next->prog, O_RDONLY | O_TRUNC | O_CREAT, S_IRWXU); // we dont create it if it does not exist
 			g_all.flag_restart = 1;
 			if (g_all.fd_in == -1)
-				exit(-1); // here restart the cycle 
+				exit(-1); // here restart the cycle DO WE really need to do this?
 		}
 	}
 }
