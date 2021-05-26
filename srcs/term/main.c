@@ -9,6 +9,7 @@ void	ft_cycle_head(void)
 {
 	ft_malloc_one_char_str(&(g_all.str));
 	ft_malloc_one_char_str(&(g_all.str_hist));
+	g_all.curr_str = 1;
 	ft_set_prompt();
 	tputs(save_cursor, 1, ft_putchar);
 	g_all.wr[0] = '\0';
@@ -17,13 +18,13 @@ void	ft_cycle_head(void)
 // действия с введенной строкой после цикла
 void	ft_manage_str(void)
 {
-	if (ft_strncmp(g_all.str_hist, "\0", 10))
+	if (g_all.curr_str == 2)
 	{
 		ft_history_newline(&(g_all.history), g_all.str_hist);
 		free(g_all.str);
 		ft_parser(g_all.str_hist); // передача строки парсеру
 	}
-	else if (ft_strncmp(g_all.str, "\0", 10))
+	else if (g_all.curr_str == 1)
 	{
 		ft_history_newline(&(g_all.history), g_all.str);
 		free(g_all.str_hist);
@@ -113,10 +114,10 @@ int	main(int argc, char* argv[], char* env[])
 			}
 			if (!ft_strncmp(g_all.wr, "\x7f", 10)) //backspace
 			{
-				if (g_all.str[0] != '\0')
-					ft_delete_one_char(&(g_all.str));
-				else if (g_all.str_hist[0] != '\0')
+				if ((g_all.str_hist[0] != '\0') && (g_all.curr_str == 2)) // !добавить флаг
 					ft_delete_one_char(&(g_all.str_hist));
+				else if ((g_all.str[0] != '\0') && (g_all.curr_str == 1))
+					ft_delete_one_char(&(g_all.str));
 				continue ;
 			}
 			if (g_all.wr[0] != '\n')
@@ -124,8 +125,8 @@ int	main(int argc, char* argv[], char* env[])
 			if (g_all.str[0] == '\004')
 				ft_exit(NULL);
 			ft_putstr_fd(g_all.wr, 1);
-			if ((ft_strlen(g_all.str) + 10) % tgetnum("co") == 0 ||
-				(ft_strlen(g_all.str_hist) + 10) % tgetnum("co") == 0)
+			if ((((ft_strlen(g_all.str) + 10) % tgetnum("co") == 0) && (g_all.curr_str == 1)) ||
+				(((ft_strlen(g_all.str_hist) + 10) % tgetnum("co") == 0) && (g_all.curr_str == 2))) //! добавить флаг
 				tputs(cursor_down, 1, ft_putchar);
 		}
 		ft_manage_str();
@@ -133,4 +134,6 @@ int	main(int argc, char* argv[], char* env[])
 	return (0);
 }
 
-
+//ошибки
+// когда удаляется история выполняется основная строка
+// и стириются дополнительные символы

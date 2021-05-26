@@ -16,6 +16,8 @@ void	ft_history_newline(t_history_list **history,
 {
 	t_history_list	*new;
 
+	if (!ft_strncmp(content, "", 1))
+		return ;
 	new = malloc(sizeof(t_history_list));
 	if (!new)
 		ft_malloc_error();
