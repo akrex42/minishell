@@ -46,63 +46,36 @@ void	ft_execute_programm(int *fd1, int *fd2)
 	{
 		g_all.flag_builtin = 0;
 	}
-	// if (g_all.commands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
-	// {
-	// 	if (g_all.commands->prev->special[0] == '|')
-	// 		dup2(fd1[0], 0);
-			
-	// 	// TODO: другие случаи
-	// 	close(fd1[0]);
-	// 	close(fd1[1]);
-	// }
-	// if (g_all.fd_in != -1)
-	// {
-	// 	dup2(g_all.fd_in ,0);
-	// }
-	// 	//для вывода
-	// if (g_all.commands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
-	// {
-	// 	if (g_all.commands->special[0] == '|')
-	// 		dup2(fd2[1], 1);
-	// 	if (g_all.fd_out != -1)
-	// 		dup2(g_all.fd_out, 1);
-	// 		// TODO: другие случаи
-	// 	close(fd2[0]);
-	// 	close(fd2[1]);
-	// }
-	// ft_putstr_fd("here", 1);
-	// builtins here
 	if (!fork())
 	{
 		// для ввода
-		// if (g_all.commands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
-		// {
-		// 	if (g_all.commands->prev->special[0] == '|')
-		// 		dup2(fd1[0], 0);
+		if (g_all.commands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
+		{
+			if (g_all.commands->prev->special[0] == '|')
+				dup2(fd1[0], 0);
 			
-		// 	// TODO: другие случаи
-		// 	close(fd1[0]);
-		// 	close(fd1[1]);
-		// }
-		// if (g_all.fd_in != -1)
-		// {
-		// 	dup2(g_all.fd_in ,0);
-		// }
-
-		// //для вывода
-		// if (g_all.commands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
-		// {
-		// 	if (g_all.commands->special[0] == '|')
-		// 		dup2(fd2[1], 1);
-		// 	if (g_all.fd_out != -1)
-		// 		dup2(g_all.fd_out, 1);
-		// 	// TODO: другие случаи
-		// 	close(fd2[0]);
-		// 	close(fd2[1]);
-		// }
+			// TODO: другие случаи
+			close(fd1[0]);
+			close(fd1[1]);
+		}
+		if (g_all.fd_in != -1)
+		{
+			dup2(g_all.fd_in ,0);
+		}
+		//для вывода
+		if (g_all.commands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
+		{
+			if (g_all.commands->special[0] == '|')
+				dup2(fd2[1], 1);
+			if (g_all.fd_out != -1)
+				dup2(g_all.fd_out, 1);
+			// TODO: другие случаи
+			close(fd2[0]);
+			close(fd2[1]);
+		}
 		// ft_putstr_fd("here", 1);
 		ft_reset_input_mode();
-		if (ft_is_relative()) // относительный путь (c /)
+		if (ft_is_relative() && (g_all.flag_builtin == 0)) // относительный путь (c /)
 			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
 		else
 		{
@@ -254,7 +227,7 @@ void	ft_handler(void)
 	if (!(g_all.tokens))
 		return ;
 	ft_syntax_analyzer();
-	// ft_display_comands(); // ! для отладки
+	ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning(); // ! потом убрать
 	if (ft_syntax_error()) //TODO: в 2 fd
 		return ;
