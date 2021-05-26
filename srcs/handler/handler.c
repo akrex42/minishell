@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_check_and_execute_builtins()
+int	ft_check_and_execute_builtins(void)
 {
 	// ft_putstr_fd(g_all.env[0], 1);
 	g_all.exec.ret = -1;
@@ -48,33 +48,33 @@ void	ft_execute_programm(int *fd1, int *fd2)
 		close(fd2[0]);
 		close(fd2[1]);
 
-		if (g_all.commands->prev != NULL) // TODO: перенести в отдельный файл
+		if (g_all.commands->next != NULL) // TODO: перенести в отдельный файл
 		{
-			if (g_all.commands->prev->special[0] == '>')
+			if (g_all.commands->special[0] == '>')
 			{
-				g_all.fd = open(g_all.commands->next, O_RDWR, O_TRUNC, O_CREAT, O_NONBLOCK);
+				g_all.fd = open(g_all.commands->next->prog, O_RDWR | O_TRUNC | O_CREAT);
 				if (g_all.fd == -1)
 					exit(-1);
 				dup2(g_all.fd, 1); // if we have > then the fd of the file after > becomes 1
 			}
-			else if (!ft_strncmp(g_all.commands->special[0], ">>", 3))
+			else if (!ft_strncmp(g_all.commands->special, ">>", 3))
 			{
-				g_all.fd = open(g_all.commands->next, O_RDWR, O_APPEND, O_CREAT, O_NONBLOCK);
+				g_all.fd = open(g_all.commands->next->prog, O_RDWR | O_APPEND | O_CREAT, NULL);
 				if (g_all.fd == -1)
 					exit(-1);
 				dup2(g_all.fd, 1); // if we have > then the fd of the file after > becomes 1
 			}
-			else if (g_all.commands->prev->special[0] == '<')
+			else if (g_all.commands->next->special[0] == '<')
 			{
-				g_all.fd = open(g_all.commands->next, O_RDWR, O_TRUNC, O_CREAT, O_NONBLOCK);
+				g_all.fd = open(g_all.commands->prog, O_RDWR | O_TRUNC | O_CREAT, NULL);
 				if (g_all.fd == -1)
 					exit(-1);
 				dup2(g_all.fd, 0); // if we have > then the fd of the file after > becomes 1
 			}
 			close(g_all.fd);
 		}
-		close(fd2[0]);
-		close(fd2[1]);
+		// close(fd2[0]);
+		// close(fd2[1]);
 
 		ft_reset_input_mode();
 		if (ft_is_relative()) // относительный путь (c /)
@@ -198,5 +198,6 @@ void	ft_handler(void)
 	ft_commands_go_beginning();
 	if (ft_syntax_error())
 		return ;
+	ft_commands_go_beginning();
 	ft_execute();
 }
