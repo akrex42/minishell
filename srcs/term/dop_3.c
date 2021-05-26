@@ -32,7 +32,7 @@ int	ft_check_unused_char(const char *wr) // добавить сюда неисп
 
 void	ft_add_char_to_correct_str(t_term_all *all)
 {
-	if (all->history->content == NULL)
+	if (all->curr_str == 1)
 		ft_strjoin_and_free_1(&(all->str), all->wr);
 	else
 		ft_strjoin_and_free_1(&(all->str_hist), all->wr);

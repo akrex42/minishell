@@ -67,6 +67,7 @@ typedef struct s_term_all
 	char			wr[10];
 	char			*str;
 	char			*str_hist;
+	int				curr_str; // 1 - str 2 - str_hist
 	char			**env;
 	char			**path; //разделенные директории по которым нужно искать прогу
 	t_history_list	*history;

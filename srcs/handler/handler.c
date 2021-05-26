@@ -34,7 +34,7 @@ void	ft_execute_programm(int *fd1, int *fd2)
 		}
 		if (g_all.fd_in != -1)
 		{
-			dup2(g_all.fd_in ,0);
+			dup2(g_all.fd_in, 0);
 		}
 
 		//для вывода
