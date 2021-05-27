@@ -1,13 +1,15 @@
 #include "minishell.h"
 
-void	ft_close_file_fd(void)
+void	ft_close_file_fd(int *fd1, int *fd2)
 {
-	if (g_all.fd_in != -1)
+	if (g_all.fd_in != -1 && !(g_all.comands->prev != NULL && fd1[0] != -1 &&
+		g_all.comands->prev->special[0] == '|'))
 	{
 		close(g_all.fd_in);
 		g_all.fd_in = -1;
 	}
-	if (g_all.fd_out != -1)
+	if (g_all.fd_out != -1 && !(g_all.comands->next != NULL &&
+		g_all.comands->special[0] == '|'))
 	{
 		close(g_all.fd_out);
 		g_all.fd_out = -1;
@@ -48,28 +50,31 @@ void	ft_execute_programm(int *fd1, int *fd2)
 	if (!fork())
 	{
 		// для ввода
-		if (g_all.comands->prev != NULL && fd1[0] != -1) //TODO: перенести в отдельный файл
+		if (g_all.comands->prev != NULL &&
+			g_all.comands->prev->special[0] == '|')
+			dup2(fd1[0], 0);
+		else if (g_all.fd_in != -1)
 		{
-			if (g_all.comands->prev->special[0] == '|')
-				dup2(fd1[0], 0);
-			
-			// TODO: другие случаи
+			dup2(g_all.fd_in, 0);
+			close(g_all.fd_in);
+		}
+		if (fd1[0] != -1)
+		{
 			close(fd1[0]);
 			close(fd1[1]);
 		}
-		if (g_all.fd_in != -1)
-		{
-			dup2(g_all.fd_in, 0);
-		}
 
 		//для вывода
-		if (g_all.comands->next != NULL && fd2[0] != -1) //TODO: перенести в отдельный файл
+		if (g_all.comands->next != NULL &&
+			g_all.comands->special[0] == '|')
+			dup2(fd2[1], 1);
+		else if (g_all.fd_out != -1)
 		{
-			if (g_all.comands->special[0] == '|')
-				dup2(fd2[1], 1);
-			if (g_all.fd_out != -1)
-				dup2(g_all.fd_out ,1);
-			// TODO: другие случаи
+			dup2(g_all.fd_out ,1);
+			close(g_all.fd_out);
+		}
+		if (fd2[0] != -1)
+		{
 			close(fd2[0]);
 			close(fd2[1]);
 		}
@@ -100,7 +105,7 @@ void	ft_execute_programm(int *fd1, int *fd2)
 		close(fd1[0]);
 		close(fd1[1]);
 	}
-	// ft_close_file_fd();
+	ft_close_file_fd(fd1, fd2);
 
 	waitpid(0, &g_all.exec.ret, 0);
 	signal(SIGINT, ft_sighnd); //ctrl + с // возвращаем первоначый обработчик
@@ -249,7 +254,7 @@ void	ft_handler(void)
 	if (ft_syntax_error()) //TODO: в 2 fd
 		return ;
 	ft_syntax_analyzer();
-	ft_display_comands(); // ! для отладки
+	// ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning(); // ! потом убрать
 	ft_execute();
 }
