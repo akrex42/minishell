@@ -71,20 +71,20 @@ int	print_err_unset(char *str)
 	i = 1;
 	if (!ft_isalpha(str[0]) && (str[0] != '_'))
 	{
-		ft_putstr_fd("bash: unset: `", 1);
-		ft_putstr_fd(str, 1);
-		ft_putstr_fd("': not a valid identifier", 1);
-		ft_putchar_fd('\n', 1);
+		ft_putstr_fd("bash: unset: `", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd("': not a valid identifier", 2);
+		ft_putchar_fd('\n', 2);
 		return (1); // errno?
 	}
 	while (str[i] != '\0')
 	{
 		if ((!ft_isalnum(str[i])) && (str[i] != '_'))
 		{
-			ft_putstr_fd("bash: unset: `", 1);
-			ft_putstr_fd(str, 1);
-			ft_putstr_fd("': not a valid identifier", 1);
-			ft_putchar_fd('\n', 1);
+			ft_putstr_fd("bash: unset: `", 2);
+			ft_putstr_fd(str, 2);
+			ft_putstr_fd("': not a valid identifier", 2);
+			ft_putchar_fd('\n', 2);
 			return (1);
 		}
 		i++;

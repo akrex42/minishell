@@ -6,13 +6,13 @@ unsigned char 	ft_exit(char **str)
 	unsigned int	error_code;
 
 	i = 0;
-	ft_putstr_fd("exit\n", 1);
+	ft_putstr_fd("exit\n", g_all.fd_out);
 	if (str == NULL)
 		exit(0);
 	if (str[1] == NULL)
 	{	
-		ft_putstr_fd("exit\n", 1);
-		ft_putchar_fd('\n', 1);
+		ft_putstr_fd("exit\n", g_all.fd_out);
+		ft_putchar_fd('\n', g_all.fd_out);
 		exit (0);
 	}
 	while (str[1][i] != '\0')
@@ -21,10 +21,10 @@ unsigned char 	ft_exit(char **str)
 			i++;
 		else if (!ft_isdigit(str[1][i]))
 		{
-			ft_putstr_fd("bash: exit: ", 1);
-			ft_putstr_fd(str[1], 1);
-			ft_putstr_fd(": numeric argument required", 1);
-			ft_putchar_fd('\n', 1);
+			ft_putstr_fd("bash: exit: ", 2);
+			ft_putstr_fd(str[1], 2);
+			ft_putstr_fd(": numeric argument required", 2);
+			ft_putchar_fd('\n', 2);
 			exit (255);
 		}
 		i++;

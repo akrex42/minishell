@@ -10,21 +10,21 @@ void	ft_print_env(void)
 		char *equal = ft_strchr(g_all.env[i], '=');
 		if (equal == NULL)
 		{
-			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd(g_all.env[i], 1);
-			ft_putchar_fd('\n', 1);
+			ft_putstr_fd("declare -x ", g_all.fd_out);
+			ft_putstr_fd(g_all.env[i], g_all.fd_out);
+			ft_putchar_fd('\n', g_all.fd_out);
 		}
 		else
 		{
-			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd("declare -x ", g_all.fd_out);
 			ft_putstr_fd(ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) 
-			- ft_strlen(equal)), 1);
-			ft_putchar_fd(equal[0], 1);
-			ft_putchar_fd('"', 1);
+			- ft_strlen(equal)), g_all.fd_out);
+			ft_putchar_fd(equal[0], g_all.fd_out);
+			ft_putchar_fd('"', g_all.fd_out);
 			ft_putstr_fd(ft_substr(equal, 1, 
-			ft_strlen(equal) - 1), 1);
-			ft_putchar_fd('"', 1);
-			ft_putchar_fd('\n', 1);
+			ft_strlen(equal) - 1), g_all.fd_out);
+			ft_putchar_fd('"', g_all.fd_out);
+			ft_putchar_fd('\n', g_all.fd_out);
 		}
 		i++;
 	}
@@ -32,10 +32,10 @@ void	ft_print_env(void)
 
 void	ft_print_error_cd(char **str)
 {
-	ft_putstr_fd("bash: cd: ", 1);
-	ft_putstr_fd(str[1], 1);
-	ft_putstr_fd(": No such file or directory", 1);
-	ft_putchar_fd('\n', 1);
+	ft_putstr_fd("bash: cd: ", 2);
+	ft_putstr_fd(str[1], 2);
+	ft_putstr_fd(": No such file or directory", 2);
+	ft_putchar_fd('\n', 2);
 }
 
 void	ft_chdir_emdash(char *dir, char **beg_env, char *this_env, char *equal)
