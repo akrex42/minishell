@@ -41,9 +41,8 @@ void	ft_execute_programm(int *fd1, int *fd2)
 {
 	int	i;
 
-	if (g_all.comands->prev != NULL)
-		if (g_all.comands->prev->special[0] == '>' ||
-			g_all.comands->prev->special[0] == '<')
+	if (g_all.comands->special[0] == '>' ||
+		g_all.comands->special[0] == '<')
 				return ;
 	//builtins here
 	if (!fork())
@@ -101,7 +100,7 @@ void	ft_execute_programm(int *fd1, int *fd2)
 		close(fd1[0]);
 		close(fd1[1]);
 	}
-	ft_close_file_fd();
+	// ft_close_file_fd();
 
 	waitpid(0, &g_all.exec.ret, 0);
 	signal(SIGINT, ft_sighnd); //ctrl + с // возвращаем первоначый обработчик
@@ -117,13 +116,13 @@ void	ft_make_redirect_fd(void)
 	//TODO: убирать файлы, которые мы уже исопльзовали
 	//TODO: добавить ПРАВИЛЬНЫЙ алгоритм
 	tmp = g_all.comands;
-	while (g_all.comands->next != NULL && g_all.comands->special[0] != ';') // TODO: сделать общим
+	while (1)
 	{
 		if (!ft_strncmp(g_all.comands->special, ">>", 3) && !(g_all.comands->used))
 		{
 			if (g_all.fd_out != -1)
 				close(g_all.fd_out);
-			g_all.fd_out = open(g_all.comands->next->prog, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
+			g_all.fd_out = open(g_all.comands->prog, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 			if (g_all.fd_out == -1)
 				exit(-1);
 			g_all.comands->used = 1;
@@ -132,7 +131,7 @@ void	ft_make_redirect_fd(void)
 		{
 			if (g_all.fd_out != -1)
 				close(g_all.fd_out);
-			g_all.fd_out = open(g_all.comands->next->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
+			g_all.fd_out = open(g_all.comands->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
 			if (g_all.fd_out == -1)
 				exit(-1);
 			g_all.comands->used = 1;
@@ -141,14 +140,14 @@ void	ft_make_redirect_fd(void)
 		{
 			if (g_all.fd_in != -1)
 				close(g_all.fd_in);
-			g_all.fd_in = open(g_all.comands->next->prog, O_RDONLY, NULL);
+			g_all.fd_in = open(g_all.comands->prog, O_RDONLY, NULL);
 			if (g_all.fd_in == -1)
-			{
-				ft_putstr_fd(strerror(errno), 1); // ! заменить ошибку
 				exit(-1);
-			}
 			g_all.comands->used = 1;
 		}
+		if (g_all.comands->special[0] == ';' ||
+			g_all.comands->next == NULL)
+			break ;
 		g_all.comands = g_all.comands->next;
 	}
 	g_all.comands = tmp;
@@ -201,41 +200,56 @@ void	ft_syntax_analyzer(void) //TODO: ОТДЕЛИТЬ АРГУМЕНТЫ ОТ �
 	{
 		ft_new_prog_node();
 		ft_comands_list_add_args_and_prog();
-		ft_tokens_go_next_spec();
+		
+		if (ft_compare_prog_to_redirect())
+		{
+			if (g_all.comands->prog == NULL)
+			{
+				if (g_all.tokens->next != NULL)
+				{
+					ft_tokens_step_front();
+					g_all.comands->prog = ft_strdup(g_all.tokens->content);
+				}
+			}
+			else
+			{
+				ft_new_prog_node();
+				ft_strlcpy(g_all.comands->special, g_all.comands->prev->special, 3);
+				if (g_all.tokens->next != NULL)
+				{
+					ft_tokens_step_front();
+					g_all.comands->prog = ft_strdup(g_all.tokens->content);
+				}
+				ft_bzero(g_all.comands->prev->special, 3);
+			}
+		}
+		
+		// ft_tokens_go_next_spec();
+		ft_tokens_step_front();
 	}
-	//если последни	аргумент один
-	g_all.tokens = g_all.tokens->prev;
-	if (g_all.tokens->next->next == NULL &&
-		ft_compare_tokens_cont_to_spec())
+	//если последний аргумент один
+	if (g_all.tokens->prev->prev != NULL)
+		if (g_all.tokens->next == NULL && (g_all.comands->special[0] == '|' || g_all.comands->special[0] == ';' ||
+			g_all.tokens->prev->prev->content[0] == '>' || g_all.tokens->prev->prev->content[0] == '<'))
+	// if (g_all.tokens->next->next == NULL &&
+	// 	(ft_compare_tokens_cont_to_spec() || 
+	// 	ft_compare_prog_to_redirect()))
 	{
-		g_all.tokens = g_all.tokens->next;
+		ft_tokens_step_front();
 		ft_new_prog_node();
 		ft_comands_list_add_args_and_prog();
 	}
 }
-
-// < - меняет standart input (0) на содержимое файла (прга < файл)
-// елси идет (прога < файл < файл < файл ...) то на вход подается содержимое только последнего файла
-
-// > - записывает вывод предыдущей прогрраммы в файл, есил файла нет создет его
-// елси идет (прога > файл > файл > файл ...) то выход записывается только в последний файл
-//! СОДЕРЖИМОЕ ПРЕДЫДУЩИХ ФАЙЛОВ СТИРАЕТСЯ
-
-// >> - записывает вывод в файл, но не перезаписывает его, а добавляет содержимое
-// елси идет (прога >> файл >> файл >> файл ...) то выход записывается только в последний файл
-//! СОДЕРЖИМОЕ ПРЕДЫДУЩИХ ФАЙЛОВ ОСТАЕТСЯ
-
-//TODO: перепрверить входы такого плана (grep Makefile < aaa > test < test1)
 
 void	ft_handler(void)
 {
 	//заглушка от пустых строк
 	if (!(g_all.tokens))
 		return ;
-	ft_syntax_analyzer();
-	// ft_display_comands(); // ! для отладки
-	ft_commands_go_beginning(); // ! потом убрать
 	if (ft_syntax_error()) //TODO: в 2 fd
 		return ;
+	ft_syntax_analyzer();
+	ft_display_comands(); // ! для отладки
+	ft_commands_go_beginning(); // ! потом убрать
 	ft_execute();
 }

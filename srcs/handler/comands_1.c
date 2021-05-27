@@ -1,6 +1,15 @@
 #include "minishell.h"
 
-int	ft_compare_tokens_cont_to_spec(void)
+int	ft_compare_prog_to_redirect(void) // 1 - нашлось
+{
+	if (g_all.comands == NULL)
+		return (0);
+	return (!ft_strncmp(g_all.comands->special, ">", 2) ||
+			!ft_strncmp(g_all.comands->special, ">>", 3) ||
+			!ft_strncmp(g_all.comands->special, "<", 2));
+}
+
+int	ft_compare_tokens_cont_to_spec(void) // 1 - нашлось
 {
 	if (g_all.tokens == NULL)
 		return (1);
@@ -105,24 +114,30 @@ void	ft_free_comands(void)
 		if (g_all.comands->prog != NULL)
 			free(g_all.comands->prog);
 		i = 0;
-		while (g_all.comands->args[i] != NULL)
+		if (g_all.comands->args != NULL)
 		{
-			free(g_all.comands->args[i]);
-			i++;
+			while (g_all.comands->args[i] != NULL)
+			{
+				free(g_all.comands->args[i]);
+				i++;
+			}
+			free(g_all.comands->args);
 		}
-		free(g_all.comands->args);
 		g_all.comands = g_all.comands->next;
 		free(g_all.comands->prev);
 	}
 	if (g_all.comands->prog != NULL) //! проверить
 		free(g_all.comands->prog);
 	i = 0;
-	while (g_all.comands->args[i] != NULL) //!
+	if (g_all.comands->args != NULL)
 	{
-		free(g_all.comands->args[i]);
-		i++;
+		while (g_all.comands->args[i] != NULL)
+		{
+			free(g_all.comands->args[i]);
+			i++;
+		}
+		free(g_all.comands->args);
 	}
-	free(g_all.comands->args);
 	free(g_all.comands);
 	g_all.comands = NULL;
 }
@@ -140,13 +155,14 @@ void	ft_display_comands(void)
 		ft_putstr_fd("\n", 1);
 		i = 0;
 		ft_putstr_fd("args: ", 1);
-		while (g_all.comands->args[i] != NULL)
-		{
-			ft_putstr_fd("[", 1);
-			ft_putstr_fd(g_all.comands->args[i], 1);
-			ft_putstr_fd("] ", 1);
-			i++;
-		}
+		if (g_all.comands->args != NULL)
+			while (g_all.comands->args[i] != NULL)
+			{
+				ft_putstr_fd("[", 1);
+				ft_putstr_fd(g_all.comands->args[i], 1);
+				ft_putstr_fd("] ", 1);
+				i++;
+			}
 		ft_putstr_fd("\n", 1);
 		ft_putstr_fd("spec: ", 1);
 		ft_putstr_fd(g_all.comands->special, 1);		
@@ -158,10 +174,11 @@ void	ft_display_comands(void)
 		g_all.comands = g_all.comands->next;
 	}
 	ft_putstr_fd("prog: ", 1);
-		ft_putstr_fd(g_all.comands->prog, 1);
-		ft_putstr_fd("\n", 1);
-		i = 0;
-		ft_putstr_fd("args: ", 1);
+	ft_putstr_fd(g_all.comands->prog, 1);
+	ft_putstr_fd("\n", 1);
+	i = 0;
+	ft_putstr_fd("args: ", 1);
+	if (g_all.comands->args != NULL)
 		while (g_all.comands->args[i] != NULL)
 		{
 			ft_putstr_fd("[", 1);
@@ -169,12 +186,12 @@ void	ft_display_comands(void)
 			ft_putstr_fd("] ", 1);
 			i++;
 		}
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("spec: ", 1);
-		ft_putstr_fd(g_all.comands->special, 1);
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("used: ", 1);
-		ft_putnbr_fd(g_all.comands->used, 1);	
-		ft_putstr_fd("\n\n", 1);
+	ft_putstr_fd("\n", 1);
+	ft_putstr_fd("spec: ", 1);
+	ft_putstr_fd(g_all.comands->special, 1);
+	ft_putstr_fd("\n", 1);
+	ft_putstr_fd("used: ", 1);
+	ft_putnbr_fd(g_all.comands->used, 1);	
+	ft_putstr_fd("\n\n", 1);
 	ft_commands_go_beginning();
 }

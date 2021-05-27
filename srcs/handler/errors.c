@@ -36,26 +36,41 @@ void	ft_error_handler(int errno_exec)
 
 int	ft_syntax_error(void)
 {
-	ft_commands_go_beginning();
+	ft_tokens_to_beginning();
 	while (1)
 	{
-		if (g_all.comands->prog == NULL)
+		if (g_all.tokens->content[0] == '|')
 		{
-			if (g_all.comands->special[0] == '|')
+			if (g_all.tokens->prev == NULL || g_all.tokens->next == NULL)
+			{
 				ft_putstr_fd("my_bash: syntax error near unexpected token `|'\n", 1);
-			else if (g_all.comands->special[0] == ';')
-				ft_putstr_fd("my_bash: syntax error near unexpected token `;'\n", 1);
-			else
-				ft_putstr_fd("my_bash: syntax error near unexpected token `newline'\n", 1);
-			g_all.exit_status = 258;
-			return 1;
+				g_all.exit_status = 258;
+				return 1;
+			}
 		}
-		// if (g_all.comands->special)
-		if (g_all.comands->next == NULL)
+		else if (g_all.tokens->content[0] == ';')
+		{
+			if (g_all.tokens->prev == NULL)
+			{
+				ft_putstr_fd("my_bash: syntax error near unexpected token `;'\n", 1);
+				g_all.exit_status = 258;
+				return 1;
+			}
+		}
+		else if (g_all.tokens->content[0] == '>' || g_all.tokens->content[0] == '<')
+		{
+			if (g_all.tokens->next == NULL)
+			{
+				ft_putstr_fd("my_bash: syntax error near unexpected token `newline'\n", 1);
+				g_all.exit_status = 258;
+				return 1;
+			}
+		}
+		if (g_all.tokens->next == NULL)
 			break ;
 		else
-			g_all.comands = g_all.comands->next;
+			g_all.tokens = g_all.tokens->next;
 	}
-	ft_commands_go_beginning();
+	ft_tokens_to_beginning();
 	return 0;
 }

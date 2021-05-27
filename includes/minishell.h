@@ -94,7 +94,6 @@ void	ft_strjoin_and_free_2(const char *str1, char **str2);
 void	ft_strjoin_char_and_free(char **str1, char ch);
 void	ft_malloc_one_char_str(char **str);
 void	ft_malloc_one_char_str(char **str);
-// void	ft_exit(void);
 void	ft_set_prompt(void);
 void	ft_sighnd(int signo);
 void	ft_reset_input_mode(void);
@@ -122,6 +121,7 @@ void	ft_error_handler(int ret);
 void	ft_sighnd_exec(int signo);
 void	ft_cycle_head(void);
 int		ft_syntax_error(void);
+int		ft_compare_prog_to_redirect(void);
 
 //tmp
 int 	ft_cd(char **str);

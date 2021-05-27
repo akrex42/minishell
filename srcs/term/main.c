@@ -37,7 +37,6 @@ void	ft_manage_str(void)
 	}
 	// ft_display_tokens(); // ! для отладки
 	ft_handler();
-	//TODO: где-то ошибка free при пустой команде со спец символом
 	ft_free_tokens();
 	ft_free_comands();
 }

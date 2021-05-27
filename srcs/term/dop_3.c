@@ -25,7 +25,7 @@ char	**ft_allocate_env(char **env)
 int	ft_check_unused_char(const char *wr) // добавить сюда неиспользуемый ввод
 {
 	if (!ft_strncmp(wr, "\e[D", 10)
-		|| !ft_strncmp(wr, "\e[C", 10))
+		|| !ft_strncmp(wr, "\e[C", 10)) //TODO: ctrl + l
 		return (1);
 	return (0);
 }
