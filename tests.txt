@@ -1,0 +1,64 @@
+cat | cat | cat | ls - 
+cat Makefile | grep pr | head -n 5 | cd file_not_exit + exit status 1
+cat Makefile | grep pr | head -n 5 | hello + exit status 127
+ls | exit -  должен ничего не показывать, у нас выходит из баша
+sleep 5 | exit - должен засыпать на 5 сек и ничего не показывать, у нас выходит из проги
+ <a cat <b <c - просто выпиливается, должен говорить no such file or directory либо показывать содержимое c
+< tests.txt cat <b < tests.txt - если б не существует, должен показывать ошибку
+> test | echo blabla; rm test - сегается, должен показывать blabla
+>a cat <b >>c  - a создается пустым, с получает то, что в ба
+>a ls >b >>c >d - работает
+>file - работает
+>a ls <machin >>c >d - просто выходит, а нужно, чтобы создавался пустой а
+cat -e > test1 < test2 - просто выходит, а должен создаваться еусе1 даже если теста2 нет
+echo 2 > out1 >> out2 - работает
+echo 2 >> out1 > out2 - работает
+echo bonjour > test\ 1 - работает
+echo test > file test1 = = echo test test1 > file - we have command not found
+not_cmd bonjour > salut - okay
+ctrl-\ - does not work exit 131 sur bin(ex : sleep 10)&line vide
+ctrl-C - works exit 130 sur bin(ex : sleep 10)&line vide
+export var="  truc"; echo $var -- export gives an error "bash: export: `var=truc  ': not a valid identifier"
+echo "$tests""Makefile" ok
+echo "$tests"Makefile ok
+echo "$tests" "Makefile" ok
+$bla (non-export) works
+echo $var bonjour ($var non export) works
+export $var (var non export) - works
+cd ../../../../../.. - works
+cd /home/user42/ - works
+cd $HOME/Bureau - works
+unset HOME; cd - I can't get it, exit 1
+export HOME= ; cd - exit 0 - works
+cd too many arguments - проверить
+cd ./path_not_found - works exit 1
+cd - - works
+mkdir a; mkdir a/b; cd a/b; rm -r ../../a; cd .. -  зависает, должен выдавать ошибки и менять директории, в коде  $? 0
+ echo -n -nnn hello -n ; echo a - hello -na
+env export env work
+cd random_cmd ; echo $? - $? 1, у нас 0
+cd random_cmd ; cd $? то же
+./file_that_is_not_an_executable - permission denied
+file_name - cmd not found (pbm avec stat() pour les binaires) - exit 127
+not_cmd - cmd not found -> exit status = 127
+export test=a ; echo $test - должен показывать значение переменной теста
+ls bonjour ; echo $? - код завершения должен быть 2
+export var=a ; export $var=test ; echo $var $a
+echo ~ - должен показывать хоум
+export "" test=a -- export test=a et set $? à 1
+. - ошибки
+"" - command not found
+echo "\s" ; echo "\\s" - должен быть одинаковый аутпут
+echo "12\"" - правильно
+echo "bip | bip ; coyotte > < \" " - правильно
+echo \> - должен печатать > 
+echo $USER$var\$USER$USER\$USERtest$USER -- user42$USERuser42$USERtestuser42
+echo bonjour \; ls -- bonjour ; ls
+$ - работает
+$LESS$VAR
+my_bash: -R$VAR: command not found - без вар
+export ""  et unset "" -- bash: export: `': not a valid identifier
+bash: export: `': not a valid identifier должно быть
+export "test=ici"=coucou ; echo $test - должно сразу отображаться
+export var="cat Makefile | grep >" ; echo $var -- проработать ошибку экспорта
+

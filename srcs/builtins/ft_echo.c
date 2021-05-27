@@ -16,7 +16,7 @@ int	ft_echo(char **str)
 	while (str[i] != NULL)
 	{
 		ft_putstr_fd(str[i], g_all.fd_out);
-		ft_putchar_fd(' ', g_all.fd_out);
+		// ft_putchar_fd(' ', g_all.fd_out);
 		i++;
 	}
 	if (str[1] != NULL)

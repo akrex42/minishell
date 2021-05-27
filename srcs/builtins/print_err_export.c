@@ -16,7 +16,7 @@ int	print_err_export(char *str)
 	while (str[i] != '\0')
 	{
 		if (!ft_isalnum(str[i]) && (str[i] != '=') 
-				&& (str[i] != '_'))
+				&& (str[i] != '_') && (str[i] != '"'))
 		{
 			ft_putstr_fd("bash: export: `", 2);
 			ft_putstr_fd(str, 2);
