@@ -15,14 +15,14 @@ int	ft_echo(char **str)
 	}
 	while (str[i] != NULL)
 	{
-		ft_putstr_fd(str[i], g_all.fd_out );
-		ft_putchar_fd(' ', g_all.fd_out );
+		ft_putstr_fd(str[i], 1);
+		ft_putchar_fd(' ', 1);
 		i++;
 	}
 	if (str[1] != NULL)
-		ft_putstr_fd(str[i], g_all.fd_out );
+		ft_putstr_fd(str[i], 1);
 	if (!flag)
-		ft_putchar_fd('\n', g_all.fd_out );
+		ft_putchar_fd('\n', 1);
 	return (0);
 }
 

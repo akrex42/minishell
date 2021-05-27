@@ -47,10 +47,8 @@ void	ft_init_term_all(char **env)
 {
 	g_all.history = NULL;
 	g_all.tokens = NULL;
-	g_all.commands = NULL;
+	g_all.comands = NULL;
 	g_all.exit_status = 0;
-	g_all.flag_restart = 0;
-	g_all.flag_builtin = 1;
 	g_all.env = ft_allocate_env(env);
 	g_all.path = ft_split(ft_find_env_var("PATH"), ':'); // добавляет двумерный массив возможных директорий для запуска программ
 	ft_init_history(&(g_all.history));
