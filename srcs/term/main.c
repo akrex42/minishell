@@ -102,6 +102,14 @@ int	main(int argc, char* argv[], char* env[])
 		{
 			ft_bzero(g_all.wr, 10);
 			read(0, g_all.wr, 10);
+			if (g_all.wr[0] == '\004')
+			{
+				if ((g_all.str[0] == '\0' && g_all.curr_str == 1) ||
+					(g_all.str_hist[0] == '\0' && g_all.curr_str == 2))
+					ft_exit(NULL);
+				else
+					continue ;
+			}
 			if (ft_check_unused_char(g_all.wr))
 				continue ;
 			if (ft_manage_history(&g_all))
@@ -119,8 +127,6 @@ int	main(int argc, char* argv[], char* env[])
 			}
 			if (g_all.wr[0] != '\n')
 				ft_add_char_to_correct_str(&g_all);
-			if (g_all.str[0] == '\004')
-				ft_exit(NULL);
 			ft_putstr_fd(g_all.wr, 1);
 			if ((((ft_strlen(g_all.str) + 10) % tgetnum("co") == 0) && (g_all.curr_str == 1)) ||
 				(((ft_strlen(g_all.str_hist) + 10) % tgetnum("co") == 0) && (g_all.curr_str == 2))) //! добавить флаг

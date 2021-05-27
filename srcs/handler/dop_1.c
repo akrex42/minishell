@@ -15,5 +15,8 @@ void	ft_sighnd_exec(int signo)
 		g_all.exit_status = 501;
 	}
 	else
+	{
+		ft_putstr_fd("\n", 1);
 		g_all.exit_status = 500; // используется как флаг для изменения этого значения после форка
+	}
 }
