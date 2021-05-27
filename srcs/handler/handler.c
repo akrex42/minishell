@@ -16,27 +16,37 @@ void	ft_close_file_fd(int *fd1, int *fd2)
 	}
 }
 
-// int	ft_check_and_execute_builtins(void)
-// {
-// 	// ft_putstr_fd(g_all.env[0], 1);
-// 	// ft_putstr_fd("here", 1);
-// 	g_all.exec.ret = -1;
-// 	if (!ft_strncmp("cd", g_all.commands->prog, 3))
-// 		g_all.exec.ret = ft_cd(g_all.commands->args);
-// 	else if (!ft_strncmp("echo", g_all.commands->prog, 5))
-// 		g_all.exec.ret = ft_echo(g_all.commands->args);
-// 	else if (!ft_strncmp("env", g_all.commands->prog, 4))
-// 		g_all.exec.ret = ft_env(g_all.commands->args);
-// 	else if (!ft_strncmp("exit", g_all.commands->prog, 5))
-// 		g_all.exec.ret = ft_exit(g_all.commands->args);
-// 	else if (!ft_strncmp("export", g_all.commands->prog, 7))
-// 		g_all.exec.ret = ft_export(g_all.commands->args);
-// 	else if (!ft_strncmp("pwd", g_all.commands->prog, 4))
-// 		g_all.exec.ret = ft_pwd(g_all.commands->args);
-// 	else if (!ft_strncmp("unset", g_all.commands->prog, 6))
-// 		g_all.exec.ret = ft_unset(g_all.commands->args);
-// 	return (g_all.exec.ret); // $?
-// }
+int	ft_check_builtins(void)
+{
+	if (!ft_strncmp("cd", g_all.comands->prog, 3) ||
+		!ft_strncmp("echo", g_all.comands->prog, 5) ||
+		!ft_strncmp("env", g_all.comands->prog, 4) ||
+		!ft_strncmp("exit", g_all.comands->prog, 5) ||
+		!ft_strncmp("export", g_all.comands->prog, 7) ||
+		!ft_strncmp("pwd", g_all.comands->prog, 4) ||
+		!ft_strncmp("unset", g_all.comands->prog, 6))
+			return (1);
+	return (0);
+}
+
+int	ft_execute_builtins(void)
+{
+	if (!ft_strncmp("cd", g_all.comands->prog, 3))
+		g_all.exec.ret = ft_cd(g_all.comands->args);
+	else if (!ft_strncmp("echo", g_all.comands->prog, 5))
+		g_all.exec.ret = ft_echo(g_all.comands->args);
+	else if (!ft_strncmp("env", g_all.comands->prog, 4))
+		g_all.exec.ret = ft_env(g_all.comands->args);
+	else if (!ft_strncmp("exit", g_all.comands->prog, 5))
+		g_all.exec.ret = ft_exit(g_all.comands->args);
+	else if (!ft_strncmp("export", g_all.comands->prog, 7))
+		g_all.exec.ret = ft_export(g_all.comands->args);
+	else if (!ft_strncmp("pwd", g_all.comands->prog, 4))
+		g_all.exec.ret = ft_pwd(g_all.comands->args);
+	else if (!ft_strncmp("unset", g_all.comands->prog, 6))
+		g_all.exec.ret = ft_unset(g_all.comands->args);
+	return (g_all.exec.ret);
+}
 
 // из fd1 - берем в fd2 - записываем
 void	ft_execute_programm(int *fd1, int *fd2)
@@ -46,6 +56,22 @@ void	ft_execute_programm(int *fd1, int *fd2)
 	if (g_all.comands->special[0] == '>' ||
 		g_all.comands->special[0] == '<')
 				return ;
+	if (ft_check_builtins())
+	{
+		if (g_all.comands->next != NULL &&
+			g_all.comands->special[0] == '|')
+			g_all.fd_out = fd2[1];
+		else if (g_all.fd_out == -1)
+			g_all.fd_out = 1;
+		ft_execute_builtins();
+		if (g_all.comands->next != NULL &&
+			g_all.comands->special[0] == '|')
+			close(fd2[1]);
+		else if (g_all.fd_out != 1)
+			close(g_all.fd_out);
+		g_all.exit_status = g_all.exec.ret;
+		return ;
+	}
 	//builtins here
 	if (!fork())
 	{
@@ -73,11 +99,9 @@ void	ft_execute_programm(int *fd1, int *fd2)
 			dup2(g_all.fd_out ,1);
 			close(g_all.fd_out);
 		}
-		if (fd2[0] != -1)
-		{
-			close(fd2[0]);
-			close(fd2[1]);
-		}
+		close(fd2[0]);
+		close(fd2[1]);
+
 
 		ft_reset_input_mode();
 		if (ft_is_relative()) // относительный путь (c /)
@@ -118,8 +142,6 @@ void	ft_execute_programm(int *fd1, int *fd2)
 void	ft_make_redirect_fd(void)
 {
 	t_comands_list	*tmp;
-	//TODO: убирать файлы, которые мы уже исопльзовали
-	//TODO: добавить ПРАВИЛЬНЫЙ алгоритм
 	tmp = g_all.comands;
 	while (1)
 	{
@@ -146,7 +168,7 @@ void	ft_make_redirect_fd(void)
 			if (g_all.fd_in != -1)
 				close(g_all.fd_in);
 			g_all.fd_in = open(g_all.comands->prog, O_RDONLY, NULL);
-			if (g_all.fd_in == -1)
+			if (g_all.fd_in == -1) //TODO: ОБРАБОТАТЬ ОШИБКУ и ПОМЕНЯТЬ exit'ы
 				exit(-1);
 			g_all.comands->used = 1;
 		}
@@ -157,7 +179,6 @@ void	ft_make_redirect_fd(void)
 	}
 	g_all.comands = tmp;
 }
-
 
 void	ft_execute(void)
 {
@@ -191,7 +212,7 @@ void	ft_execute(void)
 }
 
 // делает из лексем лист исполняемых файлов
-void	ft_syntax_analyzer(void) //TODO: ОТДЕЛИТЬ АРГУМЕНТЫ ОТ НАЗВАНИЯ ФАЙЛА КАК ОТЕДЛЬНУЮ ПРОГРАММУ
+void	ft_syntax_analyzer(void)
 {
 	// если всего один аргумент
 	ft_tokens_to_beginning();
@@ -228,17 +249,14 @@ void	ft_syntax_analyzer(void) //TODO: ОТДЕЛИТЬ АРГУМЕНТЫ ОТ �
 				ft_bzero(g_all.comands->prev->special, 3);
 			}
 		}
-		
-		// ft_tokens_go_next_spec();
 		ft_tokens_step_front();
 	}
 	//если последний аргумент один
 	if (g_all.tokens->prev->prev != NULL)
-		if (g_all.tokens->next == NULL && (g_all.comands->special[0] == '|' || g_all.comands->special[0] == ';' ||
-			g_all.tokens->prev->prev->content[0] == '>' || g_all.tokens->prev->prev->content[0] == '<'))
-	// if (g_all.tokens->next->next == NULL &&
-	// 	(ft_compare_tokens_cont_to_spec() || 
-	// 	ft_compare_prog_to_redirect()))
+		if (g_all.tokens->next == NULL && (g_all.comands->special[0] == '|' ||
+			g_all.comands->special[0] == ';' ||
+			g_all.tokens->prev->prev->content[0] == '>' ||
+			g_all.tokens->prev->prev->content[0] == '<'))
 	{
 		ft_tokens_step_front();
 		ft_new_prog_node();
@@ -251,7 +269,7 @@ void	ft_handler(void)
 	//заглушка от пустых строк
 	if (!(g_all.tokens))
 		return ;
-	if (ft_syntax_error()) //TODO: в 2 fd
+	if (ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
 		return ;
 	ft_syntax_analyzer();
 	// ft_display_comands(); // ! для отладки
