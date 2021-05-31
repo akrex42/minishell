@@ -6,6 +6,7 @@ void	ft_init_parse_flags(void)
 	g_all.flags.dollar = 0;
 	g_all.flags.double_quote = 0;
 	g_all.flags.special_value = 1;
+	g_all.flags.env = 0;
 }
 
 // добавляет стркоу в лист и выделяет память под новую строку
@@ -76,6 +77,8 @@ void	ft_parser(const char *str)
 					tmp = "$";
 				else
 					tmp = ft_find_env_var(env_str);
+				if (tmp == NULL)
+					g_all.flags.env += 1;
 				free(env_str);
 				ft_strjoin_and_free_1(&command, tmp);
 			}

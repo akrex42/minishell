@@ -56,6 +56,7 @@ typedef struct s_parse_flags
 	int		dollar;			// $
 	int		double_quote;	// '
 	int		special_value;	// был ли элемень в строке экранирован
+	int		env;           // wether we need to write a space in echo or not
 }	t_parse_flags;
 
 typedef struct s_term_all
@@ -73,7 +74,7 @@ typedef struct s_term_all
 	char			**path; //разделенные директории по которым нужно искать прогу
 	t_history_list	*history;
 	t_tokens_list	*tokens;
-	t_comands_list	*comands;
+	t_comands_list	*commands;
 	t_parse_flags	flags;
 	t_execute		exec;
 }	t_term_all;
