@@ -151,7 +151,7 @@ int	ft_cd(char **str)
 	}
 	else if (str[1] != NULL)
 	{
-		if ((strcmp(str[1], "-")))
+		if ((strncmp(str[1], "-", 2)))
 		{
 			getcwd(dir, 1000);
 			if (chdir(str[1]) == -1)

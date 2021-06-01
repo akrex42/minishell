@@ -10,18 +10,15 @@ cd too many arguments - проверить
 mkdir a; mkdir a/b; cd a/b; rm -r ../../a; cd .. -  зависает, должен выдавать ошибки и менять директории, в коде  $? 0
 cd random_cmd ; echo $? - $? 1, у нас 0
 cd random_cmd ; cd $? то же
-./file_that_is_not_an_executable - permission denied
 export test=a ; echo $test - должен показывать значение переменной теста
 ls bonjour ; echo $? - код завершения должен быть 2
-export var=a ; export $var=test ; echo $var $a
+e                                                    ; export $var=test ; echo $var $a
 echo ~ - должен показывать хоум
 export "" test=a -- export test=a et set $? à 1
 . - ошибки
-echo "\s" ; echo "\\s" - должен быть одинаковый аутпут !!!!!!
 echo $USER$var\$USER$USER\$USERtest$USER -- user42$USERuser42$USERtestuser42
 echo bonjour \; ls -- bonjour ; ls
-$LESS$VAR
-my_bash: -R$VAR: command not found - без вар
+$LESS$VAR    my_bash: -R$VAR: command not found - без вар
 export ""  et unset "" -- bash: export: `': not a valid identifier
 bash: export: `': not a valid identifier должно быть
 export "test=ici"=coucou ; echo $test - должно сразу отображаться

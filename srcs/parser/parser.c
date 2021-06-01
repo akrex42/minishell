@@ -62,27 +62,27 @@ void	ft_parser(const char *str)
 				free(env_str);
 				i++;
 			}
-			else
-			{
-				ft_malloc_one_char_str(&env_str);
-				while (((str[i] >= 'A' && str[i] <= 'Z')
-					|| (str[i] >= 'a' && str[i] <= 'z')
-					|| (str[i] >= '0' && str[i] <= '9')
-					|| str[i] == '_') && str[i])
-				{
-					ft_strjoin_char_and_free(&env_str, str[i]);
-					i++;
-				}
-				if (env_str[0] == '\0')
-					tmp = "$";
-				else
-					tmp = ft_find_env_var(env_str);
-				if (tmp == NULL)
-					g_all.flags.env += 1;
-				free(env_str);
-				ft_strjoin_and_free_1(&command, tmp);
-			}
-		}
+		// 	else
+		// 	{
+		// 		ft_malloc_one_char_str(&env_str);
+		// 		while (((str[i] >= 'A' && str[i] <= 'Z')
+		// 			|| (str[i] >= 'a' && str[i] <= 'z')
+		// 			|| (str[i] >= '0' && str[i] <= '9')
+		// 			|| str[i] == '_') && str[i])
+		// 		{
+		// 			ft_strjoin_char_and_free(&env_str, str[i]);
+		// 			i++;
+		// 		}
+		// 		if (env_str[0] == '\0')
+		// 			tmp = "$";
+		// 		else
+		// 			tmp = ft_find_env_var(env_str);
+		// 		if (tmp == NULL)
+		// 			g_all.flags.env += 1;
+		// 		free(env_str);
+		// 		ft_strjoin_and_free_1(&command, tmp);
+		// 	}
+		// }
 		if (g_all.flags.esc)
 		{
 			ft_strjoin_char_and_free(&command, str[i]);
@@ -93,6 +93,12 @@ void	ft_parser(const char *str)
 			g_all.flags.double_quote = 0;
 		else if (str[i] == '\"')
 			g_all.flags.double_quote = 1;
+		else if (str[i] == '\\' && str[i + 1] != '\0' 
+			&& str[i + 1] != '\\' && str[i + 1] != '\"'
+			&& g_all.flags.double_quote)
+		{
+			ft_strjoin_char_and_free(&command, str[i]);
+		}
 		else if (str[i] == '\\')
 			g_all.flags.esc = 1;
 		else if (g_all.flags.double_quote) // все что ниже не выполняется внутри " "

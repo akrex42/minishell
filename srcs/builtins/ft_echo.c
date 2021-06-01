@@ -16,6 +16,11 @@ int	ft_echo(char **str)
 	// 	flag = 1;
 	// 	++i;
 	// }
+	if (str[1] == NULL)
+	{
+		ft_putchar_fd('\n', g_all.fd_out);
+		return (0);
+	}
 	while (g_all.flags.env--)
 		ft_putchar_fd(' ', g_all.fd_out);
 	while (!(ft_strncmp(str[i], "-n", 2)))
@@ -33,6 +38,7 @@ int	ft_echo(char **str)
 	ft_putstr_fd(str[i], g_all.fd_out);
 	if (!flag)
 		ft_putchar_fd('\n', g_all.fd_out);
+	g_all.flags.env = 0;
 	return (0);
 }
 

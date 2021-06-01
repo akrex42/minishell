@@ -168,7 +168,7 @@ int	ft_make_redirect_fd(void)
 			}
 			else
 			{
-				int fd = open(g_all.commands->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
+				int fd = open(g_all.commands->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU); // g_all.fd_in
 			}
 			g_all.commands->used = 1;
 		}
@@ -207,6 +207,7 @@ void	ft_execute(void)
 	while (1)
 	{
 		pipe(fd1);
+		
 		if (ft_make_redirect_fd() == -1)
 			return ;
 		ft_execute_program(fd2, fd1);
@@ -266,7 +267,7 @@ void	ft_syntax_analyzer(void)
 		}
 		ft_tokens_step_front();
 	}
-	//если последний аргумент один
+	//если последний аргумент один // workd weirdly
 	if (g_all.tokens->prev->prev != NULL)
 		if (g_all.tokens->next == NULL && (g_all.commands->special[0] == '|' ||
 			g_all.commands->special[0] == ';' ||
