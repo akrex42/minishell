@@ -50,18 +50,18 @@ void	ft_parser(const char *str)
 	i = 0;
 	while(str[i])
 	{
-		if (str[i] == '$')
-		{
-			i++;
-			if (str[i] == '?')
-			{
-				env_str = ft_itoa(g_all.exit_status);
-				if (!env_str)
-					ft_malloc_error();
-				ft_strjoin_and_free_1(&command, env_str);
-				free(env_str);
-				i++;
-			}
+		// if (str[i] == '$')
+		// {
+		// 	i++;
+		// 	if (str[i] == '?')
+		// 	{
+		// 		env_str = ft_itoa(g_all.exit_status);
+		// 		if (!env_str)
+		// 			ft_malloc_error();
+		// 		ft_strjoin_and_free_1(&command, env_str);
+		// 		free(env_str);
+		// 		i++;
+		// 	}
 		// 	else
 		// 	{
 		// 		ft_malloc_one_char_str(&env_str);
