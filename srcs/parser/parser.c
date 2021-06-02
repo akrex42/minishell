@@ -12,6 +12,11 @@ void	ft_init_parse_flags(void)
 // добавляет стркоу в лист и выделяет память под новую строку
 void	ft_command_add_to_list(char **command)
 {
+	// ft_putstr_fd(*command, 1);
+	// if (!ft_strncmp(*command, "", 1))
+	// {
+	// 	ft_tokens_newline("");
+	// }
 	if ((*command)[0] != '\0')
 	{
 		ft_tokens_newline(*command); // записываем строки в лист
@@ -53,15 +58,15 @@ void	ft_parser(const char *str)
 		// if (str[i] == '$')
 		// {
 		// 	i++;
-			// if (str[i] == '?')
-			// {
-			// 	env_str = ft_itoa(g_all.exit_status);
-			// 	if (!env_str)
-			// 		ft_malloc_error();
-			// 	ft_strjoin_and_free_1(&command, env_str);
-			// 	free(env_str);
-			// 	i++;
-			// }
+		// 	if (str[i] == '?')
+		// 	{
+		// 		env_str = ft_itoa(g_all.exit_status);
+		// 		if (!env_str)
+		// 			ft_malloc_error();
+		// 		ft_strjoin_and_free_1(&command, env_str);
+		// 		free(env_str);
+		// 		i++;
+		// 	}
 		// 		ft_malloc_one_char_str(&env_str);
 		// 		while (((str[i] >= 'A' && str[i] <= 'Z')
 		// 			|| (str[i] >= 'a' && str[i] <= 'z')
@@ -87,9 +92,27 @@ void	ft_parser(const char *str)
 			g_all.flags.esc = 0;
 		}
 		else if (str[i] == '\"' && g_all.flags.double_quote)
+		{
 			g_all.flags.double_quote = 0;
+			if (g_all.flags.dollar)
+			{
+				ft_strjoin_char_and_free(&command, str[i]);
+			}
+		}
 		else if (str[i] == '\"')
+		{
 			g_all.flags.double_quote = 1;
+		// 	if (str[i + 1] == '$')
+		// 	{
+				// g_all.flags.dollar = 1;
+		// 		ft_strjoin_char_and_free(&command, str[i]);
+		// 	}
+		// 	else if (str[i - 1] != '\0' && str[i - 1] == '=')
+		// 	{
+		// 		g_all.flags.dollar = 1;
+		// 		ft_strjoin_char_and_free(&command, str[i]);
+		// 	}
+		}
 		else if (str[i] == '\\' && str[i + 1] != '\0' 
 			&& str[i + 1] != '\\' && str[i + 1] != '\"'
 			&& g_all.flags.double_quote)

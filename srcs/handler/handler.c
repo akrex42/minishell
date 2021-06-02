@@ -55,6 +55,7 @@ void	ft_execute_program(int *fd1, int *fd2)
 	int	i;
 
 	i = 0;
+	char **copy = g_all.commands->args;
 	while (g_all.commands->args[i] != NULL)
 	{
 		if (g_all.commands->args[i][0] == '$' && g_all.commands->args[i][1] == '\0')
@@ -68,24 +69,22 @@ void	ft_execute_program(int *fd1, int *fd2)
 		}
 		else if (g_all.commands->args[i][0] == '$' && g_all.commands->args[i][1] != '?')
 		{
-			// ft_putstr_fd("here", 1);
 			char *tmp = g_all.commands->args[i];
 			char *env = ft_find_env_var(tmp);
-			// ft_putstr_fd(env, 1);
 			if (env == NULL)
 			{
 				g_all.flags.env += 1;
-				g_all.commands->args[i] = ft_strdup("\"\"");
-				// ft_putstr_fd("here", 1);
+				g_all.commands->args[i] = ft_strdup("");
 				free(tmp);
 				break ;
 			}
 			g_all.commands->args[i] = ft_strdup(env);
-			// ft_putstr_fd(g_all.commands->args[i], 1);
 			free(tmp);
 		}
 		i++;
 	}
+	g_all.commands->args = copy;
+
 	if (g_all.commands->special[0] == '>' ||
 		g_all.commands->special[0] == '<')
 				return ;
@@ -106,6 +105,7 @@ void	ft_execute_program(int *fd1, int *fd2)
 		return ;
 	}
 	//builtins here
+	// ft_putstr_fd(g_all.commands->prog, 1);
 	if (!fork())
 	{
 		// для ввода
@@ -152,8 +152,10 @@ void	ft_execute_program(int *fd1, int *fd2)
 			}
 			free(g_all.exec.tmp);
 		}
+		// ft_putnbr_fd(errno, 1); // почему-то здесь теперь возвращает ноль
 		exit(errno);
 	}
+	// ft_putnbr_fd(errno, 1);
 	signal(SIGINT, ft_sighnd_exec); // сигналы во время выполнения программ
 	signal(SIGQUIT, ft_sighnd_exec);
 

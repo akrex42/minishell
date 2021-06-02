@@ -41,7 +41,10 @@ void	ft_free_tokens(void)
 		free(g_all.tokens->prev->content);
 		free(g_all.tokens->prev);
 	}
-	free(g_all.tokens->content);
+	// if (ft_strncmp(g_all.tokens->content, "", 1)) // possible leaks
+	// {
+	// 	free(g_all.tokens->content);
+	// }
 	free(g_all.tokens);
 	g_all.tokens = NULL;
 }

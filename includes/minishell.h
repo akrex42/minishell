@@ -56,7 +56,7 @@ typedef struct s_parse_flags
 	int		dollar;			// $
 	int		double_quote;	// '
 	int		special_value;	// был ли элемень в строке экранирован
-	int		env;           // wether we need to write a space in echo or not
+	int		env;           // wether we need to write a space in echo or not     
 }	t_parse_flags;
 
 typedef struct s_term_all
