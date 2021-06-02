@@ -21,7 +21,7 @@ int	print_err_export(char *str)
 		ft_putchar_fd('\n', 2);
 		return (1); // errno?
 	}
-	if (str[i] == '\0')
+	if (str[0] == '\0')
 	{
 		ft_putstr_fd("bash: export: `", 2);
 		ft_putchar_fd(str[0], 2);
@@ -48,7 +48,7 @@ int	print_err_export(char *str)
 		else if (str[i] == '\"')
 		{
 			i++;
-			while ((str[i] != '\"') || (str[i] != '\0'))
+			while ((str[i] != '\"') && (str[i] != '\0'))
 			{
 				i++;
 			}

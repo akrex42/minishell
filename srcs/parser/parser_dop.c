@@ -9,16 +9,18 @@ char	*ft_find_env_var(char *str)
 	char	*equal;
 
 	i = 0;
+	// ft_putstr_fd("here", 1);
+	str = ft_substr(str, 1, ft_strlen(str) - 1);
+	// ft_putstr_fd(str, 1);
 	len = ft_strlen(str);
+
 	while (g_all.env[i] != NULL)
 	{
 		equal = ft_strchr(g_all.env[i], '=');
 		if (equal == NULL) // key without value args cases
 		{
-			if (!ft_strncmp(g_all.env[i], str, len))
-			{
-				return (g_all.env[i]);
-			}
+			i++;
+			continue ;
 		}
 		else if (equal != NULL)
 		{
@@ -32,5 +34,7 @@ char	*ft_find_env_var(char *str)
 		}
 		i++;
 	}
+	// ft_putstr_fd(str, 1);
+	free(str);
 	return (NULL);
 }

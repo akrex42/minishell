@@ -74,9 +74,10 @@ int	ft_export(char **str)
 	int		i;
 	int		j;
 	int		flag_equal;
+	int		flag_return;
 
 	flag_equal = 0;
-	// g_all.env = ft_allocate_env(envp); // we need to initialize it somewhere else
+	flag_return = 0;
 	i = 1; // Program name may be omitted with the use of exec* family
 	if (str[i] == NULL)
 	{
@@ -85,8 +86,12 @@ int	ft_export(char **str)
 	}
 	while (str[i] != NULL)
 	{
-		if (print_err_export(str[i]) == 1)
-			return (1);
+		flag_return = print_err_export(str[i]);
+		// if (flag_return)
+		// {
+		// 	i++;
+		// 	continue ;
+		// }
 		equal = ft_strchr(str[i], '=');
 		if (equal == NULL) // key without value args cases
 		{
@@ -97,6 +102,8 @@ int	ft_export(char **str)
 			flag_equal = internal_circle(flag_equal, str, i);
 		i++;
 	}
+	if (flag_return)
+		return (1);
 	return (0);
 }
 

@@ -54,6 +54,38 @@ void	ft_execute_program(int *fd1, int *fd2)
 {
 	int	i;
 
+	i = 0;
+	while (g_all.commands->args[i] != NULL)
+	{
+		if (g_all.commands->args[i][0] == '$' && g_all.commands->args[i][1] == '\0')
+			break ;
+		else if (g_all.commands->args[i][0] == '$' && g_all.commands->args[i][1] == '?')
+		{
+			char *tmp = g_all.commands->args[i];
+			g_all.commands->args[i] = malloc(sizeof(char) * ft_strlen(ft_itoa(g_all.exit_status)));
+			g_all.commands->args[i] = ft_itoa(g_all.exit_status);
+			free(tmp);
+		}
+		else if (g_all.commands->args[i][0] == '$' && g_all.commands->args[i][1] != '?')
+		{
+			// ft_putstr_fd("here", 1);
+			char *tmp = g_all.commands->args[i];
+			char *env = ft_find_env_var(tmp);
+			// ft_putstr_fd(env, 1);
+			if (env == NULL)
+			{
+				g_all.flags.env += 1;
+				g_all.commands->args[i] = ft_strdup("\"\"");
+				// ft_putstr_fd("here", 1);
+				free(tmp);
+				break ;
+			}
+			g_all.commands->args[i] = ft_strdup(env);
+			// ft_putstr_fd(g_all.commands->args[i], 1);
+			free(tmp);
+		}
+		i++;
+	}
 	if (g_all.commands->special[0] == '>' ||
 		g_all.commands->special[0] == '<')
 				return ;

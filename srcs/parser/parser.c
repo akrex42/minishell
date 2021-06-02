@@ -53,17 +53,15 @@ void	ft_parser(const char *str)
 		// if (str[i] == '$')
 		// {
 		// 	i++;
-		// 	if (str[i] == '?')
-		// 	{
-		// 		env_str = ft_itoa(g_all.exit_status);
-		// 		if (!env_str)
-		// 			ft_malloc_error();
-		// 		ft_strjoin_and_free_1(&command, env_str);
-		// 		free(env_str);
-		// 		i++;
-		// 	}
-		// 	else
-		// 	{
+			// if (str[i] == '?')
+			// {
+			// 	env_str = ft_itoa(g_all.exit_status);
+			// 	if (!env_str)
+			// 		ft_malloc_error();
+			// 	ft_strjoin_and_free_1(&command, env_str);
+			// 	free(env_str);
+			// 	i++;
+			// }
 		// 		ft_malloc_one_char_str(&env_str);
 		// 		while (((str[i] >= 'A' && str[i] <= 'Z')
 		// 			|| (str[i] >= 'a' && str[i] <= 'z')
@@ -81,7 +79,6 @@ void	ft_parser(const char *str)
 		// 			g_all.flags.env += 1;
 		// 		free(env_str);
 		// 		ft_strjoin_and_free_1(&command, tmp);
-		// 	}
 		// }
 		if (g_all.flags.esc)
 		{
@@ -136,6 +133,12 @@ void	ft_parser(const char *str)
 			ft_common_split_part(&command, ";");
 		else
 			ft_strjoin_char_and_free(&command, str[i]);
+		if (str[i] == '\"' && str[i + 1] == '\"') // not sure but should work
+		{
+			ft_strjoin_and_free_1(&command, "");
+			i += 2;
+			g_all.flags.double_quote = 0;
+		}
 		i++;
 	}
 	ft_command_add_to_list(&command);
