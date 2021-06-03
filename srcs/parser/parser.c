@@ -102,16 +102,16 @@ void	ft_parser(const char *str)
 		else if (str[i] == '\"')
 		{
 			g_all.flags.double_quote = 1;
-		// 	if (str[i + 1] == '$')
-		// 	{
-				// g_all.flags.dollar = 1;
-		// 		ft_strjoin_char_and_free(&command, str[i]);
-		// 	}
-		// 	else if (str[i - 1] != '\0' && str[i - 1] == '=')
-		// 	{
-		// 		g_all.flags.dollar = 1;
-		// 		ft_strjoin_char_and_free(&command, str[i]);
-		// 	}
+			// if (str[i + 1] == '$')
+			// {
+			// 	g_all.flags.dollar = 1;
+			// 	ft_strjoin_char_and_free(&command, str[i]);
+			// }
+			// else if (str[i - 1] != '\0' && str[i - 1] == '=')
+			// {
+			// 	g_all.flags.dollar = 1;
+			// 	ft_strjoin_char_and_free(&command, str[i]);
+			// }
 		}
 		else if (str[i] == '\\' && str[i + 1] != '\0' 
 			&& str[i + 1] != '\\' && str[i + 1] != '\"'

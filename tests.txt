@@ -12,7 +12,7 @@ cd random_cmd ; echo $? - $? 1, у нас 0
 cd random_cmd ; cd $? то же
 export test=a ; echo $test - должен показывать значение переменной теста
 ls bonjour ; echo $? - код завершения должен быть 2
-e                                                    ; export $var=test ; echo $var $a
+e ; export $var=test ; echo $var $a
 echo ~ - должен показывать хоум
 export "" test=a -- export test=a et set $? à 1
 . - ошибки
@@ -28,3 +28,4 @@ content[0] == '>'
 if we unset PWD or OLDPWD
 ctrl+c не всегда работает -- mkdir a; mkdir a/b; cd a/b; rm -r ../../a; cd ..
 ; - зависает перед последней командой 
+`
