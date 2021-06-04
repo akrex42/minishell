@@ -7,16 +7,16 @@ unsigned char 	ft_exit(char **str)
 
 	i = 0;
 	error_code = 0;
-	if (g_all.commands->prev == NULL || (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] != '|'))
+	if (str == NULL)
+	{
+		exit(0);
+	}
+	else if (g_all.commands->prev == NULL || (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] != '|'))
 	{
 		ft_putstr_fd("exit\n", g_all.fd_out);
 		ft_putchar_fd('\n', g_all.fd_out);
 	}
 	// ft_putstr_fd("here", g_all.fd_out);
-	if (str == NULL)
-	{
-		exit(0);
-	}
 	else if (str[0] != NULL && str[1] == NULL)
 	{	
 		if (g_all.commands->prev != NULL && (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] == '|'))

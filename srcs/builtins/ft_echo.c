@@ -13,44 +13,27 @@ int	ft_echo(char **str)
 	int	flag;
 	int	i;
 	int j;
-	int flag_space = 0;
 
 	flag = 0;
 	i = 1;
 	j = 0;
-	// Parse key -n if needed
+	// Parse key -n if needed // may be an empty string
 	if (str[1] == NULL)
 	{
 		ft_putchar_fd('\n', g_all.fd_out);
 		return (0);
 	}
-	while (g_all.flags.env--)
-		ft_putchar_fd(' ', g_all.fd_out); // FIXME
-	// while (str[i] != NULL)
-	// {
-	// 	if (ft_strlen("-n") > ft_strlen(str[i]))
-	// 	{
-	// 		if (!(ft_strncmp(str[i], "-n", ft_strlen("-n"))))
-	// 		{
-	// 			flag = 1;
-	// 		}
-	// 	}
-	// 	else if (ft_strlen("-n") < ft_strlen(str[i]))
-	// 	{
-	// 		if (!(ft_strncmp(str[i], "-n", ft_strlen(str[i]))))
-	// 		{
-	// 			flag = 1;
-	// 		}
-	// 	}
-	// 	i++;
-	// }
-	while (str[i + 1] != NULL)
+	// FIXME
+	while (!(ft_strncmp(str[i], "-n", 2)))
 	{
-		while (!ft_isspace(str[i][j]) && !flag_space)
-		{
+		flag = 1;
+		i++;
+	}
+	while (str[i] != NULL && str[i + 1] != NULL)
+	{
+		j = 0;
+		while (ft_isspace(str[i][j]) == 1)
 			j++;
-			flag_space = 1;
-		}
 		while (str[i][j] != '\0')
 		{
 			ft_putchar_fd(str[i][j], g_all.fd_out);
@@ -58,7 +41,6 @@ int	ft_echo(char **str)
 		}
 		ft_putchar_fd(' ', g_all.fd_out);
 		i++;
-		flag_space = 0;
 	}
 	ft_putstr_fd(str[i], g_all.fd_out);
 	if (!flag)

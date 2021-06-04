@@ -87,11 +87,11 @@ int	ft_export(char **str)
 	while (str[i] != NULL)
 	{
 		flag_return = print_err_export(str[i]);
-		// if (flag_return)
-		// {
-		// 	i++;
-		// 	continue ;
-		// }
+		if (flag_return)
+		{
+			i++;
+			continue ;
+		}
 		equal = ft_strchr(str[i], '=');
 		if (equal == NULL) // key without value args cases
 		{
