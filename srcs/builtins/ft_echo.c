@@ -45,7 +45,6 @@ int	ft_echo(char **str)
 	ft_putstr_fd(str[i], g_all.fd_out);
 	if (!flag)
 		ft_putchar_fd('\n', g_all.fd_out);
-	g_all.flags.env = 0;
 	return (0);
 }
 

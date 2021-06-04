@@ -1,19 +1,18 @@
 cat | cat | cat | ls - странный случай
 > test | echo blabla; rm test - печатает и зависает
 echo test > file test1 = = echo test test1 > file - we have command not found
-export var="  truc"; echo $var -- export gives an error "bash: export: `var=truc  ': not a valid identifier"
+export var="  truc"; echo $var ATTENTION! trash alert
 echo "$tests" "Makefile" ok - зависит от кавычек - если кавычки, то как один аргумент, если нет, то несколько
 $bla (non-export) works
 cd /home/user42/ - I don't get it
-export HOME= ; cd - exit 0 - works переделать 
+export HOME= ; cd ДОДЕЛАТЬ с getenv
 cd too many arguments - проверить
 mkdir a; mkdir a/b; cd a/b; rm -r ../../a; cd .. -  зависает, должен выдавать ошибки и менять директории, в коде  $? 0
 cd random_cmd ; echo $? - $? 1, у нас 0
 cd random_cmd ; cd $? то же
 export test=a ; echo $test - должен показывать значение переменной теста
-ls bonjour ; echo $? - код завершения должен быть 2
+ls bonjour ; echo $? - код завершения должен быть 1
 e ; export $var=test ; echo $var $a
-echo ~ - должен показывать хоум
 export "" test=a -- export test=a et set $? à 1
 . - ошибки
 echo $USER$var\$USER$USER\$USERtest$USER -- user42$USERuser42$USERtestuser42

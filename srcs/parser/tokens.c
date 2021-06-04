@@ -10,11 +10,11 @@ void	ft_display_tokens(void)
 {
 	if (!g_all.tokens)
 	{
-		ft_putstr_fd("my_bash: ", 2); // seems like it fixes the issue with ""
-		ft_putstr_fd("", 2);
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd("command not found", 2);
-		ft_putstr_fd("\n", 2);
+		// ft_putstr_fd("my_bash: ", 2); // seems like it fixes the issue with ""
+		// ft_putstr_fd("", 2);
+		// ft_putstr_fd(": ", 2);
+		// ft_putstr_fd("command not found", 2);
+		// ft_putstr_fd("\n", 2);
 		g_all.exit_status = 127;
 		return ;
 	}

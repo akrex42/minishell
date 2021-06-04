@@ -18,15 +18,16 @@ void	ft_cycle_head(void)
 // действия с введенной строкой после цикла
 void	ft_manage_str(void)
 {
+	//TODO: фришить нужную строку!!!
 	if (g_all.curr_str == 2)
 	{
-		ft_history_newline(&(g_all.history), g_all.str_hist);
+		ft_history_newline(&(g_all.history), g_all.str_hist); //! СТРОКА ДУБЛИРУЕТСЯ
 		free(g_all.str);
 		ft_parser(g_all.str_hist); // передача строки парсеру
 	}
 	else if (g_all.curr_str == 1)
 	{
-		ft_history_newline(&(g_all.history), g_all.str);
+		ft_history_newline(&(g_all.history), g_all.str); //! СТРОКА ДУБЛИРУЕТСЯ
 		free(g_all.str_hist);
 		ft_parser(g_all.str); // передача строки парсеру
 	}
@@ -35,7 +36,7 @@ void	ft_manage_str(void)
 		free(g_all.str);
 		free(g_all.str_hist);
 	}
-	ft_display_tokens(); // ! для отладки
+	// ft_display_tokens(); // ! для отладки
 	ft_handler();
 	ft_free_tokens();
 	ft_free_comands();

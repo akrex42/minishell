@@ -23,7 +23,7 @@ void	ft_history_newline(t_history_list **history,
 		ft_malloc_error();
 	while ((*history)->next != NULL)
 		*history = (*history)->next;
-	new->content = content;
+	new->content = ft_strdup(content);
 	new->prev = (*history)->prev;
 	new->next = *history;
 	if (new->prev != NULL)
