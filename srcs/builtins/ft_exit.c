@@ -6,7 +6,8 @@ unsigned char 	ft_exit(char **str)
 	unsigned int	error_code;
 
 	i = 0;
-	if (g_all.commands->prev == NULL || g_all.commands->prev->special[0] != '|')
+	error_code = 0;
+	if (g_all.commands->prev == NULL || (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] != '|'))
 	{
 		ft_putstr_fd("exit\n", g_all.fd_out);
 		ft_putchar_fd('\n', g_all.fd_out);
@@ -18,7 +19,7 @@ unsigned char 	ft_exit(char **str)
 	}
 	else if (str[0] != NULL && str[1] == NULL)
 	{	
-		if (g_all.commands->prev != NULL || g_all.commands->prev->special[0] == '|')
+		if (g_all.commands->prev != NULL && (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] == '|'))
 			return (g_all.exec.ret);
 		exit(g_all.exec.ret); // cause we need the last command exit status
 	}
@@ -41,7 +42,10 @@ unsigned char 	ft_exit(char **str)
 	}
 
 	// sleep(1000);
-	error_code = (unsigned char)ft_atoi(str[1]); // returns 255 if error_code is out of range (0...255)
+	if (str[1] != NULL)
+	{
+		error_code = (unsigned char)ft_atoi(str[1]); // returns 255 if error_code is out of range (0...255)
+	}
 	exit(error_code); // we should set this value to $?
 }
 
