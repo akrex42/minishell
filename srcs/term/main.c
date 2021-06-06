@@ -26,17 +26,17 @@ void	ft_manage_str(void)
 		tmp = g_all.str;
 	ft_history_newline(&(g_all.history), tmp);
 	ft_parser_for_errors(tmp);
-	// if (!ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
-	// {
+	if (!ft_syntax_error())
+	{
 		ft_free_tokens();
 		ft_free_comands();
 		if (g_all.curr_str == 2)
-			ft_parser(&(g_all.str_hist));
+			ft_parser(g_all.str_hist);
 		else if (g_all.curr_str == 1)
-			ft_parser(&(g_all.str));
+			ft_parser(g_all.str);
 		// ft_display_tokens(); // ! для отладки
 		ft_handler();
-	// }
+	}
 	ft_free_comands();
 	ft_free_tokens();
 	free(g_all.str);
@@ -56,7 +56,7 @@ void	ft_init_term_all(char **env)
 	ft_init_history(&(g_all.history));
 	tgetent(0,  "xterm-256color"); // ! для дебаггера
 	// tgetent(0,  getenv("TERM")); // ! основной
-	signal(SIGINT, ft_sighnd); //ctrl + с //TODO пофиксить
+	signal(SIGINT, ft_sighnd); //ctrl + с
 	signal(SIGQUIT, ft_sighnd); //ctrl + '\'
 }
 
