@@ -24,7 +24,7 @@ void    ft_error_handler(int errno_exec)
                 ft_putstr_fd(strerror(20), 2); // is not a directory // .
                 g_all.exec.ret = 126;
             }
-            else if (errno = 2)
+            else if (errno == 2)
             {
                 ft_putstr_fd(strerror(errno_exec), 2); // no such file or directory
                 g_all.exec.ret = 127;
@@ -91,7 +91,7 @@ int	ft_syntax_error(void)
 				g_all.exit_status = 258;
 				return 1;
 			}
-			else if (ft_comp_to_spec(g_all.tokens->next))
+			else if (ft_comp_to_spec(g_all.tokens->next)) //TODO: добавить условия на редирект
 			{
 				ft_putstr_fd("my_bash: syntax error near unexpected token `", 2);
 				ft_putchar_fd(g_all.tokens->next->content[0], 2);

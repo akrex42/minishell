@@ -52,39 +52,6 @@ void	ft_parser_for_errors(char *str)
 	i = 0;
 	while(str[i])
 	{
-		if (str[i] == '$' && !g_all.flags.esc)
-		{
-			old_i = i;
-			i++;
-			if (str[i] == '?')
-			{
-				env_str = ft_itoa(g_all.exit_status);
-				ft_strjoin_and_free_1(&command, env_str);
-				i++;
-			}
-			else
-			{
-				ft_malloc_one_char_str(&env_str);
-				while (((str[i] >= 'A' && str[i] <= 'Z')
-					|| (str[i] >= 'a' && str[i] <= 'z')
-					|| (str[i] >= '0' && str[i] <= '9')
-					|| str[i] == '_') && str[i])
-				{
-					ft_strjoin_char_and_free(&env_str, str[i]);
-					i++;
-				}
-				if (env_str[0] == '\0')
-					tmp = "$";
-				else
-					tmp = ft_find_env_var(env_str);
-				if (tmp == NULL)
-					ft_malloc_one_char_str(&tmp);
-				ft_join_env_to_str(&str, old_i, env_str, tmp);
-				i = old_i;
-				//TODO: запомнить до какого мимвола мы раскрыли переменную и сделать все эти символы незначимыми
-			}
-			free(env_str);
-		}
 		if (g_all.flags.esc)
 		{
 			if (!g_all.flags.double_quote || (g_all.flags.double_quote

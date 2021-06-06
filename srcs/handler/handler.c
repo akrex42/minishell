@@ -74,7 +74,7 @@ void	ft_execute_program(int *fd1, int *fd2)
 		g_all.exit_status = g_all.exec.ret;
 		return ;
 	}
-	if (!fork())
+	if (!fork()) //TODO: если перед прогой пайп без программы, то выводим в stdout
 	{
 		// для ввода
 		if (g_all.commands->prev != NULL &&
@@ -108,8 +108,11 @@ void	ft_execute_program(int *fd1, int *fd2)
 			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
 		else
 		{
+			ft_rewrite_path();
 			g_all.exec.tmp = ft_strjoin("/", g_all.commands->prog);
 			i = 0;
+			if (!g_all.path)
+				exit(2);
 			while (g_all.path[i] != NULL)
 			{
 				g_all.exec.str = ft_strjoin(g_all.path[i], g_all.exec.tmp);
@@ -222,7 +225,7 @@ void	ft_execute(void)
 }
 
 // делает из лексем лист исполняемых файлов
-void	ft_syntax_analyzer(void)
+void	ft_syntax_analyzer(void) //TODO: скипать редиректы
 {
 	// если всего один аргумент
 	ft_tokens_to_beginning();

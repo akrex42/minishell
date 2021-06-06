@@ -20,3 +20,20 @@ void	ft_sighnd_exec(int signo)
 		g_all.exit_status = 500; // используется как флаг для изменения этого значения после форка
 	}
 }
+
+void	ft_rewrite_path(void)
+{
+	int	i;
+
+	if (g_all.path != NULL)
+	{
+		i = 0;
+		while (g_all.path[i] != NULL)
+		{
+			free(g_all.path[i]);
+			i++;
+		}
+		free(g_all.path);
+	}
+	g_all.path = ft_split(ft_find_env_var("PATH"), ':');
+}

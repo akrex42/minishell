@@ -25,16 +25,18 @@ void	ft_manage_str(void)
 	else if (g_all.curr_str == 1)
 		tmp = g_all.str;
 	ft_history_newline(&(g_all.history), tmp);
-	ft_parser_for_errors(tmp); 
-	// ft_display_tokens(); // ! для отладки
-	if (!ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
-	{
+	ft_parser_for_errors(tmp);
+	// if (!ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
+	// {
 		ft_free_tokens();
 		ft_free_comands();
-		ft_parser(tmp);
+		if (g_all.curr_str == 2)
+			ft_parser(&(g_all.str_hist));
+		else if (g_all.curr_str == 1)
+			ft_parser(&(g_all.str));
 		// ft_display_tokens(); // ! для отладки
 		ft_handler();
-	}
+	// }
 	ft_free_comands();
 	ft_free_tokens();
 	free(g_all.str);
@@ -49,7 +51,8 @@ void	ft_init_term_all(char **env)
 	g_all.commands = NULL;
 	g_all.exit_status = 0;
 	g_all.env = ft_allocate_env(env);
-	g_all.path = ft_split(ft_find_env_var("PATH"), ':'); // добавляет двумерный массив возможных директорий для запуска программ
+	g_all.path = NULL;
+	ft_rewrite_path(); // добавляет двумерный массив возможных директорий для запуска программ
 	ft_init_history(&(g_all.history));
 	tgetent(0,  "xterm-256color"); // ! для дебаггера
 	// tgetent(0,  getenv("TERM")); // ! основной
