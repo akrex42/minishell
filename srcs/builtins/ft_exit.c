@@ -9,38 +9,56 @@ unsigned char 	ft_exit(char **str)
 	error_code = 0;
 	if (str == NULL)
 	{
+		ft_putstr_fd("exit\n", g_all.fd_out);
 		exit(0);
 	}
-	else if (g_all.commands->prev == NULL || (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] != '|'))
+	else if (str[1] == NULL)
 	{
-		ft_putstr_fd("exit\n", g_all.fd_out);
-		ft_putchar_fd('\n', g_all.fd_out);
-	}
-	// ft_putstr_fd("here", g_all.fd_out);
-	else if (str[0] != NULL && str[1] == NULL)
-	{	
 		if (g_all.commands->prev != NULL && (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] == '|'))
 			return (g_all.exec.ret);
-		exit(g_all.exec.ret); // cause we need the last command exit status
+		else
+			ft_putstr_fd("exit\n", g_all.fd_out);
 	}
-	else if (str[1] != NULL) // WTF???
+	else if (str[1] != NULL)
 	{
-		while (str[1][i] != '\0')
+		if (g_all.commands->prev != NULL && (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] == '|'))
 		{
-			if ((str[1][i] == '-' || str[1][i] == '+') && ft_isdigit(str[1][i + 1]))
-				i++;
-			else if (!ft_isdigit(str[1][i]))
+			i = 0;
+			while (str[1][i] != '\0')
 			{
-				ft_putstr_fd("bash: exit: ", 2);
-				ft_putstr_fd(str[1], 2);
-				ft_putstr_fd(": numeric argument required", 2);
-				ft_putchar_fd('\n', 2);
-				exit (255);
+				if ((str[1][i] == '-' || str[1][i] == '+') && ft_isdigit(str[1][i + 1]))
+					i++;
+				else if (!ft_isdigit(str[1][i]))
+				{
+					ft_putstr_fd("my_bash: exit: ", 2);
+					ft_putstr_fd(str[1], 2);
+					ft_putstr_fd(": numeric argument required", 2);
+					ft_putchar_fd('\n', 2);
+					return (255);
+				}
+				i++;
 			}
-			i++;
+			return (g_all.exec.ret);
+		}
+		else
+		{
+			i = 0;
+			while (str[1][i] != '\0')
+			{
+				if ((str[1][i] == '-' || str[1][i] == '+') && ft_isdigit(str[1][i + 1]))
+					i++;
+				else if (!ft_isdigit(str[1][i]))
+				{
+					ft_putstr_fd("my_bash: exit: ", 2);
+					ft_putstr_fd(str[1], 2);
+					ft_putstr_fd(": numeric argument required", 2);
+					ft_putchar_fd('\n', 2);
+					exit(255);
+				}
+				i++;
+			}
 		}
 	}
-
 	// sleep(1000);
 	if (str[1] != NULL)
 	{

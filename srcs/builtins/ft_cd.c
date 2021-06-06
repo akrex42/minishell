@@ -43,15 +43,30 @@ int	ft_chdir_null(char *dir, char **beg_env, char *this_env, char *equal)
 {
 	char *dir1;
 
-	chdir(getenv("HOME"));
-	if (chdir("HOME") == -1) // переделать
+	if (ft_find_env_var("HOME") == NULL)
 	{
 		ft_putstr_fd("my_bash: cd: ", 2);
 		ft_putstr_fd("HOME not set", 2);
 		ft_putchar_fd('\n', 2);
 		return (1);
 	}
-	getcwd(dir1, 1000);
+	else if (!ft_strncmp(ft_find_env_var("HOME"), "\0", 1))
+	{
+		chdir(getenv("HOME"));
+	}
+	else
+	{
+		chdir(ft_find_env_var("HOME"));
+		if (chdir(ft_find_env_var("HOME")) == -1) // переделать
+		{
+			ft_putstr_fd("my_bash: cd: ", 2);
+			ft_putstr_fd(ft_find_env_var("HOME"), 2);
+			ft_putstr_fd(": No such file or directory", 2);
+			ft_putchar_fd('\n', 2);
+			return (1);
+		}
+	}
+	// getcwd(dir1, 1000);
 	beg_env = g_all.env;
 	while (*g_all.env != 0)
 	{
@@ -61,7 +76,7 @@ int	ft_chdir_null(char *dir, char **beg_env, char *this_env, char *equal)
 		if (!(ft_strncmp(equal, "PWD", 3)))
 		{
 			this_env = *g_all.env;
-			*g_all.env = ft_strjoin("PWD=", dir1);
+			*g_all.env = ft_strjoin("PWD=", ft_find_env_var("HOME"));
 			free(this_env);
 		}
 		else if (!(ft_strncmp(equal, "OLDPWD", 6)))

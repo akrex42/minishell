@@ -7,50 +7,64 @@ void    ft_error_handler(int errno_exec)
     // ft_putnbr_fd(errno_exec, 1);
     if (errno_exec != 8 && errno_exec != 0 && errno_exec != 1)
     {
-        ft_putstr_fd("my_bash: ", 2);
-        ft_putstr_fd(g_all.commands->prog, 2);
-        ft_putstr_fd(": ", 2);
-        if (!ft_is_relative() && errno_exec == 2) // cnf
-        {
-            ft_putstr_fd("command not found", 2);
-            g_all.exec.ret = 127;
-        }
-        else if (errno_exec == 2)
-        {
-            dir = opendir(g_all.commands->prog);
-            // ft_putnbr_fd(errno, 1);
-            if (errno == 20)
-            {
-                ft_putstr_fd(strerror(20), 2); // is not a directory // .
-                g_all.exec.ret = 126;
-            }
-            else if (errno == 2)
-            {
-                ft_putstr_fd(strerror(errno_exec), 2); // no such file or directory
-                g_all.exec.ret = 127;
-            }
-            if (dir != NULL)
-                closedir(dir);
-        }
-        else
-        {
-            dir = opendir(g_all.commands->prog);
-            if (dir != NULL || errno == 13)
-            {
-                ft_putstr_fd(strerror(21), 2); // is a directory
-                g_all.exec.ret = 126;
-            }
-            else if (errno_exec == 13)
-            {
-                ft_putstr_fd(strerror(13), 2); // permission denied
-                g_all.exec.ret = 126;
-            }
-            else if (errno == 20)
-            {
-                ft_putstr_fd(strerror(errno), 2); // is not a directory
-                g_all.exec.ret = 126;
-            }
-        }
+		if (!ft_strncmp(g_all.commands->prog, ".", 2))
+		{
+			ft_putstr_fd("my_bash: ", 2);
+        	ft_putstr_fd(g_all.commands->prog, 2);
+        	ft_putstr_fd(": ", 2);
+			ft_putstr_fd("filename argument required", 2);
+			ft_putchar_fd('\n', 2);
+			ft_putstr_fd(".: usage: . filename [arguments]", 2);
+			g_all.exec.ret = 2;
+
+		}
+		else
+		{
+			ft_putstr_fd("my_bash: ", 2);
+        	ft_putstr_fd(g_all.commands->prog, 2);
+        	ft_putstr_fd(": ", 2);
+        	if (!ft_is_relative() && errno_exec == 2) // cnf
+        	{
+            	ft_putstr_fd("command not found", 2);
+           	 	g_all.exec.ret = 127;
+      	  	}
+        	else if (errno_exec == 2)
+        	{
+            	dir = opendir(g_all.commands->prog);
+            	// ft_putnbr_fd(errno, 1);
+            	if (errno == 20)
+            	{
+                	ft_putstr_fd(strerror(20), 2); // is not a directory // .
+                	g_all.exec.ret = 126;
+            	}
+            	else if (errno == 2)
+            	{
+                	ft_putstr_fd(strerror(errno_exec), 2); // no such file or directory
+                	g_all.exec.ret = 127;
+            	}
+            	if (dir != NULL)
+                	closedir(dir);
+        	}
+        	else
+        	{
+           	 	dir = opendir(g_all.commands->prog);
+           	 	if (dir != NULL || errno == 13)
+            	{
+               		ft_putstr_fd(strerror(21), 2); // is a directory
+                	g_all.exec.ret = 126;
+           		}
+            	else if (errno_exec == 13)
+            	{
+                	ft_putstr_fd(strerror(13), 2); // permission denied
+                	g_all.exec.ret = 126;
+            	}
+            	else if (errno == 20)
+            	{
+                	ft_putstr_fd(strerror(errno), 2); // is not a directory
+                	g_all.exec.ret = 126;
+            	}
+        	}
+		}
         ft_putstr_fd("\n", 2);
     }
     if (dir != NULL)

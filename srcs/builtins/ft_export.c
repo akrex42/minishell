@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 int	ft_check_equal(int i, int flag_equal, int j, char **str)
 {

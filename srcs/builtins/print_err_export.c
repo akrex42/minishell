@@ -16,7 +16,7 @@ int	print_err_export(char *str)
 	i = 1;
 	if (!ft_isalpha(str[0]) && (str[0] != '_'))
 	{
-		ft_putstr_fd("bash: export: `", 2);
+		ft_putstr_fd("my_bash: export: `", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("': not a valid identifier", 2);
 		ft_putchar_fd('\n', 2);
@@ -24,7 +24,7 @@ int	print_err_export(char *str)
 	}
 	if (str[0] == '\0')
 	{
-		ft_putstr_fd("bash: export: `", 2);
+		ft_putstr_fd("my_bash: export: `", 2);
 		ft_putchar_fd(str[0], 2);
 		ft_putstr_fd("': not a valid identifier", 2);
 		ft_putchar_fd('\n', 2);
@@ -39,7 +39,7 @@ int	print_err_export(char *str)
 			&& (str[i] != '_') && (str[i] != '\\') 
 			&& (str[i] != '\''))
 			{
-				ft_putstr_fd("bash: export: `", 2);
+				ft_putstr_fd("my_bash: export: `", 2);
 				ft_putstr_fd(str, 2);
 				ft_putstr_fd("': not a valid identifier", 2);
 				ft_putchar_fd('\n', 2);
@@ -60,7 +60,7 @@ int	print_err_export(char *str)
 			&& (key[i] != '\'')
 			&& (!ft_isspace(key[i])))
 			{
-				ft_putstr_fd("bash: export: `", 2);
+				ft_putstr_fd("my_bash: export: `", 2);
 				ft_putstr_fd(str, 2);
 				ft_putstr_fd("': not a valid identifier", 2);
 				ft_putchar_fd('\n', 2);

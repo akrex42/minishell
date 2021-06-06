@@ -24,10 +24,33 @@ int	ft_echo(char **str)
 		return (0);
 	}
 	// FIXME
-	while (!(ft_strncmp(str[i], "-n", 2)))
+	while (str[i] != NULL && !(ft_strncmp(str[i], "-n", 2)))
 	{
-		flag = 1;
-		i++;
+		if (str[i][2] != '\0') // cycle
+		{
+			j = 2;
+			while (str[i][j] != '\0')
+			{
+				if (str[i][j] != 'n')
+				{
+					ft_putstr_fd(str[i], g_all.fd_out);
+					break ;
+				}
+				j++;
+			}
+			if (str[i][j] == '\0')
+			{
+				flag = 1;
+			}
+			i++;
+		}
+		else if (str[i][2] == '\0')
+		{
+			flag = 1;
+			i++;
+		}
+		else
+			break ;
 	}
 	while (str[i] != NULL && str[i + 1] != NULL)
 	{

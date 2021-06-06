@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	inner_circle2(int j, int i, char **str, char *equal)
 {
@@ -71,7 +71,7 @@ int	print_err_unset(char *str)
 	i = 1;
 	if (!ft_isalpha(str[0]) && (str[0] != '_'))
 	{
-		ft_putstr_fd("bash: unset: `", 2);
+		ft_putstr_fd("my_bash: unset: `", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("': not a valid identifier", 2);
 		ft_putchar_fd('\n', 2);
@@ -81,7 +81,7 @@ int	print_err_unset(char *str)
 	{
 		if ((!ft_isalnum(str[i])) && (str[i] != '_'))
 		{
-			ft_putstr_fd("bash: unset: `", 2);
+			ft_putstr_fd("my_bash: unset: `", 2);
 			ft_putstr_fd(str, 2);
 			ft_putstr_fd("': not a valid identifier", 2);
 			ft_putchar_fd('\n', 2);
@@ -99,13 +99,19 @@ int	ft_unset(char **str)
 	int		j;
 	char	**env2;
 	char	*equal;
+	int		flag_return;
 
 	g_all.flag_allocate = 0;
+	flag_return = 0;
 	i = 1;
 	while (str[i] != NULL)
 	{
-		if (print_err_unset(str[i]) == 1)
-			return (1);
+		flag_return = print_err_unset(str[i]);
+		if (flag_return)
+		{
+			i++;
+			continue ;
+		}
 		env2 = g_all.env;
 		j = 0;
 		while (env2[j] != NULL)
@@ -113,5 +119,7 @@ int	ft_unset(char **str)
 		i++;
 	}
 	g_all.flag_allocate = 0;
+	if (flag_return)
+		return (1);
 	return (0);
 }
