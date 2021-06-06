@@ -57,8 +57,8 @@ void	ft_execute_program(int *fd1, int *fd2)
 	i = 0;
 	if (g_all.commands->special[0] == '>' ||
 		g_all.commands->special[0] == '<')
-				return ;
-	if (ft_check_builtins()) //TODO: доделать редиректы
+				return ; // оставить для того, чтобы последний редирект не выполнился
+	if (ft_check_builtins())
 	{
 		if (g_all.commands->next != NULL &&
 			g_all.commands->special[0] == '|')
@@ -74,7 +74,13 @@ void	ft_execute_program(int *fd1, int *fd2)
 		g_all.exit_status = g_all.exec.ret;
 		return ;
 	}
-	if (!fork()) //TODO: если перед прогой пайп без программы, то выводим в stdout
+	if (g_all.commands->prev != NULL) // костыль как в bash
+		if (g_all.commands->prev->prog == NULL)
+		{
+			close(g_all.fd_out);
+			g_all.fd_out = -1;
+		}
+	if (!fork()) //TODO: если перед прогой пайп без программы, то выводим в stdout и fd_out закрывается
 	{
 		// для ввода
 		if (g_all.commands->prev != NULL &&
@@ -92,6 +98,12 @@ void	ft_execute_program(int *fd1, int *fd2)
 		}
 
 		//для вывода
+		// if (g_all.commands->prev != NULL) // костыль как в bash
+		// 	if (g_all.commands->prev->prog == NULL)
+		// 	{
+		// 		close(g_all.fd_out);
+		// 		g_all.fd_out = -1;
+		// 	}
 		if (g_all.commands->next != NULL &&
 			g_all.commands->special[0] == '|')
 			dup2(fd2[1], 1);
@@ -189,7 +201,7 @@ void	ft_skip_redirect(void)
 {
 	while (g_all.commands->used == 1 &&
 			g_all.commands->next)
-	g_all.commands = g_all.commands->next;
+		g_all.commands = g_all.commands->next;
 }
 
 void	ft_execute(void)
@@ -276,6 +288,35 @@ void	ft_syntax_analyzer(void) //TODO: скипать редиректы
 	}
 }
 
+void	ft_move_redirect(void) // разделяет аргументы и редиректы
+{
+	t_tokens_list	*token;
+
+	ft_tokens_to_beginning();
+	while (1)
+	{
+		if (g_all.tokens->next != NULL)
+			if ((g_all.tokens->content[0] == '>' ||
+				g_all.tokens->content[0] == '<') &&
+				!ft_comp_to_spec(g_all.tokens->next->next) &&
+				g_all.tokens->prev != NULL)
+			{ //!БЕЗУМИЕ
+				token = g_all.tokens->next->next;
+				g_all.tokens->prev->next = token;
+				token->prev = g_all.tokens->prev;
+				g_all.tokens->next->next = token->next;
+				if (token->next != NULL)
+					token->next->prev = g_all.tokens->next;
+				token->next = g_all.tokens;
+				g_all.tokens->prev = token;
+			}
+		if (g_all.tokens->next == NULL)
+			break ;
+		else
+			g_all.tokens = g_all.tokens->next;
+	}
+}
+
 void	ft_handler(void)
 {
 	//заглушка от пустых строк
@@ -283,6 +324,8 @@ void	ft_handler(void)
 		return ;
 	// if (ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
 	// 	return ;
+
+	ft_move_redirect(); // чтобы аргументы попадали в программу, даже если они разделены редиректами
 	ft_syntax_analyzer();
 	// ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning(); // ! потом убрать

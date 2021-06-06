@@ -2,8 +2,9 @@
 
 void	ft_tokens_to_beginning(void)
 {
-	while (g_all.tokens->prev != NULL)
-		g_all.tokens = g_all.tokens->prev;
+	if (g_all.tokens != NULL)
+		while (g_all.tokens->prev != NULL)
+			g_all.tokens = g_all.tokens->prev;
 }
 
 void	ft_display_tokens(void)

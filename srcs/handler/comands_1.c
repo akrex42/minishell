@@ -126,7 +126,7 @@ void	ft_free_comands(void)
 		g_all.commands = g_all.commands->next;
 		free(g_all.commands->prev);
 	}
-	if (g_all.commands->prog != NULL) //! проверить
+	if (g_all.commands->prog != NULL)
 		free(g_all.commands->prog);
 	i = 0;
 	if (g_all.commands->args != NULL)

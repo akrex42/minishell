@@ -100,7 +100,7 @@ void	ft_sighnd(int signo);
 void	ft_reset_input_mode(void);
 void	ft_set_input_mode(t_term_all *all);
 void	ft_add_char_to_correct_str(t_term_all *all);
-void	ft_parser(char **str);
+void	ft_parser(const char *str);
 void	ft_parser_for_errors(char *str);
 void	ft_common_split_part(char **command, const char *str);
 void	ft_command_add_to_list(char **command);
@@ -130,6 +130,7 @@ int		ft_compare_prog_to_redirect(void);
 void	ft_join_env_to_str(char **str, int i,
 			char *str_to_find, char *str_to_join);
 void	ft_rewrite_path(void);
+int		ft_comp_to_spec(t_tokens_list *token);
 
 //BUILTINS
 int 	ft_cd(char **str);

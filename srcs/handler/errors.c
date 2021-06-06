@@ -92,7 +92,7 @@ int	ft_comp_to_spec(t_tokens_list *token) // 1 - ошибка
 int	ft_syntax_error(void)
 {
 	ft_tokens_to_beginning();
-	while (1)
+	while (g_all.tokens)
 	{
 		if (ft_comp_to_spec(g_all.tokens))
 		{
@@ -100,15 +100,19 @@ int	ft_syntax_error(void)
 				ft_comp_to_spec(g_all.tokens->prev))
 			{
 				ft_putstr_fd("my_bash: syntax error near unexpected token `", 2);
-				ft_putchar_fd(g_all.tokens->content[0], 2);
+				ft_putstr_fd(g_all.tokens->content, 2);
 				ft_putstr_fd("'\n", 2);
 				g_all.exit_status = 258;
 				return 1;
 			}
-			else if (ft_comp_to_spec(g_all.tokens->next)) //TODO: добавить условия на редирект
+			else if ((g_all.tokens->content[0] == '<' ||
+				g_all.tokens->content[0] == '>') && ft_comp_to_spec(g_all.tokens->next))
 			{
 				ft_putstr_fd("my_bash: syntax error near unexpected token `", 2);
-				ft_putchar_fd(g_all.tokens->next->content[0], 2);
+				if (g_all.tokens->next != NULL)
+					ft_putstr_fd(g_all.tokens->next->content, 2);
+				else
+					ft_putstr_fd("newline", 2);
 				ft_putstr_fd("'\n", 2);
 				g_all.exit_status = 258;
 				return 1;
