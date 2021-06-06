@@ -3,7 +3,7 @@ NAME := minishell
 SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c \
 		srcs/term/dop_2.c srcs/term/dop_3.c srcs/term/dop_1.c \
 		srcs/parser/parser.c srcs/parser/tokens.c srcs/parser/parser_dop.c \
-		srcs/handler/handler.c srcs/handler/comands_1.c \
+		srcs/handler/handler.c srcs/handler/comands_1.c srcs/parser/parser_for_errors.c\
 		srcs/handler/errors.c srcs/handler/dop_1.c \
 		srcs/handler/comands_2.c \
 		srcs/builtins/ft_echo.c \
@@ -14,7 +14,6 @@ SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c \
 		srcs/builtins/ft_pwd.c \
 		srcs/builtins/ft_unset.c \
 
-		
 OBJS := ${patsubst %.c,%.o,${SRCS}}
 D_FILES := ${patsubst %.c,%.d,${SRCS}}
 

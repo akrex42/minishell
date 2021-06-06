@@ -18,28 +18,27 @@ void	ft_cycle_head(void)
 // действия с введенной строкой после цикла
 void	ft_manage_str(void)
 {
-	//TODO: фришить нужную строку!!!
+	char	*tmp;
+
 	if (g_all.curr_str == 2)
-	{
-		ft_history_newline(&(g_all.history), g_all.str_hist); //! СТРОКА ДУБЛИРУЕТСЯ
-		free(g_all.str);
-		ft_parser(g_all.str_hist); // передача строки парсеру
-	}
+		tmp = g_all.str_hist;
 	else if (g_all.curr_str == 1)
-	{
-		ft_history_newline(&(g_all.history), g_all.str); //! СТРОКА ДУБЛИРУЕТСЯ
-		free(g_all.str_hist);
-		ft_parser(g_all.str); // передача строки парсеру
-	}
-	else
-	{
-		free(g_all.str);
-		free(g_all.str_hist);
-	}
+		tmp = g_all.str;
+	ft_history_newline(&(g_all.history), tmp);
+	ft_parser_for_errors(tmp); 
 	// ft_display_tokens(); // ! для отладки
-	ft_handler();
-	ft_free_tokens();
+	if (!ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
+	{
+		ft_free_tokens();
+		ft_free_comands();
+		ft_parser(tmp);
+		// ft_display_tokens(); // ! для отладки
+		ft_handler();
+	}
 	ft_free_comands();
+	ft_free_tokens();
+	free(g_all.str);
+	free(g_all.str_hist);
 }
 
 // инициализация всех переменных
@@ -120,7 +119,7 @@ int	main(int argc, char* argv[], char* env[])
 			}
 			if (!ft_strncmp(g_all.wr, "\x7f", 10)) //backspace
 			{
-				if ((g_all.str_hist[0] != '\0') && (g_all.curr_str == 2)) // !добавить флаг
+				if ((g_all.str_hist[0] != '\0') && (g_all.curr_str == 2))
 					ft_delete_one_char(&(g_all.str_hist));
 				else if ((g_all.str[0] != '\0') && (g_all.curr_str == 1))
 					ft_delete_one_char(&(g_all.str));
@@ -130,14 +129,10 @@ int	main(int argc, char* argv[], char* env[])
 				ft_add_char_to_correct_str(&g_all);
 			ft_putstr_fd(g_all.wr, 1);
 			if ((((ft_strlen(g_all.str) + 10) % tgetnum("co") == 0) && (g_all.curr_str == 1)) ||
-				(((ft_strlen(g_all.str_hist) + 10) % tgetnum("co") == 0) && (g_all.curr_str == 2))) //! добавить флаг
+				(((ft_strlen(g_all.str_hist) + 10) % tgetnum("co") == 0) && (g_all.curr_str == 2)))
 				tputs(cursor_down, 1, ft_putchar);
 		}
 		ft_manage_str();
 	}
 	return (0);
 }
-
-//ошибки
-// когда удаляется история выполняется основная строка
-// и стириются дополнительные символы

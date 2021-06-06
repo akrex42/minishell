@@ -58,7 +58,7 @@ void	ft_execute_program(int *fd1, int *fd2)
 	if (g_all.commands->special[0] == '>' ||
 		g_all.commands->special[0] == '<')
 				return ;
-	if (ft_check_builtins())
+	if (ft_check_builtins()) //TODO: доделать редиректы
 	{
 		if (g_all.commands->next != NULL &&
 			g_all.commands->special[0] == '|')
@@ -153,24 +153,13 @@ int	ft_make_redirect_fd(void)
 			if (g_all.fd_out != -1)
 				close(g_all.fd_out);
 			g_all.fd_out = open(g_all.commands->prog, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
-			// if (g_all.fd_out == -1)
-			// 	return(-1);
 			g_all.commands->used = 1;
 		}
 		else if (g_all.commands->special[0] == '>' && !(g_all.commands->used))
 		{
 			if (g_all.fd_out != -1)
 				close(g_all.fd_out);
-			if (g_all.commands->prev != NULL) // I am not sure
-			{
-				g_all.fd_out = open(g_all.commands->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
-				// if (g_all.fd_out == -1)
-				// 	return(-1);
-			}
-			else
-			{
-				int fd = open(g_all.commands->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU); // g_all.fd_in
-			}
+			g_all.fd_out = open(g_all.commands->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
 			g_all.commands->used = 1;
 		}
 		else if (g_all.commands->special[0] == '<' && !(g_all.commands->used))
@@ -197,12 +186,11 @@ void	ft_skip_redirect(void)
 {
 	while (g_all.commands->used == 1 &&
 			g_all.commands->next)
-		g_all.commands = g_all.commands->next;
+	g_all.commands = g_all.commands->next;
 }
 
 void	ft_execute(void)
 {
-	// TODO: записать переменные в структуру
 	int		i;
 	int		fd1[2];
 	int		fd2[2];
@@ -211,12 +199,11 @@ void	ft_execute(void)
 	fd2[0] = -1;
 	g_all.fd_in = -1;
 	g_all.fd_out = -1;
+	if (ft_make_redirect_fd() == -1)
+		return ;
 	while (1)
 	{
 		pipe(fd1);
-		
-		if (ft_make_redirect_fd() == -1)
-			return ;
 		ft_skip_redirect();
 		ft_execute_program(fd2, fd1);
 		if (g_all.commands->next == NULL)
@@ -224,8 +211,6 @@ void	ft_execute(void)
 		else
 			g_all.commands = g_all.commands->next;
 		pipe(fd2);
-		if (ft_make_redirect_fd() == -1)
-			return ;
 		ft_skip_redirect();
 		ft_execute_program(fd1, fd2);
 		// условие выхода из цикла
@@ -293,8 +278,8 @@ void	ft_handler(void)
 	//заглушка от пустых строк
 	if (!(g_all.tokens))
 		return ;
-	if (ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
-		return ;
+	// if (ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
+	// 	return ;
 	ft_syntax_analyzer();
 	// ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning(); // ! потом убрать
