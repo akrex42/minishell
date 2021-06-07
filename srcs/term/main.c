@@ -113,13 +113,6 @@ int	main(int argc, char* argv[], char* env[])
 				else
 					continue ;
 			}
-			if (ft_check_unused_char(g_all.wr))
-				continue ;
-			if (ft_manage_history(&g_all))
-			{
-				ft_strjoin_and_free_2((g_all.history)->content, &(g_all.str_hist));
-				continue ;
-			}
 			if (!ft_strncmp(g_all.wr, "\x7f", 10)) //backspace
 			{
 				if ((g_all.str_hist[0] != '\0') && (g_all.curr_str == 2))
@@ -128,6 +121,13 @@ int	main(int argc, char* argv[], char* env[])
 					ft_delete_one_char(&(g_all.str));
 				continue ;
 			}
+			if (ft_manage_history(&g_all))
+			{
+				ft_strjoin_and_free_2((g_all.history)->content, &(g_all.str_hist));
+				continue ;
+			}
+			if (ft_check_unused_char(g_all.wr))
+				continue ;
 			if (g_all.wr[0] != '\n')
 				ft_add_char_to_correct_str(&g_all);
 			ft_putstr_fd(g_all.wr, 1);
