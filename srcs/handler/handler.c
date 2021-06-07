@@ -325,7 +325,7 @@ void	ft_handler(void)
 
 	ft_move_redirect(); // чтобы аргументы попадали в программу, даже если они разделены редиректами
 	ft_syntax_analyzer();
-	// ft_display_comands(); // ! для отладки
+	ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning(); // ! потом убрать
 	ft_execute();
 }

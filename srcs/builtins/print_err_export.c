@@ -57,8 +57,7 @@ int	print_err_export(char *str)
 		{
 			if (!ft_isalnum(key[i])
 			&& (key[i] != '_') && (key[i] != '\\') 
-			&& (key[i] != '\'')
-			&& (!ft_isspace(key[i])))
+			&& (key[i] != '\''))
 			{
 				ft_putstr_fd("my_bash: export: `", 2);
 				ft_putstr_fd(str, 2);
@@ -70,33 +69,5 @@ int	print_err_export(char *str)
 		}
 		free(key);	
 	}
-
-	// while (str[i] != '\0')
-	// {
-	// 	if (str[i] != '\"')
-	// 	{
-	// 		if (!ft_isalnum(str[i]) && (str[i] != '=') 
-	// 		&& (str[i] != '_')
-	// 		&& (str[i] != '\\') && (str[i] != '\'')
-	// 		&& (!ft_isspace(str[i])))
-	// 		{
-	// 			ft_putstr_fd("bash: export: `", 2);
-	// 			ft_putstr_fd(str, 2);
-	// 			ft_putstr_fd("': not a valid identifier", 2);
-	// 			ft_putchar_fd('\n', 2);
-	// 			return (1);
-	// 		}
-	// 	}
-	// 	else if (str[i] == '\"')
-	// 	{
-	// 		i++;
-	// 		while ((str[i] != '\"') && (str[i] != '\0'))
-	// 		{
-	// 			i++;
-	// 		}
-	// 		//  ft_putstr_fd("here", 2);
-	// 	}
-	// 	i++;
-	// }
 	return (0);
 }

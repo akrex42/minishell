@@ -1,30 +1,5 @@
-cat | cat | cat | ls - странный случай
-> test | echo blabla; rm test - печатает и зависает
-echo test > file test1 = = echo test test1 > file - we have command not found
-export var="  truc"; echo $var ATTENTION! trash alert
-echo "$tests" "Makefile" ok - зависит от кавычек - если кавычки, то как один аргумент, если нет, то несколько
-$bla (non-export) works
-cd /home/user42/ - I don't get it
-export HOME= ; cd ДОДЕЛАТЬ с getenv
-cd too many arguments - проверить
-mkdir a; mkdir a/b; cd a/b; rm -r ../../a; cd .. -  зависает, должен выдавать ошибки и менять директории, в коде  $? 0
-cd random_cmd ; echo $? - $? 1, у нас 0
-cd random_cmd ; cd $? то же
-export test=a ; echo $test - должен показывать значение переменной теста
-ls bonjour ; echo $? - код завершения должен быть 1
-e ; export $var=test ; echo $var $a
-export "" test=a -- export test=a et set $? à 1
-. - ошибки
-echo $USER$var\$USER$USER\$USERtest$USER -- user42$USERuser42$USERtestuser42
-echo bonjour \; ls -- bonjour ; ls
-$LESS$VAR    my_bash: -R$VAR: command not found - без вар
-export ""  et unset "" -- bash: export: `': not a valid identifier
-bash: export: `': not a valid identifier должно быть
-export "test=ici"=coucou ; echo $test - должно сразу отображаться
-export var="cat Makefile | grep >" ; echo $var -- проработать ошибку экспорта
-content[0] == '>'
-( - unexpected token
-if we unset PWD or OLDPWD
-ctrl+c не всегда работает -- mkdir a; mkdir a/b; cd a/b; rm -r ../../a; cd ..
-; - зависает перед последней командой 
-`
+cat /dev/random | head -n 1 | cat -e - зависает, выдает результат только после кнтрл-с
+env puis export puis env # vars aren't sorted
+cat | cat | cat | ls
+export ; env # display is different for both commands
+cat < Makefile | grep gcc > output
