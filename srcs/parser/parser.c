@@ -67,13 +67,17 @@ void	ft_parser(const char *str)
 				else
 					tmp = ft_find_env_var(env_str);
 				if (tmp == NULL)
-					ft_malloc_one_char_str(&tmp);
+				{
+					// ft_malloc_one_char_str(&tmp);
+					free(env_str);
+					break ;
+				}
 				if (g_all.flags.double_quote)
 					ft_strjoin_and_free_1(&command, tmp);
 				else
 					ft_split_by_spaces(&command, tmp);
 				// ft_join_env_to_str(str, old_i, env_str, tmp);
-				// i = old_i;
+				// i = old_i;     
 			}
 			free(env_str);
 		}

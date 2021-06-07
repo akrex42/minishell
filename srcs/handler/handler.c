@@ -184,7 +184,11 @@ int	ft_make_redirect_fd(void)
 			g_all.fd_in = open(g_all.commands->prog, O_RDONLY, NULL);
 			if (g_all.fd_in == -1)
 			{
-				ft_error_handler(errno);
+				ft_putstr_fd("my_bash: ", 2);
+				ft_putstr_fd(g_all.commands->prog, 2);
+				ft_putstr_fd(": ", 2);
+				ft_putstr_fd(strerror(errno), 2);
+				ft_putstr_fd("\n", 2);
 				return (-1);
 			}
 			g_all.commands->used = 1;
@@ -327,7 +331,7 @@ void	ft_handler(void)
 
 	ft_move_redirect(); // чтобы аргументы попадали в программу, даже если они разделены редиректами
 	ft_syntax_analyzer();
-	// ft_display_comands(); // ! для отладки
+	ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning(); // ! потом убрать
 	ft_execute();
 }

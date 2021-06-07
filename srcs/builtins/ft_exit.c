@@ -9,7 +9,7 @@ unsigned char 	ft_exit(char **str)
 	error_code = 0;
 	if (str == NULL)
 	{
-		ft_putstr_fd("exit\n", g_all.fd_out);
+		ft_putstr_fd("exit\n", 1);
 		exit(0);
 	}
 	else if (str[1] == NULL)
