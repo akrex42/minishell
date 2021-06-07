@@ -74,12 +74,12 @@ void	ft_execute_program(int *fd1, int *fd2)
 		g_all.exit_status = g_all.exec.ret;
 		return ;
 	}
-	// if (g_all.commands->prev != NULL) // костыль как в bash
-	// 	if (g_all.commands->prev->prog == NULL)
-	// 	{
-	// 		close(g_all.fd_out);
-	// 		g_all.fd_out = -1;
-	// 	}
+	if (g_all.commands->prev != NULL) // костыль как в bash
+		if (g_all.commands->prev->prog == NULL)
+		{
+			close(g_all.fd_out);
+			g_all.fd_out = -1;
+		}
 	if (!fork())
 	{
 		// для ввода
