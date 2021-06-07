@@ -74,13 +74,13 @@ void	ft_execute_program(int *fd1, int *fd2)
 		g_all.exit_status = g_all.exec.ret;
 		return ;
 	}
-	if (g_all.commands->prev != NULL) // костыль как в bash
-		if (g_all.commands->prev->prog == NULL)
-		{
-			close(g_all.fd_out);
-			g_all.fd_out = -1;
-		}
-	if (!fork()) //TODO: если перед прогой пайп без программы, то выводим в stdout и fd_out закрывается
+	// if (g_all.commands->prev != NULL) // костыль как в bash
+	// 	if (g_all.commands->prev->prog == NULL)
+	// 	{
+	// 		close(g_all.fd_out);
+	// 		g_all.fd_out = -1;
+	// 	}
+	if (!fork())
 	{
 		// для ввода
 		if (g_all.commands->prev != NULL &&
@@ -98,12 +98,6 @@ void	ft_execute_program(int *fd1, int *fd2)
 		}
 
 		//для вывода
-		// if (g_all.commands->prev != NULL) // костыль как в bash
-		// 	if (g_all.commands->prev->prog == NULL)
-		// 	{
-		// 		close(g_all.fd_out);
-		// 		g_all.fd_out = -1;
-		// 	}
 		if (g_all.commands->next != NULL &&
 			g_all.commands->special[0] == '|')
 			dup2(fd2[1], 1);
@@ -331,7 +325,7 @@ void	ft_handler(void)
 
 	ft_move_redirect(); // чтобы аргументы попадали в программу, даже если они разделены редиректами
 	ft_syntax_analyzer();
-	ft_display_comands(); // ! для отладки
+	// ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning(); // ! потом убрать
 	ft_execute();
 }

@@ -11,12 +11,13 @@ void	ft_split_by_spaces(char **command, const char *found)
 		ft_strjoin_and_free_1(command, found);
 		return ;
 	}
-	i = 0;
+	ft_strjoin_and_free_1(command, split[0]);
+	i = 1;
 	while (split[i])
 	{
-		ft_strjoin_and_free_1(command, split[i]);
 		g_all.flags.special_value = 0;
 		ft_command_add_to_list(command);
+		ft_strjoin_and_free_1(command, split[i]);
 		i++;
 	}
 	i = 0;
