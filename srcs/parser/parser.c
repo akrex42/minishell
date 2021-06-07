@@ -32,7 +32,6 @@ void	ft_split_by_spaces(char **command, const char *found)
 void	ft_parser(const char *str)
 {
 	int		i;
-	// int		old_i;
 	char	*command;
 	char	*env_str;
 	char	*tmp;
@@ -53,7 +52,6 @@ void	ft_parser(const char *str)
 			}
 			else
 			{
-				// old_i = i;
 				ft_malloc_one_char_str(&env_str);
 				while (((str[i] >= 'A' && str[i] <= 'Z')
 					|| (str[i] >= 'a' && str[i] <= 'z')
@@ -69,7 +67,6 @@ void	ft_parser(const char *str)
 					tmp = ft_find_env_var(env_str);
 				if (tmp == NULL)
 				{
-					// ft_malloc_one_char_str(&tmp);
 					free(env_str);
 					break ;
 				}
@@ -77,10 +74,10 @@ void	ft_parser(const char *str)
 					ft_strjoin_and_free_1(&command, tmp);
 				else
 					ft_split_by_spaces(&command, tmp);
-				// ft_join_env_to_str(str, old_i, env_str, tmp);
-				// i = old_i;     
 			}
 			free(env_str);
+			if (!str[i])
+				break ;
 		}
 		if (g_all.flags.esc)
 		{
