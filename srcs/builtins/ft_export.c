@@ -34,81 +34,70 @@ int	ft_equal_null(char **str, int flag_equal, char *equal, int i)
 	return (flag_equal);
 }
 
-// void	ft_swap(char **min, char **env)
-// {
-// 	char *tmp;
-// 	char *tmp1;
-
-// 	tmp = *env;
-// 	*env = ft_strdup(min);
-// 	free(tmp);
-// 	tmp1 = *min;
-// 	*min = ft_strdup(env);
-// 	free(tmp1);
-// }
-
 static void	ft_print_env(char *equal)
 {
 	int		i;
 	char	*key;
 	char	*value;
 	char 	*min;
+	char	*tmp;
+	char	*tmp1;
 
 	int j = 0;
 	i = 0;
 	char **env = ft_allocate_env(g_all.env);
-	char **env1 = env;
 	while (env[i] != NULL)
 	{
 		j = i;
-		// char *prev_min = min;
 		min = env[j];
-		// ft_putstr_fd("here", g_all.fd_out);
-		// ft_putchar_fd('\n', g_all.fd_out);
-		// ft_putstr_fd(min, g_all.fd_out);
-		// ft_putchar_fd('\n', g_all.fd_out);
-		char **env1 = env;
-		while (env1[j] != NULL)
+		int	change = j;
+
+		while (env[j] != NULL)
 		{
 			equal = ft_strchr(env[j], '=');
 			if (equal == NULL)
 			{
-				j++;
+				min = env[j];
+				while (env[j] != NULL)
+				{
+					if (ft_strchr(env[j], '=') != NULL)
+					{
+						j++;
+					}
+					else if ((ft_strncmp(min, env[j], ft_strlen(min)) > 0))
+					{
+						min = env[j]; // how to recall it
+						change = j;
+					}
+					else if ((ft_strncmp(min, env[j], ft_strlen(min)) == 0))
+					{
+						min = env[j]; // how to recall it
+						change = j;
+					}
+					j++;
+				}
 			}
 			else
 			{
-				// if (!ft_strncmp(prev_min, g_all.env[j], ft_strlen(prev_min)))
-				// {
-				// 		j++;
-				// }
-				// if (env[j] != NULL)
-				// {
-					if (min[0] > env1[j][0])
-					{
-						min = env1[j];
-						// ft_putstr_fd("there", g_all.fd_out);
-						// ft_putchar_fd('\n', g_all.fd_out);
-						// ft_putstr_fd(min, g_all.fd_out);
-						// ft_putchar_fd('\n', g_all.fd_out);
-					}
-				// }
+				if ((ft_strncmp(min, env[j], ft_strlen(min)) > 0))
+				{
+					min = env[j]; // how to recall it
+					change = j;
+				}
+				else if ((ft_strncmp(min, env[j], ft_strlen(min)) == 0))
+				{
+					min = env[j]; // how to recall it
+					change = j;
+				}
 				j++;
 			}
 		}
-		// ft_swap(*min, *env[i]);
-		char *tmp;
-		char *tmp1;
-
 		tmp = env[i];
 		env[i] = ft_strdup(min);
-		// ft_putstr_fd(env[i], 1);
-		// ft_putchar_fd('\n', 1);
-		// tmp1 = min;
-		// min = ft_strdup(tmp);
-		// free(tmp);
-		// ft_putstr_fd(min, 1);
-		// ft_putchar_fd('\n', 1);
-		// free(tmp1);
+		tmp1 = env[change];
+		env[change] = ft_strdup(tmp);
+		free(tmp);
+		free(tmp1);
 		i++;
 	}
 
@@ -118,10 +107,9 @@ static void	ft_print_env(char *equal)
 		equal = ft_strchr(env[i], '=');
 		if (equal == NULL)
 		{
-			// ft_putstr_fd("declare -x ", g_all.fd_out);
-			// ft_putstr_fd(env[i], g_all.fd_out);
-			// ft_putchar_fd('\n', g_all.fd_out);
-			i++;
+			ft_putstr_fd("declare -x ", g_all.fd_out);
+			ft_putstr_fd(env[i], g_all.fd_out);
+			ft_putchar_fd('\n', g_all.fd_out);
 		}
 		else
 		{
