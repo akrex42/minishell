@@ -14,17 +14,14 @@ unsigned char 	ft_exit(char **str)
 	}
 	else if (str[1] == NULL)
 	{
-		if ((g_all.commands->prev != NULL && (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] == '|')) || (g_all.commands->special[0] && g_all.commands->special[0] == '|'))
+		if (g_all.commands->prev != NULL && (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] == '|'))
 			return (g_all.exec.ret);
 		else
-		{
 			ft_putstr_fd("exit\n", g_all.fd_out);
-			exit(g_all.exec.ret);
-		}
 	}
 	else if (str[1] != NULL)
 	{
-		if ((g_all.commands->prev != NULL && (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] == '|')) || (g_all.commands->special[0] && g_all.commands->special[0] == '|'))
+		if (g_all.commands->prev != NULL && (g_all.commands->prev->special[0] && g_all.commands->prev->special[0] == '|'))
 		{
 			i = 0;
 			while (str[1][i] != '\0')
@@ -41,15 +38,7 @@ unsigned char 	ft_exit(char **str)
 				}
 				i++;
 			}
-			if (str[2] != NULL)
-			{
-				ft_putstr_fd("my_bash: exit: ", 2);
-				ft_putstr_fd("too many arguments", 2);
-				ft_putchar_fd('\n', 2);
-				return (1);
-			}
-			error_code = (unsigned char)ft_atoi(str[1]); // returns 255 if error_code is out of range (0...255)
-			return (error_code);
+			return (g_all.exec.ret);
 		}
 		else
 		{
@@ -77,3 +66,11 @@ unsigned char 	ft_exit(char **str)
 	}
 	exit(error_code); // we should set this value to $?
 }
+
+// int		main(int argc, char **argv, char **env)
+// {
+// 	// perror?
+// 	// EXIT FROM BASH, not builtins	
+// 	ft_exit(argv);
+// 	return(0);
+// }

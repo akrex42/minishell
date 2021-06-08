@@ -1,13 +1,19 @@
 #include "minishell.h"
 
-void	ft_close_file_fd(int *fd1, int *fd2)
+void	ft_close_file_fd(void)
 {
-	if (g_all.fd_in != -1 && !(g_all.commands->prev != NULL && fd1[0] != -1 &&
-		g_all.commands->prev->special[0] == '|'))
+	if (g_all.fd_in != -1 && !(g_all.commands->prev != NULL 
+		&& g_all.commands->prev->special[0] == '|'))
 	{
 		close(g_all.fd_in);
 		g_all.fd_in = -1;
 	}
+	// if (g_all.fd_in != -1 && !(g_all.commands->prev != NULL && fd1[0] != -1 &&
+	// 	g_all.commands->prev->special[0] == '|'))
+	// {
+	// 	close(g_all.fd_in);
+	// 	g_all.fd_in = -1;
+	// }
 	if (g_all.fd_out != -1 && !(g_all.commands->next != NULL &&
 		g_all.commands->special[0] == '|'))
 	{
@@ -50,11 +56,8 @@ int	ft_execute_builtins(void)
 }
 
 // из fd1 - берем в fd2 - записываем
-void	ft_execute_program(int *fd1, int *fd2)
+void	ft_execute_program(int *fd1, int *fd2, int i)
 {
-	int	i;
-
-	i = 0;
 	if (g_all.commands->special[0] == '>' ||
 		g_all.commands->special[0] == '<')
 				return ; // оставить для того, чтобы последний редирект не выполнился
@@ -74,13 +77,13 @@ void	ft_execute_program(int *fd1, int *fd2)
 		g_all.exit_status = g_all.exec.ret;
 		return ;
 	}
-	if (g_all.commands->prev != NULL) // костыль как в bash
-		if (g_all.commands->prev->prog == NULL)
-		{
-			close(g_all.fd_out);
-			g_all.fd_out = -1;
-		}
-	if (!fork())
+	// if (g_all.commands->prev != NULL) // TODO: доработать; смотреть если в пред команде есть пайп
+	// 	if (g_all.commands->prev->prog == NULL)
+	// 	{
+	// 		close(g_all.fd_out);
+	// 		g_all.fd_out = -1;
+	// 	}
+	if (!(g_all.pid[i][0] = fork()))
 	{
 		// для ввода
 		if (g_all.commands->prev != NULL &&
@@ -91,11 +94,8 @@ void	ft_execute_program(int *fd1, int *fd2)
 			dup2(g_all.fd_in, 0);
 			close(g_all.fd_in);
 		}
-		if (fd1[0] != -1)
-		{
-			close(fd1[0]);
-			close(fd1[1]);
-		}
+		close(fd1[0]);
+		close(fd1[1]);
 
 		//для вывода
 		if (g_all.commands->next != NULL &&
@@ -109,8 +109,7 @@ void	ft_execute_program(int *fd1, int *fd2)
 		close(fd2[0]);
 		close(fd2[1]);
 
-		ft_reset_input_mode();
-		if (ft_is_relative()) // относительный путь (c /)
+		if (ft_is_relative())
 			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
 		else
 		{
@@ -124,30 +123,26 @@ void	ft_execute_program(int *fd1, int *fd2)
 				g_all.exec.str = ft_strjoin(g_all.path[i], g_all.exec.tmp);
 				execve(g_all.exec.str, g_all.commands->args, g_all.env);
 				i++;
-				free(g_all.exec.str); // ! утечка, но можно не освобождать
+				free(g_all.exec.str);
 			}
 			free(g_all.exec.tmp);
 		}
-		// ft_putnbr_fd(errno, 1); // почему-то здесь теперь возвращает ноль
 		exit(errno);
 	}
-	// ft_putnbr_fd(errno, 1);
-	signal(SIGINT, ft_sighnd_exec); // сигналы во время выполнения программ
-	signal(SIGQUIT, ft_sighnd_exec);
+	close(fd1[0]);
+	close(fd1[1]);
+	ft_close_file_fd();
+}
 
-	if (fd1[0] != -1)
-	{
-		close(fd1[0]);
-		close(fd1[1]);
-	}
-	ft_close_file_fd(fd1, fd2);
-	waitpid(0, &g_all.exec.ret, 0);
-	signal(SIGINT, ft_sighnd); //ctrl + с // возвращаем первоначый обработчик
-	signal(SIGQUIT, ft_sighnd);
-	ft_set_input_mode(&g_all);
-	g_all.exec.ret = WEXITSTATUS(g_all.exec.ret);
-	// ft_putnbr_fd(g_all.exec.ret, 1);
-	ft_error_handler(g_all.exec.ret);
+int	ft_redirect_error(void)
+{
+	ft_putstr_fd("my_bash: ", 2);
+	ft_putstr_fd(g_all.commands->prog, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd("\n", 2);
+	g_all.exit_status = 1;
+	return (-1);
 }
 
 int	ft_make_redirect_fd(void)
@@ -162,6 +157,8 @@ int	ft_make_redirect_fd(void)
 			if (g_all.fd_out != -1)
 				close(g_all.fd_out);
 			g_all.fd_out = open(g_all.commands->prog, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
+			if (g_all.fd_out == -1 && errno != 14)
+				return (ft_redirect_error());
 			g_all.commands->used = 1;
 		}
 		else if (g_all.commands->special[0] == '>' && !(g_all.commands->used))
@@ -169,6 +166,8 @@ int	ft_make_redirect_fd(void)
 			if (g_all.fd_out != -1)
 				close(g_all.fd_out);
 			g_all.fd_out = open(g_all.commands->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
+			if (g_all.fd_out == -1 && errno != 14)
+				return (ft_redirect_error());
 			g_all.commands->used = 1;
 		}
 		else if (g_all.commands->special[0] == '<' && !(g_all.commands->used))
@@ -176,15 +175,8 @@ int	ft_make_redirect_fd(void)
 			if (g_all.fd_in != -1)
 				close(g_all.fd_in);
 			g_all.fd_in = open(g_all.commands->prog, O_RDONLY, NULL);
-			if (g_all.fd_in == -1)
-			{
-				ft_putstr_fd("my_bash: ", 2);
-				ft_putstr_fd(g_all.commands->prog, 2);
-				ft_putstr_fd(": ", 2);
-				ft_putstr_fd(strerror(errno), 2);
-				ft_putstr_fd("\n", 2);
-				return (-1);
-			}
+			if (g_all.fd_in == -1 && errno != 14)
+				return (ft_redirect_error());
 			g_all.commands->used = 1;
 		}
 		if (g_all.commands->next == NULL)
@@ -202,40 +194,168 @@ void	ft_skip_redirect(void)
 		g_all.commands = g_all.commands->next;
 }
 
+int	ft_count_progs(void)
+{
+	int	i;
+
+	i = 0;
+	ft_commands_go_beginning();
+	while (g_all.commands)
+	{
+		ft_skip_redirect();
+		if (g_all.commands->special[0] == '>'
+			|| g_all.commands->special[0] == '<')
+			break ;
+		if (g_all.commands->prog != NULL)
+			i++;
+		if (g_all.commands->next != NULL)
+			g_all.commands = g_all.commands->next;
+		else
+			break ;
+	}
+	ft_commands_go_beginning();
+	return (i);
+}
+
+void	ft_make_pipes(void)
+{
+	int	i;
+
+	i = ft_count_progs();
+	g_all.pipes = malloc(sizeof(int*) * (i + 2));
+	g_all.pipes[i + 1] = NULL; 
+	while (i >= 0)
+	{
+		g_all.pipes[i] = malloc(sizeof(int) * 2);
+		pipe(g_all.pipes[i]);
+		i--;
+	}
+}
+
+void	ft_make_pid(void)
+{
+	int	i;
+
+	i = ft_count_progs();
+	g_all.pid = malloc(sizeof(int*) * (i + 1));
+	g_all.pid[i] = NULL;
+	i--;
+	while (i >= 0)
+	{
+		g_all.pid[i] = malloc(sizeof(int) * 1);
+		g_all.pid[i][0] = -1;
+		i--;
+	}
+}
+
+void	ft_free_pid(void)
+{
+	int	i;
+
+	i = 0;
+	while (g_all.pid[i])
+	{
+		free(g_all.pid[i]);
+		i++;
+	}
+	free(g_all.pid[i]);
+	free(g_all.pid);
+}
+
+void	ft_free_pipes(void)
+{
+	int	i;
+
+	i = 0;
+	while (g_all.pipes[i])
+	{
+		free(g_all.pipes[i]);
+		i++;
+	}
+	free(g_all.pipes[i]);
+	free(g_all.pipes);
+}
+
+void	ft_go_to_right_prog(int i)
+{
+	int	j;
+
+	j = 0;
+	ft_commands_go_beginning();
+	while (j != i)
+	{
+		ft_skip_redirect();
+		if (g_all.commands->special[0] == '>'
+			|| g_all.commands->special[0] == '<')
+			break ;
+		if (g_all.commands->prog == NULL)
+		{
+			g_all.commands = g_all.commands->next;
+			continue ;
+		}
+		j++;
+		g_all.commands = g_all.commands->next;
+	}
+}
+
+void	ft_wait_pid(void)
+{
+	int	i;
+
+	if (!g_all.pid)
+		return ;
+	i = 0;
+	while (g_all.pid[i])
+	{
+		if (g_all.pid[i][0] != -1)
+		{
+			waitpid(g_all.pid[i][0], &g_all.exec.ret, 0);
+			g_all.exec.ret = WEXITSTATUS(g_all.exec.ret);
+			ft_go_to_right_prog(i);
+			ft_error_handler(g_all.exec.ret);
+		}
+		i++;
+	}
+}
+
 void	ft_execute(void)
 {
 	int		i;
-	int		fd1[2];
-	int		fd2[2];
 
-	fd1[0] = -1;
-	fd2[0] = -1;
 	g_all.fd_in = -1;
 	g_all.fd_out = -1;
+	g_all.pipes = NULL;
+	g_all.pid = NULL;
 	if (ft_make_redirect_fd() == -1)
 		return ;
-	while (1)
+	ft_make_pipes();
+	ft_make_pid();
+	signal(SIGINT, ft_sighnd_exec);
+	signal(SIGQUIT, ft_sighnd_exec);
+	ft_reset_input_mode();
+	i = 0;
+	while (g_all.pipes) //условие на первое вхождение
 	{
-		pipe(fd1);
 		ft_skip_redirect();
-		ft_execute_program(fd2, fd1);
+		ft_execute_program(g_all.pipes[i], g_all.pipes[i + 1], i);
+		i++;
 		if (g_all.commands->next == NULL)
 			break;
 		else
 			g_all.commands = g_all.commands->next;
-		pipe(fd2);
-		ft_skip_redirect();
-		ft_execute_program(fd1, fd2);
-		// условие выхода из цикла
-		if (g_all.commands->next == NULL)
-			break;
-		else
-			g_all.commands = g_all.commands->next;
-	} 
+	}
+	close(g_all.pipes[i][0]);
+	close(g_all.pipes[i][1]);
+	ft_wait_pid();
+	ft_set_input_mode(&g_all);
+	signal(SIGINT, ft_sighnd);
+	signal(SIGQUIT, ft_sighnd);
+	ft_free_pipes();
+	ft_free_pid();
 }
 
 // делает из лексем лист исполняемых файлов
-void	ft_syntax_analyzer(void) //TODO: скипать редиректы
+void	ft_syntax_analyzer(void)
 {
 	// если всего один аргумент
 	ft_tokens_to_beginning();
@@ -307,6 +427,7 @@ void	ft_move_redirect(void) // разделяет аргументы и реди
 					token->next->prev = g_all.tokens->next;
 				token->next = g_all.tokens;
 				g_all.tokens->prev = token;
+				continue ;
 			}
 		if (g_all.tokens->next == NULL)
 			break ;
@@ -315,17 +436,72 @@ void	ft_move_redirect(void) // разделяет аргументы и реди
 	}
 }
 
+void	ft_free_command_node(void)
+{
+	int	i;
+	t_comands_list	*tmp;
+
+	i = 0;
+	while (g_all.commands->args[i])
+	{
+		free(g_all.commands->args[i]);
+		i++;
+	}
+	free(g_all.commands->args[i]);
+	free(g_all.commands->args);
+	free(g_all.commands->prog);
+	tmp = g_all.commands->next;
+	g_all.commands = g_all.commands->prev;
+	free(g_all.commands->next);
+	g_all.commands->next = tmp;
+	tmp->prev = g_all.commands;
+}
+
+void	ft_join_empty_redirect(void)
+{
+	t_comands_list	*tmp;
+
+	ft_commands_go_beginning();
+	while (g_all.commands)
+	{
+		if (g_all.commands->special[0] == '|'
+			&& g_all.commands->prog == NULL)
+		{
+			tmp = g_all.commands;
+			while (1)
+			{
+				if (g_all.commands->special[0] != '>'
+					&& g_all.commands->special[0] != '<'
+					&& g_all.commands->special[0] != '|')
+				{
+					g_all.commands->special[0] = '|';
+					g_all.commands->special[1] = '\0';
+					g_all.commands->special[2] = '\0';
+				}
+				if (g_all.commands->prev == NULL)
+					break ;
+				else
+					g_all.commands = g_all.commands->prev;
+			}
+			g_all.commands = tmp;
+			ft_free_command_node();
+		}
+		if (g_all.commands->next == NULL)
+			break ;
+		else
+			g_all.commands = g_all.commands->next;
+	}
+}
+
 void	ft_handler(void)
 {
-	//заглушка от пустых строк
 	if (!(g_all.tokens))
 		return ;
-	// if (ft_syntax_error()) //TODO: в 2 fd ДОРАБОТАТЬ
-	// 	return ;
-
 	ft_move_redirect(); // чтобы аргументы попадали в программу, даже если они разделены редиректами
 	ft_syntax_analyzer();
-	ft_display_comands(); // ! для отладки
+	ft_join_empty_redirect();
+	//TODO: объединять пустые пайпы с предыдущими командами
+	// ft_display_comands(); // ! для отладки
 	ft_commands_go_beginning(); // ! потом убрать
 	ft_execute();
 }
