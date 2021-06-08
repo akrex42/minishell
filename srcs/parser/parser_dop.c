@@ -11,13 +11,9 @@ void	ft_command_add_to_list(char **command)
 {
 	if ((*command)[0] != '\0' || g_all.flags.quotes)
 	{
-		ft_tokens_newline(*command); // записываем строки в лист
+		ft_tokens_newline(*command);
 		if (!g_all.flags.special_value)
 		{
-			// если хоть один элемень в строке был экранирован
-			// или написан в кавычках
-			// но проверять это мы будем только на отдельных символах
-			// "|" ">" ">>" "<"
 			g_all.tokens->special_value = 0;
 			g_all.flags.special_value = 1;
 		}
@@ -35,21 +31,18 @@ void	ft_init_parse_flags(void)
 	g_all.flags.quotes = 0;
 }
 
-// возвращает строку по названию переменной окружения
-// ! не изменять строку
 char	*ft_find_env_var(char *str)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
 	char	*equal;
 
 	i = 0;
 	len = ft_strlen(str);
-
 	while (g_all.env[i] != NULL)
 	{
 		equal = ft_strchr(g_all.env[i], '=');
-		if (equal == NULL) // key without value args cases
+		if (equal == NULL)
 		{
 			i++;
 			continue ;
@@ -57,7 +50,7 @@ char	*ft_find_env_var(char *str)
 		else
 		{
 			if (!ft_strncmp(g_all.env[i], str, len)
-			&& g_all.env[i][len] == '=')
+				&& g_all.env[i][len] == '=')
 				return (&(g_all.env[i][len + 1]));
 		}
 		i++;

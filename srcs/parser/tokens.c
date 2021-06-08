@@ -7,15 +7,10 @@ void	ft_tokens_to_beginning(void)
 			g_all.tokens = g_all.tokens->prev;
 }
 
-void	ft_display_tokens(void)
+void	ft_display_tokens(void) //!УБРАТЬ В КОНЦЕ
 {
 	if (!g_all.tokens)
 	{
-		// ft_putstr_fd("my_bash: ", 2); // seems like it fixes the issue with ""
-		// ft_putstr_fd("", 2);
-		// ft_putstr_fd(": ", 2);
-		// ft_putstr_fd("command not found", 2);
-		// ft_putstr_fd("\n", 2);
 		g_all.exit_status = 127;
 		return ;
 	}
@@ -47,7 +42,6 @@ void	ft_free_tokens(void)
 	g_all.tokens = NULL;
 }
 
-// добавляет новый элемент истории в конец и возвращает на него указатель
 void	ft_tokens_newline(char *content)
 {
 	t_tokens_list	*new;
@@ -71,7 +65,6 @@ void	ft_tokens_newline(char *content)
 	g_all.tokens = new;
 }
 
-// шаг назад по истории если есть куда
 void	ft_tokens_step_back(void)
 {
 	if (g_all.tokens->prev == NULL)
@@ -79,7 +72,6 @@ void	ft_tokens_step_back(void)
 	g_all.tokens = g_all.tokens->prev;
 }
 
-// шаг вперед по истории если есть куда
 void	ft_tokens_step_front(void)
 {
 	if (g_all.tokens->next == NULL)

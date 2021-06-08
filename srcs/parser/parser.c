@@ -68,7 +68,7 @@ void	ft_parser(const char *str)
 				if (tmp == NULL)
 				{
 					free(env_str);
-					break ;
+					continue ;
 				}
 				if (g_all.flags.double_quote)
 					ft_strjoin_and_free_1(&command, tmp);
@@ -76,8 +76,7 @@ void	ft_parser(const char *str)
 					ft_split_by_spaces(&command, tmp);
 			}
 			free(env_str);
-			if (!str[i])
-				break ;
+			continue ;
 		}
 		if (g_all.flags.esc)
 		{

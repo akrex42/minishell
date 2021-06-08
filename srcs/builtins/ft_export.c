@@ -34,111 +34,38 @@ int	ft_equal_null(char **str, int flag_equal, char *equal, int i)
 	return (flag_equal);
 }
 
-// void	ft_swap(char **min, char **env)
-// {
-// 	char *tmp;
-// 	char *tmp1;
-
-// 	tmp = *env;
-// 	*env = ft_strdup(min);
-// 	free(tmp);
-// 	tmp1 = *min;
-// 	*min = ft_strdup(env);
-// 	free(tmp1);
-// }
-
 static void	ft_print_env(char *equal)
 {
 	int		i;
 	char	*key;
-	char	*value;
-	char 	*min;
-
-	int j = 0;
-	i = 0;
-	char **env = ft_allocate_env(g_all.env);
-	char **env1 = env;
-	while (env[i] != NULL)
-	{
-		j = i;
-		// char *prev_min = min;
-		min = env[j];
-		// ft_putstr_fd("here", g_all.fd_out);
-		// ft_putchar_fd('\n', g_all.fd_out);
-		// ft_putstr_fd(min, g_all.fd_out);
-		// ft_putchar_fd('\n', g_all.fd_out);
-		char **env1 = env;
-		while (env1[j] != NULL)
-		{
-			equal = ft_strchr(env[j], '=');
-			if (equal == NULL)
-			{
-				j++;
-			}
-			else
-			{
-				// if (!ft_strncmp(prev_min, g_all.env[j], ft_strlen(prev_min)))
-				// {
-				// 		j++;
-				// }
-				// if (env[j] != NULL)
-				// {
-					if (min[0] > env1[j][0])
-					{
-						min = env1[j];
-						// ft_putstr_fd("there", g_all.fd_out);
-						// ft_putchar_fd('\n', g_all.fd_out);
-						// ft_putstr_fd(min, g_all.fd_out);
-						// ft_putchar_fd('\n', g_all.fd_out);
-					}
-				// }
-				j++;
-			}
-		}
-		// ft_swap(*min, *env[i]);
-		char *tmp;
-		char *tmp1;
-
-		tmp = env[i];
-		env[i] = ft_strdup(min);
-		// ft_putstr_fd(env[i], 1);
-		// ft_putchar_fd('\n', 1);
-		// tmp1 = min;
-		// min = ft_strdup(tmp);
-		// free(tmp);
-		// ft_putstr_fd(min, 1);
-		// ft_putchar_fd('\n', 1);
-		// free(tmp1);
-		i++;
-	}
+	char	*key1;
 
 	i = 0;
-	while (env[i] != NULL)
+	while (g_all.env[i] != NULL)
 	{
-		equal = ft_strchr(env[i], '=');
+		equal = ft_strchr(g_all.env[i], '=');
 		if (equal == NULL)
 		{
-			// ft_putstr_fd("declare -x ", g_all.fd_out);
-			// ft_putstr_fd(env[i], g_all.fd_out);
-			// ft_putchar_fd('\n', g_all.fd_out);
-			i++;
+			ft_putstr_fd("declare -x ", g_all.fd_out);
+			ft_putstr_fd(g_all.env[i], g_all.fd_out);
+			ft_putchar_fd('\n', g_all.fd_out);
 		}
 		else
 		{
 			ft_putstr_fd("declare -x ", g_all.fd_out);
-			key = ft_substr(env[i], 0, ft_strlen(env[i]) - ft_strlen(equal));
+			key = ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) - ft_strlen(equal));
 			ft_putstr_fd(key, g_all.fd_out);
 			free(key);
 			ft_putchar_fd(equal[0], g_all.fd_out);
 			ft_putchar_fd('"', g_all.fd_out);
-			value = ft_substr(equal, 1, ft_strlen(equal) - 1);
-			ft_putstr_fd(value, g_all.fd_out);
-			free(value);
+			key1 = ft_substr(equal, 1, ft_strlen(equal) - 1);
+			ft_putstr_fd(key1, g_all.fd_out);
+			free(key1);
 			ft_putchar_fd('"', g_all.fd_out);
 			ft_putchar_fd('\n', g_all.fd_out);
 		}
 		i++;
-	}	
+	}
 }
 
 int	ft_export(char **str)
@@ -151,7 +78,7 @@ int	ft_export(char **str)
 
 	flag_equal = 0;
 	flag_return = 0;
-	i = 1;
+	i = 1; // Program name may be omitted with the use of exec* family
 	if (str[i] == NULL)
 	{
 		ft_print_env(equal);
@@ -179,3 +106,9 @@ int	ft_export(char **str)
 		return (1);
 	return (0);
 }
+
+/* int main (int argc, char **argv, char **envp)
+// {
+// 	ft_export(argv);
+// 	return(0);
+// } */
