@@ -18,6 +18,14 @@ void    ft_error_handler(int errno_exec)
 			g_all.exec.ret = 2;
 
 		}
+		else if (!ft_strncmp(g_all.commands->prog, "..", 3))
+		{
+			ft_putstr_fd("my_bash: ", 2);
+        	ft_putstr_fd(g_all.commands->prog, 2);
+        	ft_putstr_fd(": ", 2);
+            ft_putstr_fd("command not found", 2);
+           	g_all.exec.ret = 127;
+		}
 		else
 		{
 			ft_putstr_fd("my_bash: ", 2);

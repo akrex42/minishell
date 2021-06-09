@@ -23,7 +23,7 @@ D_FILES := ${patsubst %.c,%.d,${SRCS}}
 
 GCC := gcc
 # FLAGS := -Wall -Wextra -Werror 
-FLAGS := -g # -g для дебагинга 
+# FLAGS := -g # -g для дебагинга 
 INCLUDES := includes
 
 all: ${NAME}
