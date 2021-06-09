@@ -29,17 +29,14 @@ typedef struct s_history_list
 	struct s_history_list	*prev;
 }	t_history_list;
 
-// special_value для определения того, имеет ли элемент специальное значение
-// или он был экранирован
 typedef struct s_tokens_list
 {
-	int						special_value; // 1 - значимый элемент, 0 - просто символ
+	int						special_value;
 	char					*content;
 	struct s_tokens_list	*next;
 	struct s_tokens_list	*prev;
 }	t_tokens_list;
 
-// для передачи исполнителю команд
 typedef struct s_comands_list
 {
 	char					*prog;
@@ -52,10 +49,10 @@ typedef struct s_comands_list
 
 typedef struct s_parse_flags
 {
-	int		esc;			// '\\'
-	int		dollar;			// $
-	int		double_quote;	// '
-	int		special_value;	// был ли элемень в строке экранирован
+	int		esc;
+	int		dollar;
+	int		double_quote;
+	int		special_value;
 	int		quotes;
 }	t_parse_flags;
 
@@ -72,9 +69,9 @@ typedef struct s_term_all
 	char			wr[10];
 	char			*str;
 	char			*str_hist;
-	int				curr_str; // 1 - str 2 - str_hist
+	int				curr_str;
 	char			**env;
-	char			**path; //разделенные директории по которым нужно искать прогу 
+	char			**path;
 	t_history_list	*history;
 	t_tokens_list	*tokens;
 	t_comands_list	*commands;
@@ -137,6 +134,25 @@ int		ft_comp_to_spec(t_tokens_list *token);
 void	ft_delete_one_char(char **str);
 int		ft_cycle_body(void);
 int		ft_parser_3(char **command, const char *str, int *i);
+void	ft_syntax_analyzer(void);
+void	ft_move_redirect(void);
+void	ft_free_command_node(void);
+void	ft_wait_pid(void);
+void	ft_go_to_right_prog(int i);
+void	ft_skip_redirect(void);
+void	ft_free_pipes(void);
+void	ft_free_pid(void);
+void	ft_make_pid(void);
+void	ft_make_pipes(void);
+int	ft_count_progs(void);
+int	ft_make_redirect_fd(void);
+int	ft_redirect_error(void);
+void	ft_close_pipes(void);
+void	ft_execute_builtins(void);
+int	ft_check_builtins(void);
+void	ft_close_file_fd(void);
+void	ft_execute(void);
+void	ft_execute_program(int *fd1, int *fd2, int i);
 
 //BUILTINS
 int 	ft_cd(char **str);
@@ -171,9 +187,7 @@ int		check_cond(void);
 int		ft_print_err_exit_return(char **str);
 void	ft_print_err_exit(char **str);
 
-
 //tmp
 void	ft_display_tokens(void);
-void	ft_display_comands(void);
 
 #endif

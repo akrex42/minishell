@@ -70,7 +70,7 @@ int	ft_parser_2(char **command, const char *str, int *i)
 		{
 			env_str = ft_itoa(g_all.exit_status);
 			ft_strjoin_and_free_1(command, env_str);
-			i++;
+			(*i)++;
 		}
 		else
 		{

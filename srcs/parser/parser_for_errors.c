@@ -60,7 +60,7 @@ int	ft_parser_for_errors_2(char **command, const char *str, int *i)
 			ft_strjoin_char_and_free(command, str[*i]);
 		else
 		{
-			i--;
+			(*i)--;
 			ft_strjoin_char_and_free(command, str[*i]);
 		}
 		g_all.flags.special_value = 0;
