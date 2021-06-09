@@ -42,8 +42,10 @@ static void	ft_print_env(char *equal)
 	char 	*min;
 	char	*tmp;
 	char	*tmp1;
+	int		j;
 
 	i = 0;
+	j = 0;
 	char **env = ft_allocate_env(g_all.env);
 	while (env[i] != NULL)
 	{
@@ -53,43 +55,17 @@ static void	ft_print_env(char *equal)
 
 		while (env[j] != NULL)
 		{
-			equal = ft_strchr(env[j], '=');
-			if (equal == NULL)
+			if ((ft_strncmp(min, env[j], ft_strlen(min)) > 0))
 			{
-				min = env[j];
-				while (env[j] != NULL)
-				{
-					if (ft_strchr(env[j], '=') != NULL)
-					{
-						j++;
-					}
-					else if ((ft_strncmp(min, env[j], ft_strlen(min)) > 0))
-					{
-						min = env[j]; // how to recall it
-						change = j;
-					}
-					else if ((ft_strncmp(min, env[j], ft_strlen(min)) == 0))
-					{
-						min = env[j]; // how to recall it
-						change = j;
-					}
-					j++;
-				}
+				min = env[j]; // how to recall it
+				change = j;
 			}
-			else
+			else if ((ft_strncmp(min, env[j], ft_strlen(min)) == 0))
 			{
-				if ((ft_strncmp(min, env[j], ft_strlen(min)) > 0))
-				{
-					min = env[j]; // how to recall it
-					change = j;
-				}
-				else if ((ft_strncmp(min, env[j], ft_strlen(min)) == 0))
-				{
-					min = env[j]; // how to recall it
-					change = j;
-				}
-				j++;
+				min = env[j]; // how to recall it
+				change = j;
 			}
+			j++;
 		}
 		tmp = env[i];
 		env[i] = ft_strdup(min);
@@ -113,14 +89,14 @@ static void	ft_print_env(char *equal)
 		else
 		{
 			ft_putstr_fd("declare -x ", g_all.fd_out);
-			key = ft_substr(g_all.env[i], 0, ft_strlen(g_all.env[i]) - ft_strlen(equal));
+			key = ft_substr(env[i], 0, ft_strlen(env[i]) - ft_strlen(equal));
 			ft_putstr_fd(key, g_all.fd_out);
 			free(key);
 			ft_putchar_fd(equal[0], g_all.fd_out);
 			ft_putchar_fd('"', g_all.fd_out);
-			key1 = ft_substr(equal, 1, ft_strlen(equal) - 1);
-			ft_putstr_fd(key1, g_all.fd_out);
-			free(key1);
+			value = ft_substr(equal, 1, ft_strlen(equal) - 1);
+			ft_putstr_fd(value, g_all.fd_out);
+			free(value);
 			ft_putchar_fd('"', g_all.fd_out);
 			ft_putchar_fd('\n', g_all.fd_out);
 		}
