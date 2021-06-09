@@ -36,7 +36,7 @@ int	ft_check_builtins(void)
 	return (0);
 }
 
-int	ft_execute_builtins(void)
+void	ft_execute_builtins(void)
 {
 	if (!ft_strncmp("cd", g_all.commands->prog, 3))
 		g_all.exec.ret = ft_cd(g_all.commands->args);
@@ -52,7 +52,19 @@ int	ft_execute_builtins(void)
 		g_all.exec.ret = ft_pwd(g_all.commands->args);
 	else if (!ft_strncmp("unset", g_all.commands->prog, 6))
 		g_all.exec.ret = ft_unset(g_all.commands->args);
-	return (g_all.exec.ret);
+}
+
+void	ft_close_pipes(void)
+{
+	int	i;
+
+	i = 0;
+	while (g_all.pipes[i])
+	{
+		close(g_all.pipes[i][0]);
+		close(g_all.pipes[i][1]);
+		i++;
+	}
 }
 
 // из fd1 - берем в fd2 - записываем
@@ -61,23 +73,7 @@ void	ft_execute_program(int *fd1, int *fd2, int i)
 	if (g_all.commands->special[0] == '>' ||
 		g_all.commands->special[0] == '<')
 				return ; // оставить для того, чтобы последний редирект не выполнился
-	if (ft_check_builtins())
-	{
-		if (g_all.commands->next != NULL &&
-			g_all.commands->special[0] == '|')
-			g_all.fd_out = fd2[1];
-		else if (g_all.fd_out == -1)
-			g_all.fd_out = 1;
-		ft_execute_builtins();
-		if (g_all.commands->next != NULL &&
-			g_all.commands->special[0] == '|')
-			close(fd2[1]);
-		else if (g_all.fd_out != 1)
-			close(g_all.fd_out);
-		g_all.exit_status = g_all.exec.ret;
-		return ;
-	}
-	// if (g_all.commands->prev != NULL) // TODO: доработать; смотреть если в пред команде есть пайп
+	// if (g_all.commands->prev != NULL)
 	// 	if (g_all.commands->prev->prog == NULL)
 	// 	{
 	// 		close(g_all.fd_out);
@@ -85,6 +81,22 @@ void	ft_execute_program(int *fd1, int *fd2, int i)
 	// 	}
 	if (!(g_all.pid[i][0] = fork()))
 	{
+		if (ft_check_builtins())
+		{
+			if (g_all.commands->next != NULL &&
+				g_all.commands->special[0] == '|')
+				g_all.fd_out = fd2[1];
+			else if (g_all.fd_out == -1)
+				g_all.fd_out = 1;
+			ft_execute_builtins();
+			if (g_all.commands->next != NULL &&
+				g_all.commands->special[0] == '|')
+				close(fd2[1]);
+			else if (g_all.fd_out != 1)
+				close(g_all.fd_out);
+			g_all.exit_status = g_all.exec.ret;
+			exit (g_all.exit_status);
+		}
 		// для ввода
 		if (g_all.commands->prev != NULL &&
 			g_all.commands->prev->special[0] == '|')
@@ -94,8 +106,6 @@ void	ft_execute_program(int *fd1, int *fd2, int i)
 			dup2(g_all.fd_in, 0);
 			close(g_all.fd_in);
 		}
-		close(fd1[0]);
-		close(fd1[1]);
 
 		//для вывода
 		if (g_all.commands->next != NULL &&
@@ -106,8 +116,7 @@ void	ft_execute_program(int *fd1, int *fd2, int i)
 			dup2(g_all.fd_out ,1);
 			close(g_all.fd_out);
 		}
-		close(fd2[0]);
-		close(fd2[1]);
+		ft_close_pipes();
 
 		if (ft_is_relative())
 			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
@@ -189,7 +198,7 @@ int	ft_make_redirect_fd(void)
 
 void	ft_skip_redirect(void)
 {
-	while (g_all.commands->used == 1 &&
+	while ((g_all.commands->used == 1 || (g_all.commands->special[0] == '|' && g_all.commands->prog == NULL)) &&
 			g_all.commands->next)
 		g_all.commands = g_all.commands->next;
 }
@@ -333,8 +342,15 @@ void	ft_execute(void)
 	signal(SIGINT, ft_sighnd_exec);
 	signal(SIGQUIT, ft_sighnd_exec);
 	ft_reset_input_mode();
+	ft_skip_redirect();
 	i = 0;
-	while (g_all.pipes) //условие на первое вхождение
+	if (ft_count_progs() == 1 && ft_check_builtins())
+	{
+		if (g_all.fd_out == -1)
+			g_all.fd_out = 1;
+		ft_execute_builtins();
+	}
+	else while (g_all.pipes) //условие на первое вхождение
 	{
 		ft_skip_redirect();
 		ft_execute_program(g_all.pipes[i], g_all.pipes[i + 1], i);
@@ -344,8 +360,6 @@ void	ft_execute(void)
 		else
 			g_all.commands = g_all.commands->next;
 	}
-	close(g_all.pipes[i][0]);
-	close(g_all.pipes[i][1]);
 	ft_wait_pid();
 	ft_set_input_mode(&g_all);
 	signal(SIGINT, ft_sighnd);
@@ -457,6 +471,26 @@ void	ft_free_command_node(void)
 	tmp->prev = g_all.commands;
 }
 
+void	ft_join_empty_redirect_2(void)
+{
+	while (1)
+	{
+		if (g_all.commands->special[0] != '>'
+			&& g_all.commands->special[0] != '<'
+			&& g_all.commands->special[0] != '|')
+		{
+			g_all.commands->special[0] = '|';
+			g_all.commands->special[1] = '\0';
+			g_all.commands->special[2] = '\0';
+			break ;
+		}
+		if (g_all.commands->prev == NULL)
+			break ;
+		else
+			g_all.commands = g_all.commands->prev;
+	}
+}
+
 void	ft_join_empty_redirect(void)
 {
 	t_comands_list	*tmp;
@@ -468,23 +502,15 @@ void	ft_join_empty_redirect(void)
 			&& g_all.commands->prog == NULL)
 		{
 			tmp = g_all.commands;
-			while (1)
+			ft_join_empty_redirect_2();
+			if (g_all.commands->special[0] == '|'
+				&& g_all.commands->prog != NULL)
 			{
-				if (g_all.commands->special[0] != '>'
-					&& g_all.commands->special[0] != '<'
-					&& g_all.commands->special[0] != '|')
-				{
-					g_all.commands->special[0] = '|';
-					g_all.commands->special[1] = '\0';
-					g_all.commands->special[2] = '\0';
-				}
-				if (g_all.commands->prev == NULL)
-					break ;
-				else
-					g_all.commands = g_all.commands->prev;
+				g_all.commands = tmp;
+				ft_free_command_node();
 			}
-			g_all.commands = tmp;
-			ft_free_command_node();
+			else
+				g_all.commands = tmp;
 		}
 		if (g_all.commands->next == NULL)
 			break ;
@@ -499,9 +525,8 @@ void	ft_handler(void)
 		return ;
 	ft_move_redirect(); // чтобы аргументы попадали в программу, даже если они разделены редиректами
 	ft_syntax_analyzer();
-	ft_join_empty_redirect();
-	//TODO: объединять пустые пайпы с предыдущими командами
-	// ft_display_comands(); // ! для отладки
-	ft_commands_go_beginning(); // ! потом убрать
+	// ft_join_empty_redirect();
+	ft_display_comands(); // ! для отладки
+	ft_commands_go_beginning();
 	ft_execute();
 }

@@ -63,7 +63,6 @@ typedef struct s_term_all
 {
 	struct termios	g_saved_attributes;
 	int				flag_allocate;
-	int				flag_echo;
 	int				fd_in;
 	int				fd_out;
 	int				**pipes;
@@ -136,6 +135,7 @@ void	ft_rewrite_path(void);
 int		ft_comp_to_spec(t_tokens_list *token);
 void	ft_delete_one_char(char **str);
 int		ft_cycle_body(void);
+int		ft_parser_3(char **command, const char *str, int *i);
 
 //BUILTINS
 int 	ft_cd(char **str);
@@ -149,33 +149,8 @@ int		ft_export(char **str);
 int		ft_pwd(char **str);
 int		ft_unset(char **str);
 int		print_err_export(char *str);
-int		flag_zero(char **str, int flag_equal, int i);
-int		internal_circle(int flag_equal, char **str, int i);
-int		ft_error(char *dir, char *this_env, char *equal, char **str);
-int		ft_home(void);
-void	ft_print_equal(char **env, int i, char *equal);
-int		ft_insertion_sort(char **env, char *min, int change, int i);
-void	ft_print_env_sorted(char *equal, char **env);
-void	ft_swap_and_free(char *min, int change, char **env, int i);
-int		ft_cycle_export(char **str, int i, char *equal, int flag_equal);
-int		ft_cycle_unset(char **str, int i, char *equal);
-int		ft_print_error_cd(char **str);
-void	ft_chdir_normal(char *dir, char *dir1, char *this_env, char *equal);
-int		print_err_unset(char *str);
-int		inner_circle3(int j, int i, char **str, char *equal);
-int		ft_equal_null(char **str, int flag_equal, char *equal, int i);
-int 	print_1(char str);
-int 	print(char *str);
-int		check_cond(void);
-int		ft_print_err_exit_return(char **str);
-void	ft_print_err_exit(char **str);
-
-
-
-
-
-
-
+int	flag_zero(char **str, int flag_equal, int i);
+int	internal_circle(int flag_equal, char **str, int i);
 
 //tmp
 void	ft_display_tokens(void);

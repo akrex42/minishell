@@ -75,7 +75,7 @@ int	print_err_unset(char *str)
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("': not a valid identifier", 2);
 		ft_putchar_fd('\n', 2);
-		return (1);
+		return (1); // errno?
 	}
 	while (str[i] != '\0')
 	{
@@ -94,14 +94,30 @@ int	print_err_unset(char *str)
 
 int	ft_unset(char **str)
 {
+	char	*key;
 	int		i;
+	int		j;
+	char	**env2;
 	char	*equal;
 	int		flag_return;
 
 	g_all.flag_allocate = 0;
 	flag_return = 0;
 	i = 1;
-	flag_return = ft_cycle_unset(str, i, equal);
+	while (str[i] != NULL)
+	{
+		flag_return = print_err_unset(str[i]);
+		if (flag_return)
+		{
+			i++;
+			continue ;
+		}
+		env2 = g_all.env;
+		j = 0;
+		while (env2[j] != NULL)
+			j = inner_circle3(j, i, str, equal);
+		i++;
+	}
 	g_all.flag_allocate = 0;
 	if (flag_return)
 		return (1);

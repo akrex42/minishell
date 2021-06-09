@@ -8,7 +8,7 @@ int	ft_cycle(char **env, int len, char *this_env, char **ret)
 	while (i < len)
 	{
 		if ((g_all.flag_allocate == 1) && (!(ft_strncmp(env[i],
-						this_env, ft_strlen(this_env)))))
+					this_env, ft_strlen(this_env)))))
 		{
 			while (i < len - 1)
 			{
@@ -19,13 +19,14 @@ int	ft_cycle(char **env, int len, char *this_env, char **ret)
 		}
 		else
 		{	
-			ret[i] = ft_strdup(env[i]);
+			ret[i] = ft_strdup(env[i]); // free
 			i++;
 		}
 	}
 	return (i);
 }
 
+// перевыделяет память для переменных окружения // we need to free all of this
 char	**ft_allocate_env_builtins(char **env, int args, char *str,
 char *this_env)
 {
@@ -35,7 +36,7 @@ char *this_env)
 
 	len = 0;
 	while (env[len] != NULL)
-		len++;
+		len++; // i = len - 1
 	if (g_all.flag_allocate == 1)
 		ret = malloc(sizeof(char *) * (len));
 	else

@@ -8,9 +8,9 @@ int	flag_zero(char **str, int flag_equal, int i)
 
 	if (flag_equal == 0)
 	{
+		// all the keys without value that do not repeat OR first time appeared repeating ones
 		env1 = g_all.env;
-		g_all.env = ft_allocate_env_builtins(g_all.env, 1,
-				str[i], this_env);
+		g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i], this_env);
 		k = 0;
 		while (env1[k] != NULL)
 		{
@@ -36,6 +36,7 @@ int	ft_key_value2(char **str, int i, int j, int flag_equal)
 	if (ft_strlen(key) == ft_strlen(key1)
 		&& ft_strncmp(key, key1, ft_strlen(key1)) == 0)
 	{
+		// if key-=value already exists in the list and we change it, including final variant
 		this_env = g_all.env[j];
 		g_all.env[j] = ft_strdup(str[i]);
 		free(this_env);
@@ -61,6 +62,7 @@ int	ft_key_value1(char **str, int i, int j, int flag_equal)
 	if (ft_strlen(g_all.env[j]) == ft_strlen(key)
 		&& !(ft_strncmp(g_all.env[j], key, ft_strlen(key))))
 	{
+		// if we assign value to an existing key for the first time
 		this_env = g_all.env[j];
 		g_all.env[j] = ft_strdup(str[i]);
 		free(this_env);
@@ -104,6 +106,7 @@ int	ft_check_equal2(int i, int flag_equal, char *key, char **str)
 	if (ft_strlen(key) == ft_strlen(str[i]) && !(ft_strncmp(key,
 				str[i], ft_strlen(str[i]))))
 	{
+		// if keys without values repeat and they have value assigned in the list
 		flag_equal = 1;
 		free(key);
 		return (flag_equal);
