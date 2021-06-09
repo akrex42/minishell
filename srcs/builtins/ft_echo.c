@@ -1,6 +1,16 @@
 #include "minishell.h"
 
-static int	ft_isspace(char c)
+int	ft_break(char **str, int i, int j)
+{
+	if (str[i][j] != 'n')
+	{
+		ft_putstr_fd(str[i], g_all.fd_out);
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_isspace(char c)
 {
 	if (c == ' ' || c == '	' || c == '\t' || c == '\v'
 		|| c == '\f' || c == '\r' || c == '\n')
@@ -8,50 +18,39 @@ static int	ft_isspace(char c)
 	return (0);
 }
 
-int	ft_echo(char **str)
+int	ft_cycle_check_key(int j, char **str, int i, int flag)
 {
-	int	flag;
-	int	i;
-	int j;
-
-	flag = 0;
-	i = 1;
-	j = 0;
-	// Parse key -n if needed // may be an empty string
-	if (str[1] == NULL)
-	{
-		ft_putchar_fd('\n', g_all.fd_out);
-		return (0);
-	}
-	// FIXME
 	while (str[i] != NULL && !(ft_strncmp(str[i], "-n", 2)))
 	{
-		if (str[i][2] != '\0') // cycle
+		if (str[i][2] != '\0')
 		{
 			j = 2;
 			while (str[i][j] != '\0')
 			{
-				if (str[i][j] != 'n')
-				{
-					ft_putstr_fd(str[i], g_all.fd_out);
+				if (ft_break(str, i, j))
 					break ;
-				}
 				j++;
 			}
 			if (str[i][j] == '\0')
-			{
-				flag = 1;
-			}
+				g_all.flag_echo = 1;
 			i++;
 		}
 		else if (str[i][2] == '\0')
 		{
-			flag = 1;
+			g_all.flag_echo = 1;
 			i++;
 		}
 		else
 			break ;
 	}
+	return (i);
+}
+
+void	ft_cycle_print_args(int i, char **str, int flag)
+{
+	int	j;
+
+	j = 0;
 	while (str[i] != NULL && str[i + 1] != NULL)
 	{
 		j = 0;
@@ -66,13 +65,25 @@ int	ft_echo(char **str)
 		i++;
 	}
 	ft_putstr_fd(str[i], g_all.fd_out);
-	if (!flag)
+	if (!g_all.flag_echo)
 		ft_putchar_fd('\n', g_all.fd_out);
-	return (0);
 }
 
-/* int main(int argc, char **argv)
-// {
-// 	ft_echo(argv);
-// 	return(0);
-// } */
+int	ft_echo(char **str)
+{
+	int	i;
+	int	j;
+
+	g_all.flag_echo = 0;
+	i = 1;
+	j = 0;
+	if (str[1] == NULL)
+	{
+		ft_putchar_fd('\n', g_all.fd_out);
+		return (0);
+	}
+	i = ft_cycle_check_key(j, str, i, g_all.flag_echo);
+	ft_cycle_print_args(i, str, g_all.flag_echo);
+	g_all.flag_echo = 0;
+	return (0);
+}

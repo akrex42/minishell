@@ -65,7 +65,7 @@ int	ft_parser_2(char **command, const char *str, int *i)
 
 	if (str[*i] == '$' && !g_all.flags.esc)
 	{
-		i++;
+		(*i)++;
 		if (str[*i] == '?')
 		{
 			env_str = ft_itoa(g_all.exit_status);
