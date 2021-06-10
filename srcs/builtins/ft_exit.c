@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+int	print_err_exit(void)
+{
+	ft_putstr_fd("my_bash: exit: too many arguments\n", 2);
+	return (1);
+}
+
 void	ft_cycle_check_exit(char **str)
 {
 	int	i;
@@ -55,7 +61,12 @@ unsigned char 	ft_exit(char **str)
 	else if (str[1] != NULL)
 		if (ft_check(i, str))
 			return (ft_check(i, str));
+	if (str[2] != NULL)
+		return (print_err_exit());
 	if (str[1] != NULL)
+	{
+		ft_putstr_fd("exit\n", 1);
 		error_code = (unsigned char)ft_atoi(str[1]);
+	}
 	exit(error_code);
 }
