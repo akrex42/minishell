@@ -60,7 +60,6 @@ int	ft_print_err_equal(char *str)
 int	print_err_export(char *str)
 {
 	int		i;
-	char	*key;
 
 	i = 1;
 	if (!ft_isalpha(str[0]) && (str[0] != '_'))

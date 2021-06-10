@@ -42,6 +42,7 @@ int 	ft_env(char **str)
 	int		i;
 
 	i = 0;
+	equal = NULL;
 	if (str[1] != NULL)
 	{	
 		ft_print_error_env(str[1]);

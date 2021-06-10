@@ -26,7 +26,7 @@ int	ft_cycle(char **env, int len, char *this_env, char **ret)
 	return (i);
 }
 
-char	**ft_allocate_env_builtins(char **env, int args, char *str,
+char	**ft_allocate_env_builtins(char **env, char *str,
 char *this_env)
 {
 	char	**ret;

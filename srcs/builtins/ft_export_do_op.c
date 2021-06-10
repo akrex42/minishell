@@ -46,8 +46,6 @@ int	ft_insertion_sort(char **env, char *min, int change, int i)
 void	ft_print_env_sorted(char *equal, char **env)
 {
 	int		i;
-	char	*key;
-	char	*value;
 
 	i = 0;
 	while (env[i] != NULL)

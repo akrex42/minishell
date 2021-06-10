@@ -43,6 +43,8 @@ static void	ft_print_env(char *equal)
 
 	i = 0;
 	j = 0;
+	min = NULL;
+	change = 0;
 	env = ft_allocate_env(g_all.env);
 	while (env[i] != NULL)
 	{
@@ -70,6 +72,8 @@ int	ft_export(char **str)
 	flag_equal = 0;
 	flag_return = 0;
 	i = 1;
+	j = 0;
+	equal = NULL;
 	if (str[i] == NULL)
 	{
 		ft_print_env(equal);

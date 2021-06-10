@@ -6,10 +6,11 @@ int	flag_zero(char **str, int flag_equal, int i)
 	char	*this_env;
 	int		k;
 
+	this_env = NULL;
 	if (flag_equal == 0)
 	{
 		env1 = g_all.env;
-		g_all.env = ft_allocate_env_builtins(g_all.env, 1,
+		g_all.env = ft_allocate_env_builtins(g_all.env,
 				str[i], this_env);
 		k = 0;
 		while (env1[k] != NULL)

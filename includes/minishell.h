@@ -154,7 +154,7 @@ void			ft_close_file_fd(void);
 void			ft_execute(void);
 void			ft_execute_program(int *fd1, int *fd2, int i);
 int				ft_cd(char **str);
-char			**ft_allocate_env_builtins(char **env, int args, char *str,
+char			**ft_allocate_env_builtins(char **env, char *str,
 					char *this_env);
 int				ft_check_equal2(int i, int flag_equal, char *key, char **str);
 int				ft_echo(char **str);

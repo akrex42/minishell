@@ -14,7 +14,7 @@ void	inner_circle2(int j, int i, char **str, char *equal)
 	{
 		g_all.flag_allocate = 1;
 		env1 = g_all.env;
-		g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i],
+		g_all.env = ft_allocate_env_builtins(g_all.env, str[i],
 				g_all.env[j]);
 		k = 0;
 		while (env1[k] != NULL)
@@ -38,7 +38,7 @@ void	inner_circle(int j, int i, char **str)
 	{
 		g_all.flag_allocate = 1;
 		env1 = g_all.env;
-		g_all.env = ft_allocate_env_builtins(g_all.env, 1, str[i],
+		g_all.env = ft_allocate_env_builtins(g_all.env, str[i],
 				g_all.env[j]);
 		k = 0;
 		while (env1[k] != NULL)
@@ -98,6 +98,7 @@ int	ft_unset(char **str)
 	char	*equal;
 	int		flag_return;
 
+	equal = NULL;
 	g_all.flag_allocate = 0;
 	flag_return = 0;
 	i = 1;
