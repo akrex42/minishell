@@ -4,12 +4,12 @@ int	ft_is_relative(void)
 {
 	if (ft_strrchr(g_all.commands->prog, '/') != NULL)
 		return (1);
-	return (0);	
+	return (0);
 }
 
 void	ft_sighnd_exec(int signo)
 {
-	if (signo == 3) // ctrl + '\'
+	if (signo == 3)
 	{
 		ft_putstr_fd("Quit: 3\n", 1);
 		g_all.exit_status = 501;
@@ -17,7 +17,7 @@ void	ft_sighnd_exec(int signo)
 	else
 	{
 		ft_putstr_fd("\n", 1);
-		g_all.exit_status = 500; // используется как флаг для изменения этого значения после форка
+		g_all.exit_status = 500;
 	}
 }
 

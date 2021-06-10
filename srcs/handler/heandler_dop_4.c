@@ -20,7 +20,8 @@ int	ft_make_redirect_fd_2(void)
 	{
 		if (g_all.fd_out != -1)
 			close(g_all.fd_out);
-		g_all.fd_out = open(g_all.commands->prog, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
+		g_all.fd_out = open(g_all.commands->prog,
+				O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU);
 		if (g_all.fd_out == -1 && errno != 14)
 			return (ft_redirect_error());
 		g_all.commands->used = 1;
@@ -30,11 +31,13 @@ int	ft_make_redirect_fd_2(void)
 
 int	ft_make_redirect_fd_1(void)
 {
-	if (!ft_strncmp(g_all.commands->special, ">>", 3) && !(g_all.commands->used))
+	if (!ft_strncmp(g_all.commands->special, ">>", 3)
+		&& !(g_all.commands->used))
 	{
 		if (g_all.fd_out != -1)
 			close(g_all.fd_out);
-		g_all.fd_out = open(g_all.commands->prog, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
+		g_all.fd_out = open(g_all.commands->prog,
+				O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 		if (g_all.fd_out == -1 && errno != 14)
 			return (ft_redirect_error());
 		g_all.commands->used = 1;
@@ -45,16 +48,19 @@ int	ft_make_redirect_fd_1(void)
 int	ft_make_redirect_fd(void)
 {
 	t_comands_list	*tmp;
-	int	ret;
+	int				ret;
 
 	tmp = g_all.commands;
 	while (1)
 	{
-		if (!(ret = ft_make_redirect_fd_1()))
+		ret = ft_make_redirect_fd_1();
+		if (ret == -1)
 			return (ret);
-		if (!(ret = ft_make_redirect_fd_2()))
+		ret = ft_make_redirect_fd_2();
+		if (ret == -1)
 			return (ret);
-		if (!(ret = ft_make_redirect_fd_3()))
+		ret = ft_make_redirect_fd_3();
+		if (ret == -1)
 			return (ret);
 		if (g_all.commands->next == NULL)
 			break ;

@@ -101,6 +101,9 @@ int	ft_cd(char **str)
 	char	**beg_env;
 	char	dir[1000];
 
+	equal = NULL;
+	this_env = NULL;
+	beg_env = NULL;
 	if (str[1] == NULL)
 	{
 		getcwd(dir, 1000);

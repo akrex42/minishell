@@ -18,7 +18,7 @@ int	ft_isspace(char c)
 	return (0);
 }
 
-int	ft_cycle_check_key(int j, char **str, int i, int flag)
+int	ft_cycle_check_key(int j, char **str, int i)
 {
 	while (str[i] != NULL && !(ft_strncmp(str[i], "-n", 2)))
 	{
@@ -46,7 +46,7 @@ int	ft_cycle_check_key(int j, char **str, int i, int flag)
 	return (i);
 }
 
-void	ft_cycle_print_args(int i, char **str, int flag)
+void	ft_cycle_print_args(int i, char **str)
 {
 	int	j;
 
@@ -82,8 +82,8 @@ int	ft_echo(char **str)
 		ft_putchar_fd('\n', g_all.fd_out);
 		return (0);
 	}
-	i = ft_cycle_check_key(j, str, i, g_all.flag_echo);
-	ft_cycle_print_args(i, str, g_all.flag_echo);
+	i = ft_cycle_check_key(j, str, i);
+	ft_cycle_print_args(i, str);
 	g_all.flag_echo = 0;
 	return (0);
 }

@@ -5,8 +5,8 @@ void	ft_make_pipes(void)
 	int	i;
 
 	i = ft_count_progs();
-	g_all.pipes = malloc(sizeof(int*) * (i + 2));
-	g_all.pipes[i + 1] = NULL; 
+	g_all.pipes = malloc(sizeof(int *) * (i + 2));
+	g_all.pipes[i + 1] = NULL;
 	while (i >= 0)
 	{
 		g_all.pipes[i] = malloc(sizeof(int) * 2);
@@ -20,7 +20,7 @@ void	ft_make_pid(void)
 	int	i;
 
 	i = ft_count_progs();
-	g_all.pid = malloc(sizeof(int*) * (i + 1));
+	g_all.pid = malloc(sizeof(int *) * (i + 1));
 	g_all.pid[i] = NULL;
 	i--;
 	while (i >= 0)
@@ -63,7 +63,7 @@ void	ft_skip_redirect(void)
 {
 	while ((g_all.commands->used == 1
 			|| (g_all.commands->special[0] == '|'
-			&& g_all.commands->prog == NULL)) &&
-			g_all.commands->next)
+				&& g_all.commands->prog == NULL))
+		&& g_all.commands->next)
 		g_all.commands = g_all.commands->next;
 }

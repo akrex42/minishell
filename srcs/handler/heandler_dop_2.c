@@ -3,13 +3,15 @@
 void	ft_syntax_analyzer_1(void)
 {
 	if (g_all.tokens->prev->prev != NULL)
-		if (g_all.tokens->next == NULL && (g_all.commands->special[0] == '|' ||
-			g_all.tokens->prev->prev->content[0] == '>' ||
-			g_all.tokens->prev->prev->content[0] == '<'))
 	{
-		ft_tokens_step_front();
-		ft_new_prog_node();
-		ft_comands_list_add_args_and_prog();
+		if (g_all.tokens->next == NULL && (g_all.commands->special[0] == '|'
+				|| g_all.tokens->prev->prev->content[0] == '>'
+				|| g_all.tokens->prev->prev->content[0] == '<'))
+		{
+			ft_tokens_step_front();
+			ft_new_prog_node();
+			ft_comands_list_add_args_and_prog();
+		}
 	}
 }
 

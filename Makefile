@@ -8,7 +8,7 @@ SRCS := srcs/term/main.c srcs/term/history.c srcs/term/manage_history.c \
 		srcs/handler/comands_2.c srcs/parser/parser_dop_2.c srcs/handler/heandler_dop_1.c\
 		srcs/handler/heandler_dop_2.c srcs/handler/heandler_dop_3.c \
 		srcs/handler/heandler_dop_4.c srcs/handler/heandler_dop_5.c \
-		srcs/handler/heandler_dop_6.c \
+		srcs/handler/heandler_dop_6.c srcs/handler/errors_2.c\
 		srcs/builtins/ft_echo.c \
 		srcs/builtins/ft_cd.c srcs/builtins/ft_allocate_env_builtins.c \
 		srcs/builtins/ft_env.c srcs/builtins/ft_check_equal2.c \
@@ -22,8 +22,8 @@ OBJS := ${patsubst %.c,%.o,${SRCS}}
 D_FILES := ${patsubst %.c,%.d,${SRCS}}
 
 GCC := gcc
-# FLAGS := -Wall -Wextra -Werror 
-# FLAGS := -g # -g для дебагинга 
+# FLAGS := -Wall -Wextra -Werror -g
+FLAGS := -g # -g для дебагинга 
 INCLUDES := includes
 
 all: ${NAME}

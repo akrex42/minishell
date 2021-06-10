@@ -76,4 +76,3 @@ void	ft_free_comands(void)
 	ft_free_comands_2();
 	g_all.commands = NULL;
 }
-

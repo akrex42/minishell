@@ -4,21 +4,21 @@ int	ft_compare_prog_to_redirect(void)
 {
 	if (g_all.commands == NULL)
 		return (0);
-	return (!ft_strncmp(g_all.commands->special, ">", 2) ||
-			!ft_strncmp(g_all.commands->special, ">>", 3) ||
-			!ft_strncmp(g_all.commands->special, "<", 2));
+	return (!ft_strncmp(g_all.commands->special, ">", 2)
+		|| !ft_strncmp(g_all.commands->special, ">>", 3)
+		|| !ft_strncmp(g_all.commands->special, "<", 2));
 }
 
 int	ft_compare_tokens_cont_to_spec(void)
 {
 	if (g_all.tokens == NULL)
 		return (1);
-	return ((!ft_strncmp(g_all.tokens->content, "|", 2) ||
-			!ft_strncmp(g_all.tokens->content, ">", 2) ||
-			!ft_strncmp(g_all.tokens->content, ">>", 3) ||
-			!ft_strncmp(g_all.tokens->content, "<", 2) ||
-			!ft_strncmp(g_all.tokens->content, ";", 2)) &&
-			g_all.tokens->special_value);
+	return ((!ft_strncmp(g_all.tokens->content, "|", 2)
+			|| !ft_strncmp(g_all.tokens->content, ">", 2)
+			|| !ft_strncmp(g_all.tokens->content, ">>", 3)
+			|| !ft_strncmp(g_all.tokens->content, "<", 2)
+			|| !ft_strncmp(g_all.tokens->content, ";", 2))
+		&& g_all.tokens->special_value);
 }
 
 int	ft_progs_count_args(void)
@@ -36,7 +36,7 @@ int	ft_progs_count_args(void)
 	}
 	j = len;
 	if (!(g_all.tokens->next) && !ft_compare_tokens_cont_to_spec())
-			j--;
+		j--;
 	while (j > 0)
 	{
 		ft_tokens_step_back();

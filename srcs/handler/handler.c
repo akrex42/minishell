@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-void	ft_execute_program_1(int *fd1, int *fd2)
+void	ft_execute_program_1(int *fd2)
 {
 	if (ft_check_builtins())
 	{
-		if (g_all.commands->next != NULL &&
-			g_all.commands->special[0] == '|')
+		if (g_all.commands->next != NULL
+			&& g_all.commands->special[0] == '|')
 			g_all.fd_out = fd2[1];
 		else if (g_all.fd_out == -1)
 			g_all.fd_out = 1;
 		ft_execute_builtins();
-		if (g_all.commands->next != NULL &&
-			g_all.commands->special[0] == '|')
+		if (g_all.commands->next != NULL
+			&& g_all.commands->special[0] == '|')
 			close(fd2[1]);
 		else if (g_all.fd_out != 1)
 			close(g_all.fd_out);
@@ -22,27 +22,26 @@ void	ft_execute_program_1(int *fd1, int *fd2)
 
 void	ft_execute_program_2(int *fd1, int *fd2)
 {
-	if (g_all.commands->prev != NULL &&
-		g_all.commands->prev->special[0] == '|')
+	if (g_all.commands->prev != NULL
+		&& g_all.commands->prev->special[0] == '|')
 		dup2(fd1[0], 0);
 	else if (g_all.fd_in != -1)
 	{
 		dup2(g_all.fd_in, 0);
 		close(g_all.fd_in);
 	}
-
-	if (g_all.commands->next != NULL &&
-		g_all.commands->special[0] == '|')
+	if (g_all.commands->next != NULL
+		&& g_all.commands->special[0] == '|')
 		dup2(fd2[1], 1);
 	else if (g_all.fd_out != -1)
 	{
-		dup2(g_all.fd_out ,1);
+		dup2(g_all.fd_out, 1);
 		close(g_all.fd_out);
 	}
 	ft_close_pipes();
 }
 
-void	ft_execute_program_4(int *fd1, int *fd2)
+void	ft_execute_program_4(void)
 {
 	int	i;
 
@@ -63,17 +62,18 @@ void	ft_execute_program_4(int *fd1, int *fd2)
 
 void	ft_execute_program(int *fd1, int *fd2, int i)
 {
-	if (g_all.commands->special[0] == '>' ||
-		g_all.commands->special[0] == '<')
-				return ;
-	if (!(g_all.pid[i][0] = fork()))
+	if (g_all.commands->special[0] == '>'
+		|| g_all.commands->special[0] == '<')
+		return ;
+	g_all.pid[i][0] = fork();
+	if (!(g_all.pid[i][0]))
 	{
-		ft_execute_program_1(fd1, fd2);
+		ft_execute_program_1(fd2);
 		ft_execute_program_2(fd1, fd2);
 		if (ft_is_relative())
 			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
 		else
-			ft_execute_program_4(fd1, fd2);
+			ft_execute_program_4();
 		exit(errno);
 	}
 	close(fd1[0]);

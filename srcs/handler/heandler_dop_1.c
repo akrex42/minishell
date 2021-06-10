@@ -58,22 +58,23 @@ void	ft_move_redirect(void)
 	ft_tokens_to_beginning();
 	while (1)
 	{
-		if (g_all.tokens->next != NULL)
-			if ((g_all.tokens->content[0] == '>'
-				|| g_all.tokens->content[0] == '<') 
-				&& !ft_comp_to_spec(g_all.tokens->next->next)
-				&& g_all.tokens->prev != NULL)
-			{
-				token = g_all.tokens->next->next;
-				g_all.tokens->prev->next = token;
-				token->prev = g_all.tokens->prev;
-				g_all.tokens->next->next = token->next;
-				if (token->next != NULL)
-					token->next->prev = g_all.tokens->next;
-				token->next = g_all.tokens;
-				g_all.tokens->prev = token;
-				continue ;
-			}
+		if (g_all.tokens->next == NULL)
+			break ;
+		if ((g_all.tokens->content[0] == '>'
+				|| g_all.tokens->content[0] == '<')
+			&& !ft_comp_to_spec(g_all.tokens->next->next)
+			&& g_all.tokens->prev != NULL)
+		{
+			token = g_all.tokens->next->next;
+			g_all.tokens->prev->next = token;
+			token->prev = g_all.tokens->prev;
+			g_all.tokens->next->next = token->next;
+			if (token->next != NULL)
+				token->next->prev = g_all.tokens->next;
+			token->next = g_all.tokens;
+			g_all.tokens->prev = token;
+			continue ;
+		}
 		if (ft_move_redirect_2())
 			break ;
 	}
@@ -81,7 +82,7 @@ void	ft_move_redirect(void)
 
 void	ft_free_command_node(void)
 {
-	int	i;
+	int				i;
 	t_comands_list	*tmp;
 
 	i = 0;

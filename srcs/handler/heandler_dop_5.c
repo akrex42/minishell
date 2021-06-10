@@ -2,14 +2,14 @@
 
 void	ft_close_file_fd(void)
 {
-	if (g_all.fd_in != -1 && !(g_all.commands->prev != NULL 
-		&& g_all.commands->prev->special[0] == '|'))
+	if (g_all.fd_in != -1 && !(g_all.commands->prev != NULL
+			&& g_all.commands->prev->special[0] == '|'))
 	{
 		close(g_all.fd_in);
 		g_all.fd_in = -1;
 	}
-	if (g_all.fd_out != -1 && !(g_all.commands->next != NULL &&
-		g_all.commands->special[0] == '|'))
+	if (g_all.fd_out != -1 && !(g_all.commands->next != NULL
+			&& g_all.commands->special[0] == '|'))
 	{
 		close(g_all.fd_out);
 		g_all.fd_out = -1;
@@ -18,15 +18,15 @@ void	ft_close_file_fd(void)
 
 int	ft_check_builtins(void)
 {
-	if (g_all.commands->prog != NULL && (!ft_strncmp("cd", 
-			g_all.commands->prog, 3) || !ft_strncmp("echo", 
-			g_all.commands->prog, 5) ||
-		!ft_strncmp("env", g_all.commands->prog, 4) ||
-		!ft_strncmp("exit", g_all.commands->prog, 5) ||
-		!ft_strncmp("export", g_all.commands->prog, 7) ||
-		!ft_strncmp("pwd", g_all.commands->prog, 4) ||
-		!ft_strncmp("unset", g_all.commands->prog, 6)))
-			return (1);
+	if (g_all.commands->prog != NULL && (!ft_strncmp("cd",
+				g_all.commands->prog, 3) || !ft_strncmp("echo",
+				g_all.commands->prog, 5)
+			|| !ft_strncmp("env", g_all.commands->prog, 4)
+			|| !ft_strncmp("exit", g_all.commands->prog, 5)
+			|| !ft_strncmp("export", g_all.commands->prog, 7)
+			|| !ft_strncmp("pwd", g_all.commands->prog, 4)
+			|| !ft_strncmp("unset", g_all.commands->prog, 6)))
+		return (1);
 	return (0);
 }
 

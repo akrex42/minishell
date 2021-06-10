@@ -7,7 +7,7 @@ void	ft_parser_for_errors_4(char **command, const char *str, int *i)
 		if (str[*i + 1] == '>')
 		{
 			ft_common_split_part(command, ">>");
-			i++;
+			(*i)++;
 		}
 		else
 			ft_common_split_part(command, ">");
@@ -33,7 +33,7 @@ int	ft_parser_for_errors_3(char **command, const char *str, int *i)
 	}
 	else if (str[*i] == '\'')
 	{
-		i++;
+		(*i)++;
 		g_all.flags.special_value = 0;
 		g_all.flags.quotes = 1;
 		while (str[*i] != '\'' && str[*i])
@@ -83,8 +83,6 @@ void	ft_parser_for_errors(const char *str)
 {
 	int		i;
 	char	*command;
-	char	*env_str;
-	char	*tmp;
 
 	ft_init_parse_flags();
 	ft_malloc_one_char_str(&command);

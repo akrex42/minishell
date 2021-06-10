@@ -2,7 +2,8 @@
 
 void	ft_parser_6(char **command, const char *str, int *i)
 {
-	if (str[*i] == ';' || (str[*i] == '|' && (str[*i - 2] == '>' || str[*i - 2] == '<')))
+	if (str[*i] == ';' || (str[*i] == '|' && (str[*i - 2] == '>'
+				|| str[*i - 2] == '<')))
 	{
 		ft_command_add_to_list(command);
 		ft_strjoin_char_and_free(command, str[*i]);

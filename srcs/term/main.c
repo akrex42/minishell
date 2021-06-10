@@ -19,6 +19,7 @@ void	ft_manage_str(void)
 {
 	char	*tmp;
 
+	tmp = NULL;
 	if (g_all.curr_str == 2)
 		tmp = g_all.str_hist;
 	else if (g_all.curr_str == 1)
