@@ -40,7 +40,7 @@ static char	*ft_strtrim_2(const char *s1, char *ret, int min_i, int max_i)
 	return (ret);
 }
 
-char		*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*ret;
 	int		min_i;

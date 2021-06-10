@@ -58,7 +58,7 @@ static void	ft_if_n_negative(int *sign, int *count, int *n)
 	(*count)++;
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*ret;
 	int		count;

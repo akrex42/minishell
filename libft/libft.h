@@ -15,11 +15,11 @@
 
 # include <stdio.h>
 
-typedef struct		s_list
+typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
-}					t_list;
+}	t_list;
 
 char				*ft_strrchr(const char *str, int ch);
 char				*ft_strnstr(const char *str_b, const char

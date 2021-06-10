@@ -46,15 +46,14 @@ static int	ft_count_word(char const *s, int c, int i)
 	return (count);
 }
 
-static char	**ft_split_2(char const *s, char c, char **ret)
+static char	**ft_split_2(char const *s, char c, char **ret, int i)
 {
-	int		i;
 	int		j;
 	int		count;
 
-	i = 0;
 	count = 0;
 	while (s[i])
+	{
 		if (s[i] != c)
 		{
 			ret[count] = malloc(ft_count_word(s, c, i) + 1);
@@ -71,11 +70,12 @@ static char	**ft_split_2(char const *s, char c, char **ret)
 		}
 		else if (s[i])
 			i++;
+	}
 	ret[count] = NULL;
 	return (ret);
 }
 
-char		**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**ret;
 	int		count;
@@ -86,5 +86,5 @@ char		**ft_split(char const *s, char c)
 	ret = malloc(sizeof(char *) * (count + 1));
 	if (!ret)
 		return (NULL);
-	return (ft_split_2(s, c, ret));
+	return (ft_split_2(s, c, ret, 0));
 }
