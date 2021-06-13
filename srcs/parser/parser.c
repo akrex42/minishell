@@ -29,12 +29,8 @@ void	ft_split_by_spaces(char **command, const char *found)
 	free(split);
 }
 
-int	ft_parser_2_1(char **command, const char *str, int *i,
-					char **env_str)
+void	ft_parser_2_2(const char *str, int *i, char **env_str)
 {
-	char	*tmp;
-
-	ft_malloc_one_char_str(env_str);
 	while (((str[*i] >= 'A' && str[*i] <= 'Z')
 			|| (str[*i] >= 'a' && str[*i] <= 'z')
 			|| (str[*i] >= '0' && str[*i] <= '9')
@@ -43,6 +39,15 @@ int	ft_parser_2_1(char **command, const char *str, int *i,
 		ft_strjoin_char_and_free(env_str, str[*i]);
 		(*i)++;
 	}
+}
+
+int	ft_parser_2_1(char **command, const char *str, int *i,
+					char **env_str)
+{
+	char	*tmp;
+
+	ft_malloc_one_char_str(env_str);
+	ft_parser_2_2(str, i, env_str);
 	if ((*env_str)[0] == '\0')
 		tmp = "$";
 	else
@@ -63,6 +68,7 @@ int	ft_parser_2(char **command, const char *str, int *i)
 {
 	char	*env_str;
 
+	env_str = NULL;
 	if (str[*i] == '$' && !g_all.flags.esc)
 	{
 		(*i)++;
@@ -72,7 +78,8 @@ int	ft_parser_2(char **command, const char *str, int *i)
 			ft_strjoin_and_free_1(command, env_str);
 			(*i)++;
 		}
-		else
+		else if (!((str[*i] == '\"' || str[*i] == '\'')
+				&& !g_all.flags.double_quote))
 		{
 			if (ft_parser_2_1(command, str, i, &env_str))
 				return (1);

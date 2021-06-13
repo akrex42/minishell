@@ -8,6 +8,7 @@ void	ft_parser_6(char **command, const char *str, int *i)
 		ft_command_add_to_list(command);
 		ft_strjoin_char_and_free(command, str[*i]);
 		ft_command_add_to_list(command);
+		free(*command);
 		ft_handler();
 		ft_free_tokens();
 		ft_free_comands();

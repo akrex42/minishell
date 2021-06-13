@@ -2,6 +2,7 @@
 
 int	print_err_exit(void)
 {
+	// ft_putstr_fd("exit\n", 1);
 	ft_putstr_fd("my_bash: exit: too many arguments\n", 2);
 	return (1);
 }
@@ -21,34 +22,10 @@ void	ft_cycle_check_exit(char **str)
 	}
 }
 
-int	ft_check(int i, char **str)
-{
-	if (g_all.commands->prev != NULL
-		&& (g_all.commands->prev->special[0]
-			&& g_all.commands->prev->special[0] == '|'))
-	{
-		i = 0;
-		while (str[1][i] != '\0')
-		{
-			if ((str[1][i] == '-' || str[1][i] == '+')
-				&& ft_isdigit(str[1][i + 1]))
-				i++;
-			else if (!ft_isdigit(str[1][i]))
-				return (ft_print_err_exit_return(str));
-			i++;
-		}
-		return (g_all.exec.ret);
-	}
-	else
-		ft_cycle_check_exit(str);
-	return (0);
-}
-
-unsigned char 	ft_exit(char **str)
+unsigned char   ft_exit(char **str)
 {
 	int				i;
 	unsigned int	error_code;
-
 	i = 0;
 	error_code = 0;
 	if (str == NULL)
@@ -59,13 +36,12 @@ unsigned char 	ft_exit(char **str)
 	else if (str[1] == NULL)
 		g_all.exec.ret = check_cond();
 	else if (str[1] != NULL)
-		if (ft_check(i, str))
-			return (ft_check(i, str));
-	if (str[2] != NULL)
-		return (print_err_exit());
+	ft_cycle_check_exit(str);
 	if (str[1] != NULL)
 	{
-		ft_putstr_fd("exit\n", 1);
+		if (str[2] != NULL)
+			return (print_err_exit());
+		// ft_putstr_fd("exit\n", 1);
 		error_code = (unsigned char)ft_atoi(str[1]);
 	}
 	exit(error_code);

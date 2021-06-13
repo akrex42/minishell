@@ -53,7 +53,7 @@ void	ft_init_term_all(char **env)
 	ft_rewrite_path();
 	ft_init_history(&(g_all.history));
 	// tgetent(0, getenv("TERM"));
-	tgetent(0,  "xterm-256color"); // ! для дебаггера
+	tgetent(0, "xterm-256color");
 	signal(SIGINT, ft_sighnd);
 	signal(SIGQUIT, ft_sighnd);
 }

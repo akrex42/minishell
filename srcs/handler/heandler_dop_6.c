@@ -52,6 +52,8 @@ void	ft_execute(void)
 	{
 		if (g_all.fd_out == -1)
 			g_all.fd_out = 1;
+		if (!ft_strncmp(g_all.commands->prog, "exit", 5))
+			ft_putstr_fd("exit\n", 1);
 		ft_execute_builtins();
 		g_all.exit_status = g_all.exec.ret;
 	}
