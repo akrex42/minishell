@@ -5,12 +5,16 @@ void	ft_split_by_spaces(char **command, const char *found)
 	char	**split;
 	int		i;
 
+	if	(found[0] == '\0')
+		return ;
 	split = ft_split(found, ' ');
 	if (!split)
 	{
 		ft_strjoin_and_free_1(command, found);
 		return ;
 	}
+	if (found[0] == ' ')
+		ft_command_add_to_list(command);
 	ft_strjoin_and_free_1(command, split[0]);
 	i = 1;
 	while (split[i])
@@ -20,6 +24,7 @@ void	ft_split_by_spaces(char **command, const char *found)
 		ft_strjoin_and_free_1(command, split[i]);
 		i++;
 	}
+	g_all.flags.special_value = 0;
 	i = 0;
 	while (split[i])
 	{

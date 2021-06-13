@@ -49,7 +49,7 @@ void	ft_execute_program_4(void)
 	g_all.exec.tmp = ft_strjoin("/", g_all.commands->prog);
 	i = 0;
 	if (!g_all.path)
-		exit(2);
+		exit(128);
 	while (g_all.path[i] != NULL)
 	{
 		g_all.exec.str = ft_strjoin(g_all.path[i], g_all.exec.tmp);

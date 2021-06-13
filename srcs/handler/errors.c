@@ -76,7 +76,7 @@ void	ft_error_handler_3(int errno_exec, void	**dir)
 		ft_putstr_fd("\n", 2);
 		g_all.exec.ret = 127;
 	}
-	else if (errno_exec == 127)
+	else if (errno_exec == 127 || errno_exec == 128)
 		ft_error_handler_4(dir);
 	else
 		ft_error_handler_5(errno_exec, dir);
