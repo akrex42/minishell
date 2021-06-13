@@ -5,6 +5,7 @@ int	ft_break(char **str, int i, int j)
 	if (str[i][j] != 'n')
 	{
 		ft_putstr_fd(str[i], g_all.fd_out);
+		ft_putchar_fd(' ', g_all.fd_out);
 		return (1);
 	}
 	return (0);

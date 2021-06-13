@@ -80,14 +80,17 @@ int	ft_cycle_export(char **str, int i,
 	char *equal, int flag_equal)
 {
 	int	flag_return;
+	int flag_one;
 
 	flag_return = 0;
+	flag_one = 0;
 	while (str[i] != NULL)
 	{
 		flag_return = print_err_export(str[i]);
 		if (flag_return)
 		{
 			i++;
+			flag_one = 1;
 			continue ;
 		}
 		equal = ft_strchr(str[i], '=');
@@ -100,5 +103,5 @@ int	ft_cycle_export(char **str, int i,
 			flag_equal = internal_circle(flag_equal, str, i);
 		i++;
 	}
-	return (flag_return);
+	return (flag_one);
 }
