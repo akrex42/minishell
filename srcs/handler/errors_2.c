@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+void	ft_put_error_beginning(void)
+{
+	ft_putstr_fd("my_bash: ", 2);
+	ft_putstr_fd(g_all.commands->prog, 2);
+	ft_putstr_fd(": ", 2);
+}
+
 int	ft_comp_to_spec(t_tokens_list *token)
 {
 	if (token == NULL)

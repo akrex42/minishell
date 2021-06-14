@@ -76,6 +76,8 @@ void	ft_execute_program(int *fd1, int *fd2, int i)
 			execve(g_all.commands->prog, g_all.commands->args, g_all.env);
 		else
 			ft_execute_program_4();
+		if (errno == 13 || errno == 8)
+			exit(errno);
 		exit(127);
 	}
 	close(fd1[0]);

@@ -1,12 +1,5 @@
 #include "minishell.h"
 
-void	ft_put_error_beginning(void)
-{
-	ft_putstr_fd("my_bash: ", 2);
-	ft_putstr_fd(g_all.commands->prog, 2);
-	ft_putstr_fd(": ", 2);
-}
-
 int	ft_error_handler_2(void)
 {
 	if (!ft_strncmp(g_all.commands->prog, ".", 2))
@@ -28,8 +21,7 @@ void	ft_error_handler_5(int errno_exec, void	**dir)
 	if ((*dir) != NULL || errno == 13)
 	{
 		ft_put_error_beginning();
-		ft_putstr_fd(strerror(21), 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("is a directory\n", 2);
 		g_all.exec.ret = 126;
 	}
 	else if (errno_exec == 13)

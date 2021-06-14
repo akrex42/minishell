@@ -185,5 +185,7 @@ int				print(char *str);
 int				check_cond(void);
 int				ft_print_err_exit_return(char **str);
 void			ft_print_err_exit(char **str);
+void			ft_put_error_beginning(void);
+void			ft_free_split(char ***split);
 
 #endif

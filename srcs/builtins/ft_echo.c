@@ -55,8 +55,6 @@ void	ft_cycle_print_args(int i, char **str)
 	while (str[i] != NULL && str[i + 1] != NULL)
 	{
 		j = 0;
-		while (ft_isspace(str[i][j]) == 1)
-			j++;
 		while (str[i][j] != '\0')
 		{
 			ft_putchar_fd(str[i][j], g_all.fd_out);

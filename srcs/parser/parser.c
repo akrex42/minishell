@@ -5,7 +5,7 @@ void	ft_split_by_spaces(char **command, const char *found)
 	char	**split;
 	int		i;
 
-	if	(found[0] == '\0')
+	if (found[0] == '\0')
 		return ;
 	split = ft_split(found, ' ');
 	if (!split)
@@ -25,13 +25,7 @@ void	ft_split_by_spaces(char **command, const char *found)
 		i++;
 	}
 	g_all.flags.special_value = 0;
-	i = 0;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
+	ft_free_split(&split);
 }
 
 void	ft_parser_2_2(const char *str, int *i, char **env_str)

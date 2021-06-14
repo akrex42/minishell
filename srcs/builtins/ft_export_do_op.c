@@ -80,7 +80,7 @@ int	ft_cycle_export(char **str, int i,
 	char *equal, int flag_equal)
 {
 	int	flag_return;
-	int flag_one;
+	int	flag_one;
 
 	flag_return = 0;
 	flag_one = 0;

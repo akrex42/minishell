@@ -2,7 +2,6 @@
 
 int	print_err_exit(void)
 {
-	// ft_putstr_fd("exit\n", 1);
 	ft_putstr_fd("my_bash: exit: too many arguments\n", 2);
 	return (1);
 }
@@ -22,26 +21,26 @@ void	ft_cycle_check_exit(char **str)
 	}
 }
 
-unsigned char   ft_exit(char **str)
+unsigned char	ft_exit(char **str)
 {
 	int				i;
 	unsigned int	error_code;
+
 	i = 0;
 	error_code = 0;
 	if (str == NULL)
 	{
 		ft_putstr_fd("exit\n", 1);
-		exit(0);
+		exit(1);
 	}
 	else if (str[1] == NULL)
 		g_all.exec.ret = check_cond();
 	else if (str[1] != NULL)
-	ft_cycle_check_exit(str);
+		ft_cycle_check_exit(str);
 	if (str[1] != NULL)
 	{
 		if (str[2] != NULL)
 			return (print_err_exit());
-		// ft_putstr_fd("exit\n", 1);
 		error_code = (unsigned char)ft_atoi(str[1]);
 	}
 	exit(error_code);

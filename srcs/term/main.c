@@ -52,8 +52,7 @@ void	ft_init_term_all(char **env)
 	g_all.path = NULL;
 	ft_rewrite_path();
 	ft_init_history(&(g_all.history));
-	// tgetent(0, getenv("TERM"));
-	tgetent(0, "xterm-256color");
+	tgetent(0, getenv("TERM"));
 	signal(SIGINT, ft_sighnd);
 	signal(SIGQUIT, ft_sighnd);
 }

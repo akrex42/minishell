@@ -1,5 +1,18 @@
 #include "minishell.h"
 
+void	ft_free_split(char ***split)
+{
+	int	i;
+
+	i = 0;
+	while ((*split)[i])
+	{
+		free((*split)[i]);
+		i++;
+	}
+	free((*split));
+}
+
 void	ft_common_split_part(char **command, const char *str)
 {
 	ft_command_add_to_list(command);
